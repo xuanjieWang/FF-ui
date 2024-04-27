@@ -74,7 +74,7 @@ import { getAuthList } from "@/api/system/social/auth";
 import { getUserProfile } from "@/api/system/user";
 
 const activeTab = ref("userinfo");
-const state = ref<Record<string, any>>({
+const state = ref({
     user: {},
     roleGroup: '',
     postGroup: '',

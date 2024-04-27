@@ -54,6 +54,8 @@ export interface OrderVO {
    */
   title: string;
 
+  orderPayType: string;
+
   /**
    * 修改人
    */
@@ -110,6 +112,8 @@ export interface OrderForm extends BaseEntity {
    * 发布状态
    */
   isRelease?: string;
+
+  orderPayType?: string;
 
   /**
    * 标题
