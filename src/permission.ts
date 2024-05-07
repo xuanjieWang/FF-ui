@@ -21,7 +21,7 @@ router.beforeEach(async (to, from, next) => {
       next({ path: '/' });
       NProgress.done();
     } else if (whiteList.indexOf(to.path) !== -1) {
-      next()
+      next();
     } else {
       if (useUserStore().roles.length === 0) {
         isRelogin.show = true;

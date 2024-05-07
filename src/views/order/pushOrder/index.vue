@@ -206,10 +206,11 @@ const submitForm = () => {
         form.value.updateUser = userStore.name
         await updateOrder(form.value).finally(() =>  buttonLoading.value = false);
       } else {
+        // 需要添加发布人
         info = "添加订单成功！"
         console.log(userStore+"11111");
         form.value.pushUser =userStore.name
-        // await addOrder(form.value).finally(() =>  buttonLoading.value = false);
+        await addOrder(form.value).finally(() =>  buttonLoading.value = false);
         console.log(form.value);
       }
       proxy?.$modal.msgSuccess(info+"成功!");

@@ -1,3 +1,4 @@
+import { RegisData } from './../../types';
 import { DeptVO } from './../dept/types';
 import { RoleVO } from '@/api/system/role/types';
 import request from '@/utils/request';
@@ -34,6 +35,17 @@ export const getUser = (userId?: string | number): AxiosPromise<UserInfoVO> => {
 export const addUser = (data: UserForm) => {
   return request({
     url: '/system/user',
+    method: 'post',
+    data: data
+  });
+};
+
+/**
+ * 注册新增的设计师用户
+ */
+export const RegisUser = (data: any) => {
+  return request({
+    url: '/system/user/regisUser',
     method: 'post',
     data: data
   });
@@ -200,6 +212,7 @@ export default {
   listUser,
   getUser,
   addUser,
+  RegisUser,
   updateUser,
   delUser,
   resetUserPwd,

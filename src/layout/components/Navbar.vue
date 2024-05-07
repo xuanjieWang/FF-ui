@@ -58,7 +58,7 @@
           <lang-select id="lang-select" class="right-menu-item hover-effect" />
         </el-tooltip>
 
-        <el-button type="">深色模式</el-button>
+        <!-- <el-button type="">深色模式</el-button> -->
 
         <!-- <el-tooltip :content="$t('navbar.layoutSize')" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />

@@ -32,9 +32,9 @@
             </el-form-item>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane label="短信登录" name="two">
+        <!-- <el-tab-pane label="短信登录" name="two">
           <SMSLogin />
-        </el-tab-pane>
+        </el-tab-pane> -->
         <el-tab-pane label="注册" name="three">
           <SMSRegis />
         </el-tab-pane>
@@ -53,7 +53,7 @@ import { useUserStore } from '@/store/modules/user';
 import { LoginData } from '@/api/types';
 import { to } from 'await-to-js';
 import { loginRules } from './rules'
-import SMSLogin from './smsLogin/index.vue'
+// import SMSLogin from './smsLogin/index.vue'
 import SMSRegis from './smsRegis/index.vue'
 const userStore = useUserStore();
 const router = useRouter();
@@ -73,6 +73,7 @@ const loginRef = ref<ElFormInstance>();
 const activeName = ref('one')
 
 
+
 const handleLogin = () => {
   loginRef.value?.validate(async (valid: boolean, fields: any) => {
     if (valid) {
@@ -88,9 +89,21 @@ const handleLogin = () => {
         localStorage.removeItem('password');
         localStorage.removeItem('rememberMe');
       }
+
       const [err] = await to(userStore.login(loginForm.value));
+      await to(userStore.getUserStatusInfo());
+
       if (!err) {
+        console.log(userStore.regisStatus);
+        // 注册中跳转完善信息页面
+        if("注册中"===userStore.regisStatus){
+        await router.push('/information');
+        }else if("审核中"===userStore.regisStatus){
+        loading.value = false;
+        await router.push('/auditing');
+        }else{
         await router.push('/index');
+        }
         loading.value = false;
       } else {
         loading.value = false;

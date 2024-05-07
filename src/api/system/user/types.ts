@@ -46,6 +46,11 @@ export interface UserVO extends BaseEntity {
   postIds: any;
   roleId: any;
   admin: boolean;
+  zfb: string;
+  wx: string;
+  isDesigner: string;
+  regisStatus: string;
+  designerType: string;
 }
 
 /**
@@ -65,8 +70,9 @@ export interface UserForm {
   remark?: string;
   postIds: string[];
   roleIds: string[];
-  zfb: string[];
-  wx: string[];
+  zfb: string;
+  wx: string;
+  isDesigner: string;
 }
 
 export interface UserInfoVO {

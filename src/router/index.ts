@@ -53,6 +53,16 @@ export const constantRoutes: RouteOption[] = [
     hidden: true
   },
   {
+    path: '/information',
+    component: () => import('@/views/information/index.vue'),
+    hidden: true
+  },
+  {
+    path: '/auditing',
+    component: () => import('@/views/information/auditing/index.vue'),
+    hidden: true
+  },
+  {
     path: '/register',
     component: () => import('@/views/register.vue'),
     hidden: true

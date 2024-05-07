@@ -27,6 +27,23 @@ export function login(data: LoginData): AxiosPromise<LoginResult> {
   });
 }
 
+export function smsLoginAPI(data: any) {
+  const params = {
+    ...data,
+    clientId: data.clientId || clientId,
+    grantType: data.grantType || 'password'
+  };
+  return request({
+    url: '/auth/smsLogin',
+    headers: {
+      isToken: false,
+      isEncrypt: true
+    },
+    method: 'post',
+    data: params
+  });
+}
+
 //短信登录
 export function loginSMS(data: SmsLoginData): AxiosPromise<LoginResult> {
   const params = {
@@ -60,6 +77,17 @@ export function register(data: any) {
     },
     method: 'post',
     data: params
+  });
+}
+
+// 获取邀请码
+export function getInviteCode() {
+  return request({
+    url: '/auth/getInviteCode',
+    headers: {
+      isToken: false
+    },
+    method: 'get'
   });
 }
 
