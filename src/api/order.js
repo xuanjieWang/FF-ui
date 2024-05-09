@@ -1,6 +1,4 @@
 import request from '@/utils/request';
-import { AxiosPromise } from 'axios';
-import { OrderVO, OrderForm, OrderQuery } from '@/api/system/order/types';
 
 /**
  * 查询【请填写功能名称】列表
@@ -8,7 +6,7 @@ import { OrderVO, OrderForm, OrderQuery } from '@/api/system/order/types';
  * @returns {*}
  */
 
-export const listOrder = (query?: OrderQuery): AxiosPromise<OrderVO[]> => {
+export const listOrder = (query) => {
   return request({
     url: '/system/order/list',
     method: 'get',
@@ -20,7 +18,7 @@ export const listOrder = (query?: OrderQuery): AxiosPromise<OrderVO[]> => {
  * 查询【请填写功能名称】详细
  * @param id
  */
-export const getOrder = (id: string | number): AxiosPromise<OrderVO> => {
+export const getOrder = (id) => {
   return request({
     url: '/system/order/' + id,
     method: 'get'
@@ -31,7 +29,7 @@ export const getOrder = (id: string | number): AxiosPromise<OrderVO> => {
  * 新增【请填写功能名称】
  * @param data
  */
-export const addOrder = (data: OrderForm) => {
+export const addOrder = (data) => {
   return request({
     url: '/system/order',
     method: 'post',
@@ -43,7 +41,7 @@ export const addOrder = (data: OrderForm) => {
  * 修改【请填写功能名称】
  * @param data
  */
-export const updateOrder = (data: OrderForm) => {
+export const updateOrder = (data) => {
   return request({
     url: '/system/order',
     method: 'put',
@@ -55,7 +53,7 @@ export const updateOrder = (data: OrderForm) => {
  * 删除【请填写功能名称】
  * @param id
  */
-export const delOrder = (id: string | number | Array<string | number>) => {
+export const delOrder = (id) => {
   return request({
     url: '/system/order/' + id,
     method: 'delete'

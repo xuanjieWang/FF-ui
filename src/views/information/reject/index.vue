@@ -9,30 +9,47 @@
         <img class="pic-404__child right" src="@/assets/404_images/404_cloud.png" alt="404" />
       </div>
       <div class="bullshit">
-        <div class="bullshit__oops">信息审核中</div>
-        <div class="bullshit__headline">资料已提交，需等待审核结果！</div>
-        <div class="bullshit__info">已经通知管理员进行审核,请等待！ 具体的审核时间可能会因多种因素而有所不同，预计需要 1 - 2 个工作日左右！</div>
-        <router-link to="/index" class="bullshit__return-home"> 返回 </router-link>
+        <div class="bullshit__oops">审核未通过</div>
+        <div class="bullshit__headline">很遗憾，您的申请未能通过审核。</div>
+        <div class="bullshit__info">经审核，您的事项不符合要求，未能通过。</div>
+        <div style="display: flex">
+          <el-button type="warning" class="bullshit__return-home" round style="margin-left: 40px" @click.prevent="returnHome"><p>返回</p></el-button>
+          <el-button type="success" class="bullshit__reset" round style="margin-left: 40px" @click.prevent="reset" :disabled="isDisabled"
+            ><p>重新提交</p></el-button
+          >
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onUnmounted } from 'vue';
 import { useUserStore } from '@/store/modules/user';
+import {resetAudit} from '@/api/audit'
 
 const userStore = useUserStore();
 const router = useRouter();
 
-// 等待审核页面
-onUnmounted(()=>{
+// 重新提交信息
+const isDisabled = ref(false)
+async function reset() {
+  isDisabled.value = true
+  await resetAudit(userStore.userId)
+  userStore.setUser()
+  setTimeout(async () => {
+    await router.push('/login');
+  }, 200);
+}
+
+// 返回到首页
+async function returnHome() {
   userStore.logout()
   setTimeout(async () => {
   await router.push('/login');
   }, 200);
-})
+}
 </script>
+
 <style lang="scss" scoped>
 .wscn-http404-container{
   transform: translate(-50%,-50%);
@@ -167,7 +184,7 @@ onUnmounted(()=>{
       font-weight: bold;
       line-height: 40px;
       // color: #1482f0;
-      color: #7cec55;
+      color: red;
       opacity: 0;
       margin-bottom: 20px;
       animation-name: slideUp;
@@ -178,7 +195,7 @@ onUnmounted(()=>{
       font-size: 20px;
       line-height: 24px;
       // color: #222;
-      color: #7cec55;
+      color: red;
       font-weight: bold;
       opacity: 0;
       margin-bottom: 10px;
@@ -204,13 +221,29 @@ onUnmounted(()=>{
       width: 110px;
       height: 36px;
       // background: #1482f0;
-      background: #7cec55;
+      background: red;
       border-radius: 100px;
       text-align: center;
       color: #ffffff;
       opacity: 0;
       font-size: 14px;
-      line-height: 36px;
+      cursor: pointer;
+      animation-name: slideUp;
+      animation-duration: 0.5s;
+      animation-delay: 0.3s;
+      animation-fill-mode: forwards;
+    }
+    &__reset {
+      display: block;
+      float: left;
+      width: 110px;
+      height: 36px;
+      background: green;
+      border-radius: 100px;
+      text-align: center;
+      color: #ffffff;
+      opacity: 0;
+      font-size: 14px;
       cursor: pointer;
       animation-name: slideUp;
       animation-duration: 0.5s;
@@ -228,5 +261,9 @@ onUnmounted(()=>{
       }
     }
   }
+}
+p{
+  margin-top: 5px;
+  line-height: 10px;
 }
 </style>

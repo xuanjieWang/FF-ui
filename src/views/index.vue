@@ -10,13 +10,13 @@ const router = useRouter();
 
 
 onMounted(async ()=>{
-  console.log(11111111111111,userStore.regisStatus);
-
    if("注册中"===userStore.regisStatus){
         await router.push('/information');
-        }else if("审核中"===userStore.regisStatus){
+   }else if("审核中"===userStore.regisStatus){
         await router.push('/auditing');
-        }
+   }else if("审核不通过"===userStore.regisStatus){
+        await router.push('/reject');
+  }
 })
 </script>
 

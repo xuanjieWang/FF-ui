@@ -67,3 +67,4 @@ const getList = async () => {
   loading.value = false;
 }
 </script>
+../../../api/order/index../../../api/order/types

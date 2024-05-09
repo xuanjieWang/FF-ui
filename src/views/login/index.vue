@@ -72,8 +72,6 @@ const captchaEnabled = ref(true);
 const loginRef = ref<ElFormInstance>();
 const activeName = ref('one')
 
-
-
 const handleLogin = () => {
   loginRef.value?.validate(async (valid: boolean, fields: any) => {
     if (valid) {
@@ -89,25 +87,24 @@ const handleLogin = () => {
         localStorage.removeItem('password');
         localStorage.removeItem('rememberMe');
       }
-
       const [err] = await to(userStore.login(loginForm.value));
-      await to(userStore.getUserStatusInfo());
-
       if (!err) {
-        console.log(userStore.regisStatus);
+      await to(userStore.getUserStatusInfo());
         // 注册中跳转完善信息页面
         if("注册中"===userStore.regisStatus){
         await router.push('/information');
         }else if("审核中"===userStore.regisStatus){
         loading.value = false;
         await router.push('/auditing');
+        }else if("审核不通过"===userStore.regisStatus){
+        loading.value = false;
+        await router.push('/reject');
         }else{
         await router.push('/index');
         }
         loading.value = false;
       } else {
         loading.value = false;
-        // 重新获取验证码
         if (captchaEnabled.value) {
           await getCode();
         }

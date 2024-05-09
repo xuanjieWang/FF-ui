@@ -110,7 +110,8 @@
               :show-overflow-tooltip="true"
             />
             <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
-            <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
+            <el-table-column label="账号状态" align="center" key="regis_status" prop="regis_status" />
+            <el-table-column label="使用状态" align="center" key="status" v-if="columns[5].visible">
               <template #default="scope">
                 <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)"></el-switch>
               </template>
@@ -366,6 +367,7 @@ const initFormData: UserForm = {
   zfb: '',
   wx: '',
   isDesigner: '',
+  regisStatus: '',
 }
 const data = reactive<PageData<UserForm, UserQuery>>({
   form: { ...initFormData },
@@ -410,6 +412,8 @@ const getTreeSelect = async () => {
 const getList = async () => {
   loading.value = true;
   const res = await api.listUser(proxy?.addDateRange(queryParams.value, dateRange.value));
+  console.log(res);
+
   loading.value = false;
   userList.value = res.rows;
   total.value = res.total;

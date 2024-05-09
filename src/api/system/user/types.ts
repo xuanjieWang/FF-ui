@@ -73,6 +73,7 @@ export interface UserForm {
   zfb: string;
   wx: string;
   isDesigner: string;
+  regisStatus: string;
 }
 
 export interface UserInfoVO {

@@ -62,7 +62,7 @@ export const useUserStore = defineStore('user', () => {
       const data = res.data;
       const user = data.user;
       const profile = user.avatar == '' || user.avatar == null ? defAva : user.avatar;
-      console.log('登录信息---', res.data.user);
+      console.log('登录信息getInfo---', res.data.user);
 
       if (data.roles && data.roles.length > 0) {
         // 验证返回的roles是否是一个非空数组
@@ -71,6 +71,7 @@ export const useUserStore = defineStore('user', () => {
       } else {
         roles.value = ['ROLE_DEFAULT'];
       }
+
       name.value = user.userName;
       nickname.value = user.nickName;
       avatar.value = profile;
@@ -88,6 +89,7 @@ export const useUserStore = defineStore('user', () => {
     if (res) {
       const data = res.data;
       const user = data.user;
+      userId.value = user.userId;
       regisStatus.value = user.regisStatus;
       designerType.value = user.designerType;
       return Promise.resolve();
@@ -100,6 +102,7 @@ export const useUserStore = defineStore('user', () => {
     await logoutApi();
     token.value = '';
     roles.value = [];
+    userId.value = '';
     regisStatus.value = '';
     designerType.value = '';
     permissions.value = [];
@@ -110,7 +113,12 @@ export const useUserStore = defineStore('user', () => {
     avatar.value = value;
   };
 
+  const setUser = () => {
+    regisStatus.value = '注册中';
+  };
+
   return {
+    name,
     userId,
     token,
     nickname,
@@ -125,7 +133,8 @@ export const useUserStore = defineStore('user', () => {
     getInfo,
     logout,
     setAvatar,
-    getUserStatusInfo
+    getUserStatusInfo,
+    setUser
   };
 });
 

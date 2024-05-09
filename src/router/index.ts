@@ -52,16 +52,24 @@ export const constantRoutes: RouteOption[] = [
     component: () => import('@/views/login/index.vue'),
     hidden: true
   },
+  // 实名页面
   {
     path: '/information',
     component: () => import('@/views/information/index.vue'),
     hidden: true
   },
+  //审核页面
   {
     path: '/auditing',
     component: () => import('@/views/information/auditing/index.vue'),
     hidden: true
   },
+  {
+    path: '/reject',
+    component: () => import('@/views/information/reject/index.vue'),
+    hidden: true
+  },
+  // 注册页面
   {
     path: '/register',
     component: () => import('@/views/register.vue'),
