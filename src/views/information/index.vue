@@ -105,7 +105,7 @@ const isDisabled = ref(false);
 .body{
   height: 100%;
   width: 100%;
-  background: #f5f5f5;
+  background-image: url("../../assets/images/info.png");
   display: flex;
   flex-direction: column;
   justify-content: center;

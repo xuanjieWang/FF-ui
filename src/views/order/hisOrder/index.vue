@@ -33,15 +33,14 @@
 
 <script setup name="Order" lang="ts">
 import {ref,reactive,getCurrentInstance,toRefs,onMounted} from 'vue'
-import { listOrder } from '../../../api/system/order/index';
-import { OrderVO, OrderQuery } from '../../../api/system/order/types';
-const { proxy } = getCurrentInstance() as ComponentInternalInstance;
+import { listOrder } from '@/api/order';
+const { proxy } = getCurrentInstance() ;
 
-const orderList = ref<OrderVO[]>([]);
+const orderList = ref([]);
 const loading = ref(true);
 const total = ref(0);
 
-const data = reactive<PageData<OrderQuery>>({
+const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
@@ -67,4 +66,3 @@ const getList = async () => {
   loading.value = false;
 }
 </script>
-../../../api/order/index../../../api/order/types

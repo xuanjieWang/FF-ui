@@ -38,11 +38,6 @@ export const constantRoutes: RouteOption[] = [
     ]
   },
   {
-    path: '/authentication',
-    hidden: true,
-    component: () => import('@/views/people/authentication/index.vue')
-  },
-  {
     path: '/social-callback',
     hidden: true,
     component: () => import('@/layout/components/SocialCallback/index.vue')
@@ -52,27 +47,22 @@ export const constantRoutes: RouteOption[] = [
     component: () => import('@/views/login/index.vue'),
     hidden: true
   },
-  // 实名页面
-  {
-    path: '/information',
-    component: () => import('@/views/information/index.vue'),
-    hidden: true
-  },
-  //审核页面
+  //审核中页面
   {
     path: '/auditing',
     component: () => import('@/views/information/auditing/index.vue'),
     hidden: true
   },
+  //审核不通过页面
   {
     path: '/reject',
     component: () => import('@/views/information/reject/index.vue'),
     hidden: true
   },
-  // 注册页面
+  //实名认证界面
   {
-    path: '/register',
-    component: () => import('@/views/register.vue'),
+    path: '/information',
+    component: () => import('@/views/information/index.vue'),
     hidden: true
   },
   {
@@ -169,20 +159,6 @@ export const dynamicRoutes: RouteOption[] = [
         component: () => import('@/views/system/oss/config.vue'),
         name: 'OssConfig',
         meta: { title: '配置管理', activeMenu: '/system/oss', icon: '' }
-      }
-    ]
-  },
-  {
-    path: '/tool/gen-edit',
-    component: Layout,
-    hidden: true,
-    permissions: ['tool:gen:edit'],
-    children: [
-      {
-        path: 'index/:tableId(\\d+)',
-        component: () => import('@/views/tool/gen/editTable.vue'),
-        name: 'GenEdit',
-        meta: { title: '修改生成配置', activeMenu: '/tool/gen', icon: '' }
       }
     ]
   }

@@ -15,6 +15,7 @@ export const useUserStore = defineStore('user', () => {
   const permissions = ref<Array<string>>([]); // 用户权限编码集合 → 判断按钮权限
   const regisStatus = ref<string>(''); //用户角色信息
   const designerType = ref<string>('');
+  const deptName = ref<string>('');
 
   /**
    * 登录
@@ -78,12 +79,13 @@ export const useUserStore = defineStore('user', () => {
       userId.value = user.userId;
       regisStatus.value = user.regisStatus;
       designerType.value = user.designerType;
+      deptName.value = user.dept.deptName;
       return Promise.resolve();
     }
     return Promise.reject(err);
   };
 
-  // 获取用户信息
+  // 获取用户信息，用于登录的时候获取状态
   const getUserStatusInfo = async (): Promise<void> => {
     const [err, res] = await to(getUserInfo());
     if (res) {
@@ -127,6 +129,7 @@ export const useUserStore = defineStore('user', () => {
     permissions,
     regisStatus,
     designerType,
+    deptName, // 部门
     login,
     smsLogin,
     loginSMS,
