@@ -3,7 +3,7 @@
     <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
       <div class="search" v-show="showSearch">
         <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="68px">
-          <el-form-item label="提交状态" prop="orderStatus">
+          <!-- <el-form-item label="提交状态" prop="orderStatus">
             <el-select v-model="queryParams.orderStatus" placeholder="选择订单提交状态" clearable style="width: 180px; margin-bottom: 0">
               <el-option v-for="dict in order_push_statu" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
@@ -17,12 +17,17 @@
             <el-select v-model="queryParams.commonType" placeholder="选择订单评价" clearable style="width: 180px; margin-bottom: 0">
               <el-option v-for="dict in order_common_statu" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="订单编号" prop="id">
             <el-input v-model="queryParams.id" placeholder="请输入订单编号" clearable style="width: 180px; margin-bottom: 0" />
           </el-form-item>
           <el-form-item label="设计师" prop="sjsName">
             <el-input v-model="queryParams.sjsName" placeholder="请输入设计师名称" clearable style="width: 180px; margin-bottom: 0" />
+          </el-form-item>
+          <el-form-item label="订单类型" prop="type">
+            <el-select v-model="queryParams.type" placeholder="选择订单评价" clearable style="width: 180px; margin-bottom: 0">
+              <el-option v-for="dict in the_dept" :key="dict.value" :label="dict.label" :value="dict.value" />
+            </el-select>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -51,23 +56,25 @@
       </template>
 
       <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
-        <el-table-column label="序号" align="center" prop="title" />
+        <!-- <el-table-column type="selection" width="15" align="center" /> -->
+        <el-table-column label="序号" align="center" prop="title" width="80px">
+          <template #default="scope">
+            {{scope.$index + 1 + (queryParams.pageNum -1)*queryParams.pageSize}}
+          </template>
+        </el-table-column>
         <el-table-column label="订单编号" align="center" prop="id" width="180px" />
         <el-table-column label="标题" align="center" prop="title" width="180px" />
-        <!-- <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column> -->
+        <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column>
         <el-table-column label="设计师姓名" align="center" prop="sjsName" width="100px"> </el-table-column>
         <el-table-column label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column>
-        <el-table-column label="对标客服" align="center" prop="kf" width="100px" />
-        <el-table-column label="提成金额" align="center" prop="money" width="100px" />
-        <el-table-column label="订单类型" align="center" prop="type" width="100px" />
+        <el-table-column label="提成金额" align="center" prop="money" width="90px" />
+        <el-table-column label="订单类型" align="center" prop="type" width="90px" />
         <!-- <el-table-column label="订单状态" align="center" prop="orderStatus" width="100px" /> -->
         <!-- <el-table-column label="结算状态" align="center" prop="jsStatus" width="100px" /> -->
         <!-- <el-table-column label="订单评价" align="center" prop="common" /> -->
-        <el-table-column label="下单时间" align="center" prop="xfTime" />
-        <!-- <el-table-column label="创建时间" align="center" prop="createTime" /> -->
-        <!-- <el-table-column label="更新时间" align="center" prop="updateTime" /> -->
-        <el-table-column label="交付时间" align="center" prop="jfTime" />
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <el-table-column label="下单时间" align="center" prop="xdTime" width="110px" />
+        <el-table-column label="交付时间" align="center" prop="jfTime" width="110px" />
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="120px">
           <template #default="scope">
             <el-tooltip content="查看" placement="top">
               <el-button link type="primary" icon="View" @click="handleView(scope.row)" v-hasPermi="['system:order:edit']"></el-button>
@@ -75,9 +82,9 @@
             <el-tooltip content="修改" placement="top">
               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:order:edit']"></el-button>
             </el-tooltip>
-            <!-- <el-tooltip content="删除" placement="top">
-              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:order:remove']"></el-button>
-            </el-tooltip> -->
+            <el-tooltip content="交易完成" placement="top">
+              <el-button link type="primary" icon="Edit" @click="handleOrder(scope.row)" v-hasPermi="['system:order:edit']"></el-button>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -88,10 +95,15 @@
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="900px" append-to-body>
       <el-form ref="orderFormRef" :model="form" :rules="rules" label-width="150px">
         <p class="item">订单信息</p>
-        <el-row :gutter="20">
-          <el-form-item label="订单编号:" prop="title">
+        <el-row :gutter="20" v-if="!add | isDisabled">
+          <el-form-item label="订单编号:" prop="id">
+            <el-input v-model="form.id" disabled="true" placeholder="" />
+          </el-form-item>
+          <el-form-item label="订单标题:" prop="title">
             <el-input v-model="form.title" :disabled="isDisabled" placeholder="" />
           </el-form-item>
+        </el-row>
+        <el-row :gutter="20" v-else>
           <el-form-item label="订单标题:" prop="title">
             <el-input v-model="form.title" :disabled="isDisabled" placeholder="" />
           </el-form-item>
@@ -106,31 +118,30 @@
             </el-select>
           </el-form-item>
         </el-row>
-        <p class="item">客户信息</p>
         <el-row :gutter="20">
-          <el-form-item label="客户旺旺号" prop="title">
-            <el-input v-model="form.wagnwang" :disabled="isDisabled" placeholder="" />
+          <el-form-item label="客户旺旺号" prop="wangwang">
+            <el-input v-model="form.wangwang" :disabled="isDisabled" placeholder="" />
           </el-form-item>
-          <el-form-item label="对标客服" prop="title">
-            <el-input v-model="form.wagnwang" :disabled="isDisabled" placeholder="" />
+          <el-form-item label="对标客服" prop="kf" v-if="isDisabled">
+            <el-input v-model="form.kf" :disabled="isDisabled" placeholder="" />
           </el-form-item>
         </el-row>
         <p class="item">设计师信息</p>
         <el-row :gutter="20">
-          <el-form-item label="设计师姓名" prop="title">
-            <el-input v-model="form.wagnwang" :disabled="isDisabled" placeholder="" />
+          <el-form-item label="设计师姓名" prop="sjsName">
+            <el-input v-model="form.sjsName" :disabled="isDisabled" placeholder="" />
           </el-form-item>
-          <el-form-item label="设计师账户" prop="title">
-            <el-input v-model="form.wagnwang" :disabled="isDisabled" placeholder="" />
+          <el-form-item label="设计师账户" prop="sjsPhone">
+            <el-input v-model="form.sjsPhone" :disabled="isDisabled" placeholder="" />
           </el-form-item>
         </el-row>
         <p class="item">时间</p>
         <el-row :gutter="20">
-          <el-form-item label="下单时间:" prop="jfTime">
+          <el-form-item label="下单时间:" prop="xdTime">
             <el-date-picker
               style="width:250px"
               clearable
-              v-model="form.jfTime"
+              v-model="form.xdTime"
               :disabled="isDisabled"
               type="datetime"
               value-format="YYYY-MM-DD HH:mm:ss"
@@ -151,12 +162,12 @@
             </el-date-picker>
           </el-form-item>
         </el-row>
-        <el-row :gutter="20">
-          <el-form-item label="订单创建时间:" prop="jfTime">
+        <el-row :gutter="20" v-if="isDisabled">
+          <el-form-item label="订单创建时间:" prop="createTime">
             <el-date-picker
               style="width:250px"
               clearable
-              v-model="form.jfTime"
+              v-model="form.createTime"
               :disabled="isDisabled"
               type="datetime"
               value-format="YYYY-MM-DD HH:mm:ss"
@@ -164,28 +175,17 @@
             >
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="订单更新时间:" prop="jfTime">
+          <el-form-item label="订单完成时间:" prop="updateTime">
             <el-date-picker
               style="width:250px"
               clearable
-              v-model="form.jfTime"
+              v-model="form.updateTime"
               :disabled="isDisabled"
               type="datetime"
               value-format="YYYY-MM-DD HH:mm:ss"
               placeholder=""
             >
             </el-date-picker>
-          </el-form-item>
-        </el-row>
-        <p class="item">订单评价</p>
-        <el-row :gutter="20">
-          <el-form-item label="订单评价" prop="money">
-            <el-input v-model="form.money" :disabled="isDisabled" placeholder="" />
-          </el-form-item>
-        </el-row>
-        <el-row :gutter="20">
-          <el-form-item label="订单评论" prop="jfTime">
-            <el-input v-model="form.money" type="textarea" style="width: 540px; height: 100px;" :disabled="isDisabled" placeholder="" />
           </el-form-item>
         </el-row>
       </el-form>
@@ -196,6 +196,16 @@
         </div>
       </template>
     </el-dialog>
+    <el-dialog title="订单结算" v-model="dialog.jsVisible" width="500px" append-to-body>
+      <p style="line-height: 50px; margin-left: 100px; margin-top: -10px; font-size: 18px;">确认结算订单: {{jsData.title}} ？</p>
+      <span>订单失败： 不进行订单结算，设计师可以在历史订单中查看到此记录</span>
+      <br />
+      <span>结算成功： 按照提成金额： {{ jsData.money }} 结算订单</span>
+      <div style="margin-left: 250px; margin-top: 10px">
+        <el-button type="danger" @click="orderFail">订单失败</el-button>
+        <el-button type="success" @click="orderSuccess">结算成功</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -203,7 +213,7 @@
 import {ref,reactive,getCurrentInstance,toRefs,onMounted} from 'vue'
 import { listOrder, getOrder, delOrder, addOrder, updateOrder } from '@/api/order';
 const { proxy } = getCurrentInstance()
-const { the_dept,order_push_statu,order_balance_statu,order_common_statu } = toRefs(proxy?.useDict("the_dept","order_push_statu","order_balance_statu","order_common_statu"));
+const { the_dept } = toRefs(proxy?.useDict("the_dept"));
 import { useUserStore } from '@/store/modules/user';
 const userStore = useUserStore();
 import {rules} from '../rules'
@@ -222,7 +232,8 @@ const orderFormRef = ref();
 
 const dialog = reactive({
   visible: false,
-  title: ''
+  title: '',
+  jsVisible: false,
 });
 
 const initFormData = {}
@@ -237,18 +248,16 @@ const data = reactive({
 
 const { queryParams, form } = toRefs(data);
 
-
 /** 提交按钮 */
 const submitForm = () => {
   orderFormRef.value?.validate(async (valid) => {
     if (valid) {
       buttonLoading.value = true;
-
       let info = ""
       if (form.value.id) {
         info = "修改订单信息成功！"
-        // form.value.updateUser = userStore.name
-        // await updateOrder(form.value).then(() =>  buttonLoading.value = false);
+        form.value.updateUser = userStore.name
+        await updateOrder(form.value).then(() =>  buttonLoading.value = false);
       } else {
         info = "添加订单成功！"
         form.value.kf = userStore.name  // 添加对应的客服信息
@@ -256,7 +265,6 @@ const submitForm = () => {
       }
       proxy?.$modal.msgSuccess(info+"成功!");
       dialog.visible = false;
-      buttonLoading.value = false
       await getList();
     }
   });
@@ -306,6 +314,15 @@ const resetQuery = () => {
   handleQuery();
 }
 
+/** 删除按钮操作 */
+const handleDelete = async (row) => {
+  const _ids = row?.id || ids.value;
+  await proxy?.$modal.confirm('是否确认删除订单编号为"' + _ids + '"的数据项？').finally(() => loading.value = false);
+  await delOrder(_ids);
+  proxy?.$modal.msgSuccess("删除成功");
+  await getList();
+}
+
 /** 多选框选中数据 */
 const handleSelectionChange = (selection) => {
   ids.value = selection.map(item => item.id);
@@ -313,9 +330,50 @@ const handleSelectionChange = (selection) => {
   multiple.value = !selection.length;
 }
 
+const jsData = ref({
+    id: '',
+    orderStatus: '',
+    jsStatus:'',
+    title: ''
+})
+const handleOrder = async (row) => {
+  jsData.value.id =row.id
+  dialog.jsVisible = true
+  jsData.value = row
+  console.log(jsData.value);
+}
+
+ //订单结算成功
+ async function orderSuccess() {
+      jsData.value.orderStatus = '交易完成'
+      jsData.value.jsStatus = '已结算'
+  await updateOrder(jsData.value)
+  proxy?.$modal.msgSuccess("结算成功")
+  dialog.jsVisible = false
+setTimeout(() => {
+  getList()
+    }, 200)
+ }
+
+ //订单结算失败
+ async function orderFail() {
+          jsData.value.orderStatus = '交易失败'
+      jsData.value.jsStatus = '订单取消'
+  await updateOrder(jsData.value)
+  proxy?.$modal.msgSuccess("操作成功")
+  dialog.jsVisible = false
+  setTimeout(() => {
+  getList()
+    }, 200)
+
+ }
+
 /** 新增按钮操作 */
+const add = ref(false)
 const handleAdd = () => {
+  add.value = true
   reset();
+  isDisabled.value = false;
   dialog.visible = true;
   dialog.title = "新增订单";
 }
@@ -324,6 +382,7 @@ const isDisabled = ref(false)
 
 /** 修改按钮操作 */
 const handleUpdate = async (row) => {
+  add.value =false
   isDisabled.value = false;
   reset();
   const _id = row?.id || ids.value[0]
@@ -333,8 +392,9 @@ const handleUpdate = async (row) => {
   dialog.title = "修改订单";
 }
 
-/** 修改按钮操作 */
+/** 查看按钮 */
 const handleView = async (row) => {
+  add.value =false
   isDisabled.value = true;
   reset();
   const _id = row?.id || ids.value[0]

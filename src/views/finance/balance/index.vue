@@ -1,7 +1,7 @@
 <!--页面-->
 <template>
-  <div class=""></div>
+  <div class="">账户余额</div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup></script>
 <style lang="scss" scoped></style>

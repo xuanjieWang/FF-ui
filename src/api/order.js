@@ -14,6 +14,13 @@ export const listOrder = (query) => {
   });
 };
 
+export const listHis = (query) => {
+  return request({
+    url: '/system/order/listHis',
+    method: 'get',
+    params: query
+  });
+};
 /**
  * 查询【请填写功能名称】详细
  * @param id
@@ -44,6 +51,14 @@ export const addOrder = (data) => {
 export const updateOrder = (data) => {
   return request({
     url: '/system/order',
+    method: 'put',
+    data: data
+  });
+};
+
+export const subComm = (data) => {
+  return request({
+    url: '/system/order/subcomm',
     method: 'put',
     data: data
   });

@@ -54,16 +54,17 @@ const params = reactive({
 });
 const { queryParams } = toRefs(params);
 
-const listTimer = ref('')
+let listTimer = ""
 onMounted(() => {
-  listTimer.value = setInterval(() => {
   getList();
-  }, 2000);
+  listTimer = setInterval(() => {
+  getList();
+  }, 20000);
 });
 
 // 销毁定时器
 onUnmounted(()=>{
-  clearInterval(listTimer.value)
+  clearInterval(listTimer)
 })
 
 // /** 查询【请填写功能名称】列表 */
