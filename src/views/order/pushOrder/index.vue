@@ -129,10 +129,20 @@
         <p class="item">设计师信息</p>
         <el-row :gutter="20">
           <el-form-item label="设计师姓名" prop="sjsName">
-            <el-input v-model="form.sjsName" :disabled="isDisabled" placeholder="" />
+            <div style="display: flex; flex-direction: column">
+              <el-input v-model="testName" :disabled="isDisabled" placeholder="" @blur="searchBlue()" @focus="searchFocus()" />
+              <div v-if="searchView" class="searchResult">
+                <div v-for="(item, index) in searchList" :key="index">
+                  <div style="display: flex;  align-items: center;" class="searchItem" @click="checkUser(item)">
+                    <p style="width: 90px;">{{ item.name || "无姓名"  }}</p>
+                    <p style="width: 180px;">{{ item.userName}}-{{item.designerType}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </el-form-item>
           <el-form-item label="设计师账户" prop="sjsPhone">
-            <el-input v-model="form.sjsPhone" :disabled="isDisabled" placeholder="" />
+            <el-input v-model="form.sjsPhone" disabled placeholder="" />
           </el-form-item>
         </el-row>
         <p class="item">时间</p>
@@ -210,13 +220,30 @@
 </template>
 
 <script setup>
-import {ref,reactive,getCurrentInstance,toRefs,onMounted} from 'vue'
-import { listOrder, getOrder, delOrder, addOrder, updateOrder } from '@/api/order';
+import {ref,reactive,getCurrentInstance,toRefs,onMounted,watch} from 'vue'
+import { listOrder, getOrder, delOrder, addOrder, updateOrder,searchUser } from '@/api/order';
 const { proxy } = getCurrentInstance()
 const { the_dept } = toRefs(proxy?.useDict("the_dept"));
 import { useUserStore } from '@/store/modules/user';
 const userStore = useUserStore();
 import {rules} from '../rules'
+
+const testName = ref('')
+watch(testName, () => {
+  search()
+})
+
+//搜索用户
+async function search() {
+  if(" " == testName.value)return
+  if(!testName.value){ searchParams.value.name = "all"}else{
+    searchParams.value.name = testName.value
+  }
+   const res =  await searchUser(searchParams.value)
+   searchList.value = res.rows
+   searchView.value = true
+
+}
 
 const orderList = ref([])
 const buttonLoading = ref(false);
@@ -243,10 +270,23 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
   },
+  searchParams:{
+    pageNum: 1,
+    pageSize: 10,
+    name: ""
+  }
 
 });
 
-const { queryParams, form } = toRefs(data);
+//选中标签
+function checkUser(data) {
+  form.value.sjsName = data.name
+  form.value.sjsPhone = data.userName
+  testName.value = data.name
+  searchView.value = false
+}
+
+const { queryParams, form,searchParams } = toRefs(data);
 
 /** 提交按钮 */
 const submitForm = () => {
@@ -290,6 +330,7 @@ const getList = async () => {
   loading.value = false;
 }
 
+
 /** 取消按钮 */
 const cancel = () => {
   reset();
@@ -312,15 +353,6 @@ const handleQuery = () => {
 const resetQuery = () => {
   queryFormRef.value?.resetFields();
   handleQuery();
-}
-
-/** 删除按钮操作 */
-const handleDelete = async (row) => {
-  const _ids = row?.id || ids.value;
-  await proxy?.$modal.confirm('是否确认删除订单编号为"' + _ids + '"的数据项？').finally(() => loading.value = false);
-  await delOrder(_ids);
-  proxy?.$modal.msgSuccess("删除成功");
-  await getList();
 }
 
 /** 多选框选中数据 */
@@ -357,8 +389,8 @@ setTimeout(() => {
 
  //订单结算失败
  async function orderFail() {
-          jsData.value.orderStatus = '交易失败'
-      jsData.value.jsStatus = '订单取消'
+    jsData.value.orderStatus = '交易失败'
+    jsData.value.jsStatus = '订单取消'
   await updateOrder(jsData.value)
   proxy?.$modal.msgSuccess("操作成功")
   dialog.jsVisible = false
@@ -366,6 +398,19 @@ setTimeout(() => {
   getList()
     }, 200)
 
+ }
+ const searchView = ref(false)
+ const searchList = ref([])
+ function searchBlue() {
+  setTimeout(() => {
+    searchView.value = false
+  }, 500);
+
+
+ }
+ function searchFocus() {
+  searchView.value = true
+  testName.value = ""
  }
 
 /** 新增按钮操作 */
@@ -376,6 +421,7 @@ const handleAdd = () => {
   isDisabled.value = false;
   dialog.visible = true;
   dialog.title = "新增订单";
+  testName.value = " "
 }
 
 const isDisabled = ref(false)
@@ -416,5 +462,31 @@ const handleView = async (row) => {
 }
 :deep(.el-picker-width100pr .el-input__wrapper){
   width: 100% !important;
+}
+.searchResult{
+  position: absolute;
+  top: 40px;
+  z-index: 1000;
+  height: 130px;
+  overflow: auto;
+  width: 250px;
+  background: rgb(220, 214, 214);
+}
+.searchItem{
+  height: 25px;
+  width: 250px;
+  font-size: 15px;
+  line-height: 25px;
+}
+ .searchItem:focus,
+.searchItem:hover
+{
+  cursor: pointer;
+  background: rgb(86, 82, 82);
+  color: #fff
+}
+p{
+
+  margin-left: 5px;
 }
 </style>

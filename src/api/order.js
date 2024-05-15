@@ -74,3 +74,35 @@ export const delOrder = (id) => {
     method: 'delete'
   });
 };
+
+/**
+ * 搜索用户
+ */
+export const searchUser = (query) => {
+  return request({
+    url: '/system/user/searchUser',
+    method: 'get',
+    params: query
+  });
+};
+
+/**
+ * 提现时间
+ */
+export const getTxTime = () => {
+  return request({
+    url: '/system/money/getTime',
+    method: 'get'
+  });
+};
+
+/**
+ * 提现时间
+ */
+export const setTxTime = (data) => {
+  return request({
+    url: '/system/money/setTxTime',
+    method: 'get',
+    params: data
+  });
+};
