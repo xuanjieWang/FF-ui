@@ -19,22 +19,44 @@ module.exports = {
   },
   plugins: ['vue', '@typescript-eslint'],
   rules: {
-    'vue/multi-word-component-names': 'off',
-    '@typescript-eslint/no-empty-function': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
-    'vue/no-v-model-argument': 'off',
-    '@typescript-eslint/ban-types': [
-      'error',
+    'prettier/prettier': [
+      'warn',
       {
-        // 关闭空类型检查 {}
-        extendDefaults: true,
-        types: {
-          '{}': false,
-          Function: false
-        }
+        singleQuote: true, // 单引号
+        semi: false, // 无分号
+        // printWidth: 1000000, // 每行宽度至多80字符
+        trailingComma: 'none', // 不加对象|数组最后逗号
+        endOfLine: 'auto' // 换行符号不限制（win mac 不一致）
       }
-    ]
+    ],
+    'vue/multi-word-component-names': [
+      'warn',
+      {
+        ignores: ['index'] // vue组件名称多单词组成（忽略index.vue）
+      }
+    ],
+    'vue/no-setup-props-destructure': ['off'], // 关闭 props 解构的校验
+    'no-undef': 'off',
+    'no-unused-vars': 'off',
+    'no-sequences': 'off'
   },
+  // rules: {
+  //   'vue/multi-word-component-names': 'off',
+  //   '@typescript-eslint/no-empty-function': 'off',
+  //   '@typescript-eslint/no-explicit-any': 'off',
+  //   'vue/no-v-model-argument': 'off',
+  //   '@typescript-eslint/ban-types': [
+  //     'error',
+  //     {
+  //       // 关闭空类型检查 {}
+  //       extendDefaults: true,
+  //       types: {
+  //         '{}': false,
+  //         Function: false
+  //       }
+  //     }
+  //   ]
+  // },
   globals: {
     DialogOption: 'readonly',
     OptionType: 'readonly'

@@ -45,21 +45,20 @@
             <template #prefix> <p>身份证照片: </p> </template>
           </el-input>
         </el-form-item> -->
-        <el-button type="primary" style="width:150px; margin: 5px 0px 0px 80px" @click.prevent="submit" :disabled="isDisabled"> 提交 </el-button>
+        <el-button type="primary" style="width: 150px; margin: 5px 0px 0px 80px" @click.prevent="submit" :disabled="isDisabled"> 提交 </el-button>
       </el-form>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted,onUnmounted } from 'vue';
-import { useUserStore } from '@/store/modules/user';
+import { onMounted, onUnmounted } from 'vue'
+import { useUserStore } from '@/store/modules/user'
 import { rules } from './rules'
-import {addRealInfo} from '@/api/audit'
+import { addRealInfo } from '@/api/audit'
 
-
-const userStore = useUserStore();
-const router = useRouter();
+const userStore = useUserStore()
+const router = useRouter()
 
 const info = ref({
   userId: null,
@@ -71,65 +70,61 @@ const info = ref({
   proficient: null,
   sfz: null,
   sfzImg: null
-} );
-
-
-onMounted(async ()=>{
 })
 
-onUnmounted(()=>{
+onUnmounted(() => {
   userStore.logout()
 })
 
 // 返回到登录页面
- async function logout() {
+async function logout() {
   userStore.logout()
   setTimeout(async () => {
-  await router.push('/login');
-  }, 200);
+    await router.push('/login')
+  }, 200)
 }
 
 // 提交表达信息，讲信息提交到用户信息中
-const isDisabled = ref(false);
- async function submit() {
-  isDisabled.value = true;
-  info.value.userId = userStore.userId;
-  ElMessage.success("信息提交成功,请等待审核！")
-  setTimeout( () => {
-     router.push('/auditing');
-  }, 500);
+const isDisabled = ref(false)
+async function submit() {
+  isDisabled.value = true
+  info.value.userId = userStore.userId
+  ElMessage.success('信息提交成功,请等待审核！')
+  setTimeout(() => {
+    router.push('/auditing')
+  }, 500)
   await addRealInfo(info.value)
 }
 </script>
 <style lang="scss" scoped>
-.body{
+.body {
   height: 100%;
   width: 100%;
-  background-image: url("../../assets/images/info.png");
+  background-image: url('../../assets/images/info.png');
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-.info{
+.info {
   width: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-  .el-input {
+.el-input {
+  height: 40px;
+  width: 300px;
+  input {
     height: 40px;
-    width: 300px;
-    input {
-      height: 40px;
-    }
   }
-.logout{
+}
+.logout {
   position: absolute;
   top: 5%;
   left: 5%;
 }
-p{
+p {
   width: 70px;
   text-align: left;
 }

@@ -21,10 +21,10 @@
                 <svg-icon icon-class="phone" />手机号码
                 <div class="pull-right">{{ state.user.phonenumber }}</div>
               </li>
-              <li class="list-group-item">
+              <!-- <li class="list-group-item">
                 <svg-icon icon-class="email" />用户邮箱
                 <div class="pull-right">{{ state.user.email }}</div>
-              </li>
+              </li> -->
               <!-- <li class="list-group-item">
                 <svg-icon icon-class="tree" />所属部门
                 <div class="pull-right" v-if="state.user.dept">{{ state.user.dept.deptName }} / {{ state.postGroup }}</div>
@@ -66,38 +66,38 @@
 </template>
 
 <script setup name="Profile" lang="ts">
-import UserAvatar from "./userAvatar.vue";
-import UserInfo from "./userInfo.vue";
-import ResetPwd from "./resetPwd.vue";
-import ThirdParty from "./thirdParty.vue";
-import { getAuthList } from "@/api/system/social/auth";
-import { getUserProfile } from "@/api/system/user";
+import UserAvatar from './userAvatar.vue'
+import UserInfo from './userInfo.vue'
+import ResetPwd from './resetPwd.vue'
+import ThirdParty from './thirdParty.vue'
+import { getAuthList } from '@/api/system/social/auth'
+import { getUserProfile } from '@/api/system/user'
 
-const activeTab = ref("userinfo");
+const activeTab = ref('userinfo')
 const state = ref({
-    user: {},
-    roleGroup: '',
-    postGroup: '',
-    auths: []
-});
+  user: {},
+  roleGroup: '',
+  postGroup: '',
+  auths: []
+})
 
-const userForm = ref({});
+const userForm = ref({})
 
 const getUser = async () => {
-    const res = await getUserProfile();
-    state.value.user = res.data.user;
-    userForm.value = { ...res.data.user }
-    state.value.roleGroup = res.data.roleGroup;
-    state.value.postGroup = res.data.postGroup;
-};
+  const res = await getUserProfile()
+  state.value.user = res.data.user
+  userForm.value = { ...res.data.user }
+  state.value.roleGroup = res.data.roleGroup
+  state.value.postGroup = res.data.postGroup
+}
 
 const getAuths = async () => {
-    const res = await getAuthList();
-    state.value.auths = res.data;
-};
+  const res = await getAuthList()
+  state.value.auths = res.data
+}
 
 onMounted(() => {
-    getUser();
-    getAuths();
+  getUser()
+  getAuths()
 })
 </script>

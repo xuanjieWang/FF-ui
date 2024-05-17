@@ -6,10 +6,24 @@
         <h1 style="margin-left: 35%">设置提现时间</h1>
       </div>
       <div class="tx">
-        <!---时间选择，每个月或每周的-->
-        <div class="txTime">距离提现还有--时间</div>
-        <div class="txTime">可以进行提现</div>
-        <!-- <el-button type="success">提现</el-button> -->
+        <div class="item" style="margin-top: 20px;">
+          <span>提现类别:</span>
+          <el-select v-model="type" placeholder="Select" style="width: 180px">
+            <el-option v-for="item in timeType" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </div>
+        <div class="item">
+          <span>开始时间:</span>
+          <el-input-number v-model="txData.beginTime" :max="timeMax" :min="1" step-strictly />
+        </div>
+        <div class="item">
+          <span>结束时间:</span>
+          <el-input-number v-model="txData.endTime" :max="timeMax" :min="1" step-strictly />
+        </div>
+        <div class="item">
+          <span class="ps">ps: 提现类别可设置为按月或按周</span>
+          <el-button type="success" @click="updateTime">确定</el-button>
+        </div>
       </div>
     </div>
     <div class="rightPage"></div>
@@ -18,14 +32,56 @@
 
 <script setup>
 import { getTxTime , setTxTime } from '@/api/order';
-import { onMounted } from 'vue';
+import { onMounted,watch } from 'vue';
+const { proxy } = getCurrentInstance()
 
+
+const timeMax = ref(30)
+const timeType = [
+  {
+    value: 'day',
+    label: '每周',
+  },
+  {
+    value: 'month',
+    label: '每月',
+  },
+]
+const type = ref("")
 const txData = ref({})
  onMounted(async ()=>{
   const res= await getTxTime();
   txData.value=res.data;
-  console.log(res.data);
+  type.value = txData.value.type
  })
+
+// 设置提交时间
+ async function updateTime() {
+  txData.value.type = type.value
+  await setTxTime(txData.value)
+  setTimeout(() => {
+    proxy?.$modal.msgSuccess("提现时间设置成功");
+
+  }, 300);
+
+
+
+}
+
+// 监听type
+watch(type,()=>{
+  if(type.value!=txData.value.type){
+    if("month"==type.value){
+      timeMax.value = 31
+      txData.value.beginTime = 15
+      txData.value.endTime = 15
+    }else{
+      timeMax.value = 7
+      txData.value.beginTime = 1
+      txData.value.endTime = 1
+    }
+  }
+})
 </script>
 <style lang="scss" scoped>
 .body{
@@ -66,15 +122,23 @@ span{
 }
 .tx{
   width: 90%;
-  height: 200px;
+  height: 250px;
   border-radius: 10px;
   border: 1px solid #b1b5ba;
   margin: 10px 0px 0px 20px;
   text-align: center;
 }
-.txTime{
-  font-size: 20px;
-  padding: 20px;
-
+.item{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 50px;
+  color: #000;
+  // font-weight: 600;
+  font-size: 18px;
+}
+.ps{
+  color: #b1b5ba;
+  font-size: 14px;
 }
 </style>

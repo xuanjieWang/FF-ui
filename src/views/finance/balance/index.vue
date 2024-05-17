@@ -1,4 +1,3 @@
-<!--页面-->
 <template>
   <div class="body">
     <div class="leftPage">
@@ -48,79 +47,144 @@
           </li>
         </ul>
       </div>
-      <div class="tx">
-        <div class="txTime">距离提现还有--时间</div>
-        <div class="txTime">可以进行提现</div>
-        <!-- <el-button type="success">提现</el-button> -->
+      <div class="tx" v-if="!txButtn">
+        <div class="txTime" style="color: red">目前不能进行提现</div>
+        <div class="txTime">
+          <span v-if="'day' == time.type">提现时间为每周的周{{ time.beginTime }}-周{{ time.endTime }}</span>
+          <span v-else>提现时间为每月的{{ time.beginTime }}-{{ time.endTime }}日</span>
+        </div>
+      </div>
+      <div class="tx" v-else>
+        <div class="txTime" style="color: green">目前可以进行提现</div>
+        <div class="txTime2">
+          <div>账户余额: {{ userData.money || 0 }}</div>
+          <el-button style="margin-left: 10%" type="success" @click="buttonDis = true" :disabled="buttonDis">提现</el-button>
+        </div>
+        <div style="left: 1%; margin-top: 5%; color: #b1b8bd">
+          <span v-if="'day' == time.type">ps(提现时间为每周的{{ time.beginTime }}-{{ time.endTime }}日)</span>
+          <span v-else>ps(提现时间为每月的{{ time.beginTime }}-{{ time.endTime }}日)</span>
+        </div>
       </div>
     </div>
     <div class="rightPage">
-      <div>echarts图</div>
+      <div>
+        <h1 style="margin-left: 45%">提现记录</h1>
+        <el-table v-loading="txLoading" :data="txList">
+          <el-table-column label="序号" align="center" prop="title" width="80px">
+            <template #default="scope">
+              {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
+            </template>
+          </el-table-column>
+          <el-table-column label="姓名" align="center" prop="sjsName" />
+          <el-table-column label="账户" align="center" prop="sjsPhone" width="120px" />
+          <el-table-column label="支付宝号" align="center" prop="zfb" width="140px" />
+          <el-table-column label="提现金额" align="center" prop="money" />
+          <el-table-column label="账户余额" align="center" prop="balance" />
+          <el-table-column label="提现时间" align="center" prop="createTime" width="110px" />
+        </el-table>
+        <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getTxList" />
+      </div>
     </div>
+    <el-dialog title="提现" v-model="buttonDis" width="500px" append-to-body>
+      <div style="flex">
+        <span>提现金额： </span>
+        <el-input-number v-model="TX.money" :max="userData.money" :precision="2" :min="10" />
+        <span>元</span>
+      </div>
+      <p style="margin: 20px 0 0 10px">当前提现金额: {{ TX.money.toFixed(2) }}, 体现后余额: {{ (userData.money - TX.money).toFixed(2) }}</p>
+      <el-button style="margin-left: 350px" type="success" @click="subTX">提现</el-button>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { getInfo } from '@/api/login';
-import { onMounted } from 'vue';
+import { getInfo } from '@/api/login'
+import { getTxTime } from '@/api/order'
+import { onMounted, toRefs } from 'vue'
+import { list, setTx } from '@/api/tx'
+const { proxy } = getCurrentInstance()
 
-// let time  = ""
-const userData = ref({})
- onMounted(async ()=>{
+const userData = ref({}) // 用户信息
+const txList = ref([]) //提现列表
+const time = ref({}) // 提现时间
 
-  const res= await getInfo();
-  userData.value = res.data.user;
-  console.log(res.data.user);
- })
+const total = ref(0)
+const txLoading = ref(false)
+
+onMounted(() => {
+  getData()
+})
+
+const buttonDis = ref(false)
+// 提现申请列表
+const TX = ref({
+  money: 10
+})
+
+const data = reactive({
+  queryParams: {
+    pageNum: 1,
+    pageSize: 10
+  }
+})
+const { queryParams } = toRefs(data)
+
+async function subTX() {
+  TX.value.sjsPhone = userData.value.userName
+  TX.value.sjsName = userData.value.name
+
+  await setTx(TX.value)
+  setTimeout(() => {
+    proxy?.$modal.msgSuccess('提现申请成功')
+    buttonDis.value = false
+    getData()
+  }, 500)
+}
+
+const txButtn = ref(false)
+function checkTxtime(data) {
+  var currentDate = new Date()
+  let time = 0
+  if ('day' == data.type) {
+    var daysOfWeek = ['7', '1', '2', '3', '4', '5', '6']
+    time = daysOfWeek[currentDate.getDay()]
+  } else {
+    time = currentDate.getDate()
+  }
+  if (data.beginTime <= data.endTime) {
+    if (time >= data.beginTime && time <= data.endTime) {
+      txButtn.value = true
+      return
+    }
+  } else {
+    if (time <= data.beginTime || time >= data.endTime) {
+      txButtn.value = true
+      return
+    }
+  }
+}
+
+async function getData() {
+  const res = await getInfo()
+  userData.value = res.data.user
+  if ('设计师部门' == res.data.user.dept.deptName) {
+    queryParams.value.sjsPhone = userData.value.userName
+  }
+
+  // 获取提现时间
+  const txres = await getTxTime()
+  time.value = txres.data
+  checkTxtime(txres.data)
+
+  getTxList()
+}
+//获取提交列表
+async function getTxList() {
+  txLoading.value = true
+  const txListRes = await list(queryParams.value)
+  txList.value = txListRes.rows
+  total.value = txListRes.total
+  txLoading.value = false
+}
 </script>
-<style lang="scss" scoped>
-.body{
-  display: flex;
-}
-.leftPage{
-  width: 30%;
-  display: flex;
-  flex-direction: column;
-}
-
-.list-group-striped > .list-group-item {
-  border-left: 0;
-  border-right: 0;
-  border-radius: 0;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.list-group {
-  padding-left: 0px;
-  list-style: none;
-}
-
-.list-group-item {
-  border-bottom: 1px solid #e7eaec;
-  border-top: 1px solid #e7eaec;
-  margin-bottom: -1px;
-  padding: 11px 0px;
-  font-size: 16px;
-  margin-left: 10px;
-}
-.pull-right{
-  margin-left: 5px;
-}
-span{
-  margin-left: 10px;
-}
-.tx{
-  width: 90%;
-  height: 200px;
-  border-radius: 10px;
-  border: 1px solid #b1b5ba;
-  margin: 10px 0px 0px 20px;
-  text-align: center;
-}
-.txTime{
-  font-size: 20px;
-  padding: 20px;
-
-}
-</style>
+<style lang="scss" scoped src="./index.scss"></style>
