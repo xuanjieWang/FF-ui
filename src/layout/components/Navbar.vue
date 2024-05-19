@@ -14,7 +14,7 @@
           </div>
         </el-tooltip> -->
         <!-- 消息 -->
-        <el-tooltip :content="$t('navbar.message')" effect="dark" placement="bottom">
+        <!-- <el-tooltip :content="$t('navbar.message')" effect="dark" placement="bottom">
           <div>
             <el-popover placement="bottom" trigger="click" transition="el-zoom-in-top" :width="300" :persistent="false">
               <template #reference>
@@ -27,7 +27,7 @@
               </template>
             </el-popover>
           </div>
-        </el-tooltip>
+        </el-tooltip> -->
         <!-- <el-tooltip content="Github" effect="dark" placement="bottom">
           <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
         </el-tooltip> -->
@@ -76,94 +76,97 @@
 </template>
 
 <script setup lang="ts">
-import SearchMenu from './TopBar/search.vue';
-import useAppStore from '@/store/modules/app';
-import useUserStore from '@/store/modules/user';
-import useSettingsStore from '@/store/modules/settings';
-import { getTenantList } from "@/api/login";
-import { ComponentInternalInstance } from "vue";
-import { TenantVO } from "@/api/types";
-import notice from './notice/index.vue';
-import useNoticeStore from '@/store/modules/notice';
+import SearchMenu from './TopBar/search.vue'
+import useAppStore from '@/store/modules/app'
+import useUserStore from '@/store/modules/user'
+import useSettingsStore from '@/store/modules/settings'
+import { getTenantList } from '@/api/login'
+import { ComponentInternalInstance } from 'vue'
+import { TenantVO } from '@/api/types'
+import notice from './notice/index.vue'
+import useNoticeStore from '@/store/modules/notice'
 
-const appStore = useAppStore();
-const userStore = useUserStore();
-const settingsStore = useSettingsStore();
-const noticeStore = storeToRefs(useNoticeStore());
-const newNotice = ref(<number>0);
+const appStore = useAppStore()
+const userStore = useUserStore()
+const settingsStore = useSettingsStore()
+const noticeStore = storeToRefs(useNoticeStore())
+const newNotice = ref(<number>0)
 
-const { proxy } = getCurrentInstance() as ComponentInternalInstance;
+const { proxy } = getCurrentInstance() as ComponentInternalInstance
 
-const userId = ref(userStore.userId);
-const companyName = ref(undefined);
-const tenantList = ref<TenantVO[]>([]);
+const userId = ref(userStore.userId)
+const companyName = ref(undefined)
+const tenantList = ref<TenantVO[]>([])
 // 是否切换了租户
-const dynamic = ref(false);
+const dynamic = ref(false)
 // 租户开关
-const tenantEnabled = ref(true);
+const tenantEnabled = ref(true)
 // 搜索菜单
-const searchMenuRef = ref<InstanceType<typeof SearchMenu>>();
+const searchMenuRef = ref<InstanceType<typeof SearchMenu>>()
 
 const openSearchMenu = () => {
-  searchMenuRef.value?.openSearch();
+  searchMenuRef.value?.openSearch()
 }
 /** 租户列表 */
 const initTenantList = async () => {
-  const { data } = await getTenantList();
-  tenantEnabled.value = data.tenantEnabled === undefined ? true : data.tenantEnabled;
+  const { data } = await getTenantList()
+  tenantEnabled.value = data.tenantEnabled === undefined ? true : data.tenantEnabled
   if (tenantEnabled.value) {
-    tenantList.value = data.voList;
+    tenantList.value = data.voList
   }
 }
 
 defineExpose({
-  initTenantList,
+  initTenantList
 })
 
 const toggleSideBar = () => {
-  appStore.toggleSideBar(false);
+  appStore.toggleSideBar(false)
 }
 
 const logout = async () => {
-    await ElMessageBox.confirm('确定注销并退出系统吗？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    })
-    await userStore.logout()
-    location.href = import.meta.env.VITE_APP_CONTEXT_PATH + 'index';
+  await ElMessageBox.confirm('确定注销并退出系统吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+  await userStore.logout()
+  location.href = import.meta.env.VITE_APP_CONTEXT_PATH + 'index'
 }
 
 const emits = defineEmits(['setLayout'])
 const setLayout = () => {
-    emits('setLayout');
+  emits('setLayout')
 }
 // 定义Command方法对象 通过key直接调用方法
-const commandMap: {[key: string]: any} = {
-    setLayout,
-    logout
-};
+const commandMap: { [key: string]: any } = {
+  setLayout,
+  logout
+}
 const handleCommand = (command: string) => {
-    // 判断是否存在该方法
-    if (commandMap[command]) {
-        commandMap[command]();
-    }
+  // 判断是否存在该方法
+  if (commandMap[command]) {
+    commandMap[command]()
+  }
 }
 
 //用深度监听 消息
-watch(() => noticeStore.state.value.notices, (newVal, oldVal) => {
-  newNotice.value = newVal.filter((item: any) => !item.read).length;
-}, { deep: true });
+watch(
+  () => noticeStore.state.value.notices,
+  (newVal, oldVal) => {
+    newNotice.value = newVal.filter((item: any) => !item.read).length
+  },
+  { deep: true }
+)
 </script>
 
 <style lang="scss" scoped>
-
 :deep(.el-select .el-input__wrapper) {
-  height:30px;
+  height: 30px;
 }
 
-:deep(.el-badge__content.is-fixed){
-    top: 12px;
+:deep(.el-badge__content.is-fixed) {
+  top: 12px;
 }
 
 .flex {

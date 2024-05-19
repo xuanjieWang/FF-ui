@@ -51,7 +51,12 @@
         <el-table-column label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column>
         <el-table-column label="提成金额" align="center" prop="money" width="90px" />
         <el-table-column label="订单类型" align="center" prop="type" width="90px" />
-        <el-table-column label="订单状态" align="center" prop="orderStatus" width="100px" />
+        <el-table-column label="订单状态" align="center" prop="orderStatus" width="100px">
+          <template #default="scope">
+            <span v-if="scope.row.orderStatus == '交易完成'" style="color: green">交易完成</span>
+            <span v-else style="color: red">{{ scope.row.orderStatus }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="结算状态" align="center" prop="jsStatus" width="100px" />
         <el-table-column label="评论" align="center" prop="commonType" width="100px" />
         <!-- <el-table-column label="下单时间" align="center" prop="xdTime" width="110px" /> -->

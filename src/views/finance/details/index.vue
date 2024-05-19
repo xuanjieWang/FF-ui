@@ -16,7 +16,7 @@
         <el-table-column label="订单金额" align="center" prop="money" width="90px" />
         <el-table-column label="余额" align="center" prop="balance" width="90px" />
         <el-table-column label="结算状态" align="center" prop="jsStatus" width="100px" />
-        <el-table-column label="结算时间" align="center" prop="createTime" />
+        <el-table-column label="结算时间" align="center" prop="createTime" width="110px" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="订单详情" placement="top">

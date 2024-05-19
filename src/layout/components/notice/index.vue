@@ -8,7 +8,7 @@
       <template v-if="newsList.length > 0">
         <div class="content-box-item" v-for="(v, k) in newsList" :key="k" @click="onNewsClick(k)">
           <div class="item-conten">
-            <div>{{ v.message }}</div>
+            <div>{{ v.noticeContent }}</div>
             <div class="content-box-msg"></div>
             <div class="content-box-time">{{ v.time }}</div>
           </div>
@@ -19,53 +19,87 @@
       </template>
       <el-empty :description="'消息为空'" v-else></el-empty>
     </div>
-    <div class="foot-box" @click="onGoToGiteeClick" v-if="newsList.length > 0">前往gitee</div>
+    <!-- <div class="foot-box" @click="onGoToGiteeClick" v-if="newsList.length > 0">前往gitee</div> -->
   </div>
 </template>
 
 <script setup lang="ts" name="layoutBreadcrumbUserNews">
-import { ref } from "vue";
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { nextTick, onMounted, reactive } from "vue";
-import useNoticeStore from '@/store/modules/notice';
+import { nextTick, onMounted, reactive } from 'vue'
+import useNoticeStore from '@/store/modules/notice'
+import { listNotice } from '@/api/system/notice'
+import { NoticeForm, NoticeQuery, NoticeVO } from '@/api/system/notice/types'
 
-const noticeStore = storeToRefs(useNoticeStore());
-const {readAll} = useNoticeStore();
+const noticeStore = storeToRefs(useNoticeStore())
+const { readAll } = useNoticeStore()
 
 // 定义变量内容
 const state = reactive({
-  loading: false,
-});
-const newsList =ref([]) as any;
+  loading: false
+})
+const newsList = ref([]) as any
+
+const initFormData: NoticeForm = {
+  noticeId: undefined,
+  noticeTitle: '',
+  noticeType: '',
+  noticeContent: '',
+  status: '0',
+  remark: '',
+  createByName: ''
+}
+
+const data = reactive<PageData<NoticeForm, NoticeQuery>>({
+  form: { ...initFormData },
+  queryParams: {
+    pageNum: 1,
+    pageSize: 10,
+    noticeTitle: '',
+    createByName: '',
+    status: '',
+    noticeType: ''
+  },
+  rules: {
+    noticeTitle: [{ required: true, message: '公告标题不能为空', trigger: 'blur' }],
+    noticeType: [{ required: true, message: '公告类型不能为空', trigger: 'change' }]
+  }
+})
+const { queryParams, form, rules } = toRefs(data)
 
 /**
  * 初始化数据
  * @returns
  */
 const getTableData = async () => {
-  state.loading = true;
-  newsList.value = noticeStore.state.value.notices;
-  state.loading = false;
-};
+  state.loading = true
+  // 使用接口获取到通知信息
+  const res = await listNotice(queryParams.value)
+  console.log('通知公告---', res)
 
+  newsList.value = res.rows
+
+  // newsList.value = noticeStore.state.value.notices
+  state.loading = false
+}
 
 //点击消息，写入已读
 const onNewsClick = (item: any) => {
-  newsList.value[item].read = true;
+  newsList.value[item].read = true
   //并且写入pinia
-  noticeStore.state.value.notices = newsList.value;
-};
+  noticeStore.state.value.notices = newsList.value
+}
 
 // 前往通知中心点击
 const onGoToGiteeClick = () => {
-  window.open("https://gitee.com/dromara/RuoYi-Vue-Plus/tree/5.X/");
-};
+  window.open('https://gitee.com/dromara/RuoYi-Vue-Plus/tree/5.X/')
+}
 
 onMounted(() => {
   nextTick(() => {
-    getTableData();
-  });
-});
+    getTableData()
+  })
+})
 </script>
 
 <style scoped lang="scss">

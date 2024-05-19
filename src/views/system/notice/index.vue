@@ -31,14 +31,10 @@
             <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['system:notice:add']">新增</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate()" v-hasPermi="['system:notice:edit']"
-              >修改</el-button
-            >
+            <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate()" v-hasPermi="['system:notice:edit']">修改</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()" v-hasPermi="['system:notice:remove']">
-              删除
-            </el-button>
+            <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()" v-hasPermi="['system:notice:remove']"> 删除 </el-button>
           </el-col>
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
@@ -97,8 +93,7 @@
           <el-col :span="24">
             <el-form-item label="状态">
               <el-radio-group v-model="form.status">
-                <el-radio v-for="dict in sys_notice_status" :key="dict.value" :label="dict.value">{{ dict.label
-                }}</el-radio>
+                <el-radio v-for="dict in sys_notice_status" :key="dict.value" :label="dict.value">{{ dict.label }}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -120,35 +115,34 @@
 </template>
 
 <script setup name="Notice" lang="ts">
-import { listNotice, getNotice, delNotice, addNotice, updateNotice } from "@/api/system/notice";
-import { NoticeForm, NoticeQuery, NoticeVO } from "@/api/system/notice/types";
+import { listNotice, getNotice, delNotice, addNotice, updateNotice } from '@/api/system/notice'
+import { NoticeForm, NoticeQuery, NoticeVO } from '@/api/system/notice/types'
 
-const { proxy } = getCurrentInstance() as ComponentInternalInstance;
-const { sys_notice_status, sys_notice_type } = toRefs<any>(proxy?.useDict("sys_notice_status", "sys_notice_type"));
+const { proxy } = getCurrentInstance() as ComponentInternalInstance
+const { sys_notice_status, sys_notice_type } = toRefs<any>(proxy?.useDict('sys_notice_status', 'sys_notice_type'))
 
-const noticeList = ref<NoticeVO[]>([]);
-const loading = ref(true);
-const showSearch = ref(true);
-const ids = ref<Array<string | number>>([]);
-const single = ref(true);
-const multiple = ref(true);
-const total = ref(0);
+const noticeList = ref<NoticeVO[]>([])
+const loading = ref(true)
+const showSearch = ref(true)
+const ids = ref<Array<string | number>>([])
+const single = ref(true)
+const multiple = ref(true)
+const total = ref(0)
 
-const queryFormRef = ref<ElFormInstance>();
-const noticeFormRef = ref<ElFormInstance>();
-
+const queryFormRef = ref<ElFormInstance>()
+const noticeFormRef = ref<ElFormInstance>()
 
 const dialog = reactive<DialogOption>({
   visible: false,
   title: ''
-});
+})
 
 const initFormData: NoticeForm = {
   noticeId: undefined,
   noticeTitle: '',
   noticeType: '',
   noticeContent: '',
-  status: "0",
+  status: '0',
   remark: '',
   createByName: ''
 }
@@ -163,85 +157,85 @@ const data = reactive<PageData<NoticeForm, NoticeQuery>>({
     noticeType: ''
   },
   rules: {
-    noticeTitle: [{ required: true, message: "公告标题不能为空", trigger: "blur" }],
-    noticeType: [{ required: true, message: "公告类型不能为空", trigger: "change" }]
-  },
-});
+    noticeTitle: [{ required: true, message: '公告标题不能为空', trigger: 'blur' }],
+    noticeType: [{ required: true, message: '公告类型不能为空', trigger: 'change' }]
+  }
+})
 
-const { queryParams, form, rules } = toRefs(data);
+const { queryParams, form, rules } = toRefs(data)
 
 /** 查询公告列表 */
 const getList = async () => {
-  loading.value = true;
-  const res = await listNotice(queryParams.value);
-  console.log("通知公告---",res);
+  loading.value = true
+  const res = await listNotice(queryParams.value)
+  console.log('通知公告---', res)
 
-  noticeList.value = res.rows;
-  total.value = res.total;
-  loading.value = false;
+  noticeList.value = res.rows
+  total.value = res.total
+  loading.value = false
 }
 /** 取消按钮 */
 const cancel = () => {
-  reset();
-  dialog.visible = false;
+  reset()
+  dialog.visible = false
 }
 /** 表单重置 */
 const reset = () => {
-  form.value = { ...initFormData };
-  noticeFormRef.value?.resetFields();
+  form.value = { ...initFormData }
+  noticeFormRef.value?.resetFields()
 }
 /** 搜索按钮操作 */
 const handleQuery = () => {
-  queryParams.value.pageNum = 1;
-  getList();
+  queryParams.value.pageNum = 1
+  getList()
 }
 /** 重置按钮操作 */
 const resetQuery = () => {
-  queryFormRef.value?.resetFields();
-  handleQuery();
+  queryFormRef.value?.resetFields()
+  handleQuery()
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: NoticeVO[]) => {
-  ids.value = selection.map(item => item.noticeId);
-  single.value = selection.length != 1;
-  multiple.value = !selection.length;
+  ids.value = selection.map((item) => item.noticeId)
+  single.value = selection.length != 1
+  multiple.value = !selection.length
 }
 /** 新增按钮操作 */
 const handleAdd = () => {
-  reset();
-  dialog.visible = true;
-  dialog.title = "添加公告";
+  reset()
+  dialog.visible = true
+  dialog.title = '添加公告'
 }
 /**修改按钮操作 */
 const handleUpdate = async (row?: NoticeVO) => {
-  reset();
-  const noticeId = row?.noticeId || ids.value[0];
-  const { data } = await getNotice(noticeId);
-  Object.assign(form.value, data);
-  dialog.visible = true;
-  dialog.title = "修改公告";
+  reset()
+  const noticeId = row?.noticeId || ids.value[0]
+  const { data } = await getNotice(noticeId)
+  Object.assign(form.value, data)
+  dialog.visible = true
+  dialog.title = '修改公告'
 }
 /** 提交按钮 */
 const submitForm = () => {
   noticeFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
-      form.value.noticeId ? await updateNotice(form.value) : await addNotice(form.value);
-      proxy?.$modal.msgSuccess("修改成功");
-      dialog.visible = false;
-      await getList();
+      form.value.noticeId ? await updateNotice(form.value) : await addNotice(form.value)
+      proxy?.$modal.msgSuccess('修改成功')
+      dialog.visible = false
+      await getList()
     }
-  });
+  })
 }
 /** 删除按钮操作 */
 const handleDelete = async (row?: NoticeVO) => {
   const noticeIds = row?.noticeId || ids.value
-  await proxy?.$modal.confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项？');
-  await delNotice(noticeIds);
-  await getList();
-  proxy?.$modal.msgSuccess("删除成功");
+  await proxy?.$modal.confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项？')
+  await delNotice(noticeIds)
+  await getList()
+  proxy?.$modal.msgSuccess('删除成功')
 }
 
 onMounted(() => {
-  getList();
+  getList()
 })
 </script>

@@ -23,8 +23,7 @@
                 range-separator="-"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
-                :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
-              ></el-date-picker>
+                :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"></el-date-picker>
             </el-form-item>
 
             <el-form-item>
@@ -77,9 +76,9 @@
             <el-tooltip content="修改" placement="top" v-if="scope.row.roleId !== 1">
               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:role:edit']"></el-button>
             </el-tooltip>
-            <el-tooltip content="删除" placement="top" v-if="scope.row.roleId !== 1 && scope.row.roleName !== '设计师'">
+            <!-- <el-tooltip content="删除" placement="top" v-if="scope.row.roleId !== 1 && scope.row.roleName !== '设计师'">
               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:role:remove']"></el-button>
-            </el-tooltip>
+            </el-tooltip> -->
             <!-- <el-tooltip content="数据权限" placement="top" v-if="scope.row.roleId !== 1">
               <el-button link type="primary" icon="CircleCheck" @click="handleDataScope(scope.row)" v-hasPermi="['system:role:edit']"></el-button>
             </el-tooltip> -->
@@ -90,13 +89,7 @@
         </el-table-column>
       </el-table>
 
-      <pagination
-        v-if="total > 0"
-        v-model:total="total"
-        v-model:page="queryParams.pageNum"
-        v-model:limit="queryParams.pageSize"
-        @pagination="getList"
-      />
+      <pagination v-if="total > 0" v-model:total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
     </el-card>
 
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
@@ -120,9 +113,7 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
-            <el-radio v-for="dict in sys_normal_disable" :key="dict.value" :label="dict.value">{{
-              dict.label
-            }}</el-radio>
+            <el-radio v-for="dict in sys_normal_disable" :key="dict.value" :label="dict.value">{{ dict.label }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="菜单权限">
@@ -137,8 +128,7 @@
             node-key="id"
             :check-strictly="!form.menuCheckStrictly"
             empty-text="加载中，请稍候"
-            :props="{ label: 'label', children: 'children' }"
-          ></el-tree>
+            :props="{ label: 'label', children: 'children' }"></el-tree>
         </el-form-item>
         <el-form-item label="备注">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
@@ -179,8 +169,7 @@
             node-key="id"
             :check-strictly="!form.deptCheckStrictly"
             empty-text="加载中，请稍候"
-            :props="{ label: 'label', children: 'children' }"
-          ></el-tree>
+            :props="{ label: 'label', children: 'children' }"></el-tree>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -194,16 +183,16 @@
 </template>
 
 <script setup name="Role" lang="ts">
-import { addRole, changeRoleStatus, dataScope, delRole, getRole, listRole, updateRole, deptTreeSelect } from "@/api/system/role";
-import { roleMenuTreeselect, treeselect as menuTreeselect } from '@/api/system/menu/index';
-import { RoleVO, RoleForm, RoleQuery, DeptTreeOption } from '@/api/system/role/types';
-import { MenuTreeOption, RoleMenuTree } from '@/api/system/menu/types';
+import { addRole, changeRoleStatus, dataScope, delRole, getRole, listRole, updateRole, deptTreeSelect } from '@/api/system/role'
+import { roleMenuTreeselect, treeselect as menuTreeselect } from '@/api/system/menu/index'
+import { RoleVO, RoleForm, RoleQuery, DeptTreeOption } from '@/api/system/role/types'
+import { MenuTreeOption, RoleMenuTree } from '@/api/system/menu/types'
 
-const router = useRouter();
-const { proxy } = getCurrentInstance() as ComponentInternalInstance;
-const { sys_normal_disable } = toRefs<any>(proxy?.useDict('sys_normal_disable'));
+const router = useRouter()
+const { proxy } = getCurrentInstance() as ComponentInternalInstance
+const { sys_normal_disable } = toRefs<any>(proxy?.useDict('sys_normal_disable'))
 
-const roleList = ref<RoleVO[]>();
+const roleList = ref<RoleVO[]>()
 const loading = ref(true)
 const showSearch = ref(true)
 const ids = ref<Array<string | number>>([])
@@ -221,18 +210,18 @@ const openDataScope = ref(false)
 
 /** 数据范围选项*/
 const dataScopeOptions = ref([
-  { value: "1", label: "全部数据权限" },
-  { value: "2", label: "自定数据权限" },
-  { value: "3", label: "本部门数据权限" },
-  { value: "4", label: "本部门及以下数据权限" },
-  { value: "5", label: "仅本人数据权限" }
+  { value: '1', label: '全部数据权限' },
+  { value: '2', label: '自定数据权限' },
+  { value: '3', label: '本部门数据权限' },
+  { value: '4', label: '本部门及以下数据权限' },
+  { value: '5', label: '仅本人数据权限' }
 ])
 
-const queryFormRef = ref<ElFormInstance>();
-const roleFormRef = ref<ElFormInstance>();
-const dataScopeRef = ref<ElFormInstance>();
-const menuRef = ref<ElTreeInstance>();
-const deptRef = ref<ElTreeInstance>();
+const queryFormRef = ref<ElFormInstance>()
+const roleFormRef = ref<ElFormInstance>()
+const dataScopeRef = ref<ElFormInstance>()
+const menuRef = ref<ElTreeInstance>()
+const deptRef = ref<ElTreeInstance>()
 
 const initForm: RoleForm = {
   roleId: undefined,
@@ -245,7 +234,7 @@ const initForm: RoleForm = {
   remark: '',
   dataScope: '1',
   menuIds: [],
-  deptIds: [],
+  deptIds: []
 }
 
 const data = reactive<PageData<RoleForm, RoleQuery>>({
@@ -255,12 +244,12 @@ const data = reactive<PageData<RoleForm, RoleQuery>>({
     pageSize: 10,
     roleName: '',
     roleKey: '',
-    status: '',
+    status: ''
   },
   rules: {
-    roleName: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
-    roleKey: [{ required: true, message: "权限字符不能为空", trigger: "blur" }],
-    roleSort: [{ required: true, message: "角色顺序不能为空", trigger: "blur" }]
+    roleName: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }],
+    roleKey: [{ required: true, message: '权限字符不能为空', trigger: 'blur' }],
+    roleSort: [{ required: true, message: '角色顺序不能为空', trigger: 'blur' }]
   }
 })
 const { form, queryParams, rules } = toRefs(data)
@@ -268,14 +257,14 @@ const { form, queryParams, rules } = toRefs(data)
 const dialog = reactive<DialogOption>({
   visible: false,
   title: ''
-});
+})
 
 /**
  * 查询角色列表
  */
 const getList = () => {
   loading.value = true
-  listRole(proxy?.addDateRange(queryParams.value, dateRange.value)).then(res => {
+  listRole(proxy?.addDateRange(queryParams.value, dateRange.value)).then((res) => {
     roleList.value = res.rows
     total.value = res.total
     loading.value = false
@@ -286,172 +275,174 @@ const getList = () => {
  * 搜索按钮操作
  */
 const handleQuery = () => {
-  queryParams.value.pageNum = 1;
-  getList();
+  queryParams.value.pageNum = 1
+  getList()
 }
 
 /** 重置 */
 const resetQuery = () => {
   dateRange.value = ['', '']
-  queryFormRef.value?.resetFields();
-  handleQuery();
+  queryFormRef.value?.resetFields()
+  handleQuery()
 }
 /**删除按钮操作 */
 const handleDelete = async (row?: RoleVO) => {
-  const roleids = row?.roleId || ids.value;
-  await proxy?.$modal.confirm('是否确认删除角色编号为' + roleids + '数据项目');
-  await delRole(roleids);
-  getList();
-  proxy?.$modal.msgSuccess('删除成功');
+  const roleids = row?.roleId || ids.value
+  await proxy?.$modal.confirm('是否确认删除角色编号为' + roleids + '数据项目')
+  await delRole(roleids)
+  getList()
+  proxy?.$modal.msgSuccess('删除成功')
 }
 
 /** 导出按钮操作 */
 const handleExport = () => {
-  proxy?.download("system/role/export", {
-    ...queryParams.value,
-  }, `role_${new Date().getTime()}.xlsx`)
+  proxy?.download(
+    'system/role/export',
+    {
+      ...queryParams.value
+    },
+    `role_${new Date().getTime()}.xlsx`
+  )
 }
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: RoleVO[]) => {
-  ids.value = selection.map((item: RoleVO) => item.roleId);
-  single.value = selection.length != 1;
-  multiple.value = !selection.length;
+  ids.value = selection.map((item: RoleVO) => item.roleId)
+  single.value = selection.length != 1
+  multiple.value = !selection.length
 }
 
 /** 角色状态修改 */
 const handleStatusChange = async (row: RoleVO) => {
-  let text = row.status === "0" ? "启用" : "停用";
+  let text = row.status === '0' ? '启用' : '停用'
   try {
-    await proxy?.$modal.confirm('确认要"' + text + '""' + row.roleName + '"角色吗?');
-    await changeRoleStatus(row.roleId, row.status);
-    proxy?.$modal.msgSuccess(text + "成功");
+    await proxy?.$modal.confirm('确认要"' + text + '""' + row.roleName + '"角色吗?')
+    await changeRoleStatus(row.roleId, row.status)
+    proxy?.$modal.msgSuccess(text + '成功')
   } catch {
-    row.status = row.status === "0" ? "1" : "0";
+    row.status = row.status === '0' ? '1' : '0'
   }
 }
 
 /** 分配用户 */
 const handleAuthUser = (row: RoleVO) => {
-  router.push("/system/role-auth/user/" + row.roleId);
+  router.push('/system/role-auth/user/' + row.roleId)
 }
 
 /** 查询菜单树结构 */
 const getMenuTreeselect = async () => {
-  const res = await menuTreeselect();
-  menuOptions.value = res.data;
+  const res = await menuTreeselect()
+  menuOptions.value = res.data
 }
 /** 所有部门节点数据 */
 const getDeptAllCheckedKeys = (): any => {
   // 目前被选中的部门节点
-  let checkedKeys = deptRef.value?.getCheckedKeys();
+  let checkedKeys = deptRef.value?.getCheckedKeys()
   // 半选中的部门节点
-  let halfCheckedKeys = deptRef.value?.getHalfCheckedKeys();
+  let halfCheckedKeys = deptRef.value?.getHalfCheckedKeys()
   if (halfCheckedKeys) {
-    checkedKeys?.unshift.apply(checkedKeys, halfCheckedKeys);
+    checkedKeys?.unshift.apply(checkedKeys, halfCheckedKeys)
   }
   return checkedKeys
 }
 /** 重置新增的表单以及其他数据  */
 const reset = () => {
-  menuRef.value?.setCheckedKeys([]);
+  menuRef.value?.setCheckedKeys([])
   menuExpand.value = false
   menuNodeAll.value = false
   deptExpand.value = true
   deptNodeAll.value = false
-  form.value = { ...initForm };
-  roleFormRef.value?.resetFields();
-
+  form.value = { ...initForm }
+  roleFormRef.value?.resetFields()
 }
 
 /** 添加角色 */
 const handleAdd = () => {
-  reset();
-  getMenuTreeselect();
-  dialog.visible = true;
-  dialog.title = "添加角色";
+  reset()
+  getMenuTreeselect()
+  dialog.visible = true
+  dialog.title = '添加角色'
 }
 /** 修改角色 */
 const handleUpdate = async (row?: RoleVO) => {
-  reset();
+  reset()
   const roleId = row?.roleId || ids.value[0]
-  const { data } = await getRole(roleId);
-  Object.assign(form.value, data);
-  form.value.roleSort = Number(form.value.roleSort);
-  const res = await getRoleMenuTreeselect(roleId);
-  dialog.title = "修改角色";
-  dialog.visible = true;
+  const { data } = await getRole(roleId)
+  Object.assign(form.value, data)
+  form.value.roleSort = Number(form.value.roleSort)
+  const res = await getRoleMenuTreeselect(roleId)
+  dialog.title = '修改角色'
+  dialog.visible = true
   res.checkedKeys.forEach((v) => {
     nextTick(() => {
-      menuRef.value?.setChecked(v, true, false);
+      menuRef.value?.setChecked(v, true, false)
     })
   })
-
 }
 /** 根据角色ID查询菜单树结构 */
 const getRoleMenuTreeselect = (roleId: string | number) => {
   return roleMenuTreeselect(roleId).then((res): RoleMenuTree => {
-    menuOptions.value = res.data.menus;
-    return res.data;
+    menuOptions.value = res.data.menus
+    return res.data
   })
 }
 /** 根据角色ID查询部门树结构 */
 const getRoleDeptTreeSelect = async (roleId: string | number) => {
-  const res = await deptTreeSelect(roleId);
-  deptOptions.value = res.data.depts;
-  return res.data;
+  const res = await deptTreeSelect(roleId)
+  deptOptions.value = res.data.depts
+  return res.data
 }
 /** 树权限（展开/折叠）*/
 const handleCheckedTreeExpand = (value: boolean, type: string) => {
-  if (type == "menu") {
-    let treeList = menuOptions.value;
+  if (type == 'menu') {
+    let treeList = menuOptions.value
     for (let i = 0; i < treeList.length; i++) {
       if (menuRef.value) {
-        menuRef.value.store.nodesMap[treeList[i].id].expanded = value;
+        menuRef.value.store.nodesMap[treeList[i].id].expanded = value
       }
     }
-  } else if (type == "dept") {
-    let treeList = deptOptions.value;
+  } else if (type == 'dept') {
+    let treeList = deptOptions.value
     for (let i = 0; i < treeList.length; i++) {
       if (deptRef.value) {
-        deptRef.value.store.nodesMap[treeList[i].id].expanded = value;
+        deptRef.value.store.nodesMap[treeList[i].id].expanded = value
       }
     }
   }
 }
 /** 树权限（全选/全不选） */
 const handleCheckedTreeNodeAll = (value: any, type: string) => {
-  if (type == "menu") {
-    menuRef.value?.setCheckedNodes(value ? menuOptions.value as any : []);
-  } else if (type == "dept") {
-    deptRef.value?.setCheckedNodes(value ? deptOptions.value as any : []);
+  if (type == 'menu') {
+    menuRef.value?.setCheckedNodes(value ? (menuOptions.value as any) : [])
+  } else if (type == 'dept') {
+    deptRef.value?.setCheckedNodes(value ? (deptOptions.value as any) : [])
   }
 }
 /** 树权限（父子联动） */
 const handleCheckedTreeConnect = (value: any, type: string) => {
-  if (type == "menu") {
-    form.value.menuCheckStrictly = value;
-  } else if (type == "dept") {
-    form.value.deptCheckStrictly = value;
+  if (type == 'menu') {
+    form.value.menuCheckStrictly = value
+  } else if (type == 'dept') {
+    form.value.deptCheckStrictly = value
   }
 }
 /** 所有菜单节点数据 */
 const getMenuAllCheckedKeys = (): any => {
   // 目前被选中的菜单节点
-  let checkedKeys = menuRef.value?.getCheckedKeys();
+  let checkedKeys = menuRef.value?.getCheckedKeys()
   // 半选中的菜单节点
-  let halfCheckedKeys = menuRef.value?.getHalfCheckedKeys();
+  let halfCheckedKeys = menuRef.value?.getHalfCheckedKeys()
   if (halfCheckedKeys) {
-    checkedKeys?.unshift.apply(checkedKeys, halfCheckedKeys);
+    checkedKeys?.unshift.apply(checkedKeys, halfCheckedKeys)
   }
-  return checkedKeys;
+  return checkedKeys
 }
 /** 提交按钮 */
 const submitForm = () => {
   roleFormRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       form.value.menuIds = getMenuAllCheckedKeys()
-      form.value.roleId ? await updateRole(form.value) : await addRole(form.value);
-      proxy?.$modal.msgSuccess("操作成功")
+      form.value.roleId ? await updateRole(form.value) : await addRole(form.value)
+      proxy?.$modal.msgSuccess('操作成功')
       dialog.visible = false
       getList()
     }
@@ -460,43 +451,43 @@ const submitForm = () => {
 /** 取消按钮 */
 const cancel = () => {
   reset()
-  dialog.visible = false;
+  dialog.visible = false
 }
 /** 选择角色权限范围触发 */
 const dataScopeSelectChange = (value: string) => {
-  if (value !== "2") {
+  if (value !== '2') {
     deptRef.value?.setCheckedKeys([])
   }
 }
 /** 分配数据权限操作 */
 const handleDataScope = async (row: RoleVO) => {
-  const response = await getRole(row.roleId);
-  Object.assign(form.value, response.data);
-  const res = await getRoleDeptTreeSelect(row.roleId);
-  openDataScope.value = true;
-  dialog.title = "分配数据权限";
+  const response = await getRole(row.roleId)
+  Object.assign(form.value, response.data)
+  const res = await getRoleDeptTreeSelect(row.roleId)
+  openDataScope.value = true
+  dialog.title = '分配数据权限'
   await nextTick(() => {
-    deptRef.value?.setCheckedKeys(res.checkedKeys);
+    deptRef.value?.setCheckedKeys(res.checkedKeys)
   })
 }
 /** 提交按钮（数据权限） */
 const submitDataScope = async () => {
   if (form.value.roleId) {
-    form.value.deptIds = getDeptAllCheckedKeys();
-    await dataScope(form.value);
-    proxy?.$modal.msgSuccess("修改成功");
-    openDataScope.value = false;
-    getList();
+    form.value.deptIds = getDeptAllCheckedKeys()
+    await dataScope(form.value)
+    proxy?.$modal.msgSuccess('修改成功')
+    openDataScope.value = false
+    getList()
   }
 }
 /** 取消按钮（数据权限）*/
 const cancelDataScope = () => {
-  dataScopeRef.value?.resetFields();
-  form.value = { ...initForm };
-  openDataScope.value = false;
+  dataScopeRef.value?.resetFields()
+  form.value = { ...initForm }
+  openDataScope.value = false
 }
 
 onMounted(() => {
-  getList();
-});
+  getList()
+})
 </script>

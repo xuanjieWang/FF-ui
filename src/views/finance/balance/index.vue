@@ -58,7 +58,7 @@
         <div class="txTime" style="color: green">目前可以进行提现</div>
         <div class="txTime2">
           <div>账户余额: {{ userData.money || 0 }}</div>
-          <el-button style="margin-left: 10%" type="success" @click="buttonDis = true" :disabled="buttonDis">提现</el-button>
+          <el-button style="margin-left: 10%" type="success" @click="handleBut()" :disabled="buttonDis">提现</el-button>
         </div>
         <div style="left: 1%; margin-top: 5%; color: #b1b8bd">
           <span v-if="'day' == time.type">ps(提现时间为每周的{{ time.beginTime }}-{{ time.endTime }}日)</span>
@@ -68,19 +68,26 @@
     </div>
     <div class="rightPage">
       <div>
-        <h1 style="margin-left: 45%">提现记录</h1>
+        <h1 style="margin-left: 45%">提现/扣款记录</h1>
         <el-table v-loading="txLoading" :data="txList">
-          <el-table-column label="序号" align="center" prop="title" width="80px">
+          <el-table-column label="序号" prop="title" width="60px">
             <template #default="scope">
               {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
             </template>
           </el-table-column>
-          <el-table-column label="姓名" align="center" prop="sjsName" />
-          <el-table-column label="账户" align="center" prop="sjsPhone" width="120px" />
+          <el-table-column label="姓名" align="center" prop="sjsName" width="80px" />
+          <el-table-column label="账户" align="center" prop="sjsPhone" width="110" />
           <el-table-column label="支付宝号" align="center" prop="zfb" width="140px" />
-          <el-table-column label="提现金额" align="center" prop="money" />
-          <el-table-column label="账户余额" align="center" prop="balance" />
-          <el-table-column label="提现时间" align="center" prop="createTime" width="110px" />
+          <el-table-column label="类型" align="center" width="80px">
+            <template #default="scope">
+              <span v-if="!scope.row.message" style="color: green">提现</span>
+              <span v-else style="color: red">扣款</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="金额" align="center" prop="money" width="80px" />
+          <el-table-column label="余额" align="center" prop="balance" width="80px" />
+          <el-table-column label="扣款原因" align="center" prop="message" width="140px" />
+          <el-table-column label="打款时间" align="center" prop="txTime" width="110px" />
         </el-table>
         <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getTxList" />
       </div>
@@ -101,7 +108,7 @@
 import { getInfo } from '@/api/login'
 import { getTxTime } from '@/api/order'
 import { onMounted, toRefs } from 'vue'
-import { list, setTx } from '@/api/tx'
+import { listDis, setTx } from '@/api/tx'
 const { proxy } = getCurrentInstance()
 
 const userData = ref({}) // 用户信息
@@ -120,6 +127,15 @@ const buttonDis = ref(false)
 const TX = ref({
   money: 10
 })
+
+// 判断余额是否充足
+function handleBut() {
+  if (!userData.value.money || userData.value.money <= 0) {
+    proxy?.$modal.msgError('账户余额不足')
+    return
+  }
+  buttonDis.value = true
+}
 
 const data = reactive({
   queryParams: {
@@ -166,6 +182,7 @@ function checkTxtime(data) {
 
 async function getData() {
   const res = await getInfo()
+
   userData.value = res.data.user
   if ('设计师部门' == res.data.user.dept.deptName) {
     queryParams.value.sjsPhone = userData.value.userName
@@ -181,7 +198,7 @@ async function getData() {
 //获取提交列表
 async function getTxList() {
   txLoading.value = true
-  const txListRes = await list(queryParams.value)
+  const txListRes = await listDis(queryParams.value)
   txList.value = txListRes.rows
   total.value = txListRes.total
   txLoading.value = false

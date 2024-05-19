@@ -14,6 +14,14 @@ export const list = (query) => {
   })
 }
 
+export const listDis = (query) => {
+  return request({
+    url: '/tx/data/listDis',
+    method: 'get',
+    params: query
+  })
+}
+
 // 审核
 export const adopt = (query) => {
   return request({
