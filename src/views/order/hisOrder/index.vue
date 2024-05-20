@@ -13,22 +13,22 @@
               <el-option v-for="dict in order_balance_statu" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
           </el-form-item> -->
-          <el-form-item label="订单评价" prop="commonType">
+          <!-- <el-form-item label="订单评价" prop="commonType">
             <el-select v-model="queryParams.commonType" placeholder="选择订单评价" clearable style="width: 180px; margin-bottom: 0">
               <el-option v-for="dict in order_common_statu" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="订单编号" prop="id">
             <el-input v-model="queryParams.id" placeholder="请输入订单编号" clearable style="width: 180px; margin-bottom: 0" />
           </el-form-item>
           <el-form-item label="设计师" prop="sjsName">
             <el-input v-model="queryParams.sjsName" placeholder="请输入设计师名称" clearable style="width: 180px; margin-bottom: 0" />
           </el-form-item>
-          <el-form-item label="订单类型" prop="type">
-            <el-select v-model="queryParams.type" placeholder="选择订单评价" clearable style="width: 180px; margin-bottom: 0">
+          <!-- <el-form-item label="订单类型" prop="type">
+            <el-select v-model="queryParams.type" placeholder="选择订单类型" clearable style="width: 180px; margin-bottom: 0">
               <el-option v-for="dict in the_dept" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -66,9 +66,9 @@
             <el-tooltip content="查看" placement="top">
               <el-button link type="primary" icon="View" @click="handleView(scope.row)"></el-button>
             </el-tooltip>
-            <el-tooltip content="评价" placement="top" v-if="scope.row.commonType === '未评'">
+            <!-- <el-tooltip content="评价" placement="top" v-if="scope.row.commonType === '未评'">
               <el-button link type="info" icon="ChatRound" @click="handleCommon(scope.row)"></el-button>
-            </el-tooltip>
+            </el-tooltip> -->
           </template>
         </el-table-column>
       </el-table>
@@ -160,7 +160,7 @@
               </el-date-picker>
             </el-form-item>
           </el-row>
-          <p class="item">评论</p>
+          <!-- <p class="item">评论</p>
           <el-row :gutter="20">
             <el-form-item label="评论类型:" prop="commonType">
               <el-input v-model="detailData.commonType" disabled placeholder="" />
@@ -170,7 +170,7 @@
             <el-form-item label="评论:" prop="common" type="textarea">
               <el-input style="width: 500px" :autosize="{ minRows: 4, maxRows: 6 }" type="textarea" v-model="detailData.common" disabled />
             </el-form-item>
-          </el-row>
+          </el-row> -->
         </el-form>
       </el-dialog>
       <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />

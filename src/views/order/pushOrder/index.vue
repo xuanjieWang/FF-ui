@@ -452,6 +452,9 @@ const handleView = async (row) => {
   const _id = row?.id || ids.value[0]
   const res = await getOrder(_id)
   Object.assign(form.value, res.data)
+
+  // testName.value = row.name
+
   dialog.visible = true
   dialog.title = '订单详情'
 }
