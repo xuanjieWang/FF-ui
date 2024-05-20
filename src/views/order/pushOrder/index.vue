@@ -2,7 +2,7 @@
   <div class="p-2">
     <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
       <div class="search" v-show="showSearch">
-        <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="68px">
+        <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="100px">
           <!-- <el-form-item label="提交状态" prop="orderStatus">
             <el-select v-model="queryParams.orderStatus" placeholder="选择订单提交状态" clearable style="width: 180px; margin-bottom: 0">
               <el-option v-for="dict in order_push_statu" :key="dict.value" :label="dict.label" :value="dict.value" />
@@ -18,16 +18,16 @@
               <el-option v-for="dict in order_common_statu" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
           </el-form-item> -->
-          <el-form-item label="订单编号" prop="id">
-            <el-input v-model="queryParams.id" placeholder="请输入订单编号" clearable style="width: 180px; margin-bottom: 0" />
-          </el-form-item>
-          <el-form-item label="设计师" prop="sjsName">
-            <el-input v-model="queryParams.sjsName" placeholder="请输入设计师名称" clearable style="width: 180px; margin-bottom: 0" />
-          </el-form-item>
-          <el-form-item label="订单类型" prop="type">
-            <el-select v-model="queryParams.type" placeholder="选择订单评价" clearable style="width: 180px; margin-bottom: 0">
-              <el-option v-for="dict in the_dept" :key="dict.value" :label="dict.label" :value="dict.value" />
+          <el-form-item label="订单标题" prop="title">
+            <el-select v-model="queryParams.title" placeholder="选择订单标题" clearable style="width: 180px; margin-bottom: 0">
+              <el-option v-for="dict in the_order_title" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
+          </el-form-item>
+          <el-form-item label="订单编号" prop="type">
+            <el-input v-model="queryParams.type" placeholder="请输入订单编号" clearable style="width: 180px; margin-bottom: 0" />
+          </el-form-item>
+          <el-form-item label="设计师姓名" prop="sjsName">
+            <el-input v-model="queryParams.sjsName" placeholder="请输入设计师名称" clearable style="width: 180px; margin-bottom: 0" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -62,13 +62,14 @@
             {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
           </template>
         </el-table-column>
-        <el-table-column label="订单编号" align="center" prop="id" width="180px" />
-        <el-table-column label="标题" align="center" prop="title" width="180px" />
+        <el-table-column label="订单标题" align="center" prop="title" width="180px" />
+        <el-table-column label="订单号" align="center" prop="type" width="180px" />
         <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column>
         <el-table-column label="设计师姓名" align="center" prop="sjsName" width="100px"> </el-table-column>
         <el-table-column label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column>
         <el-table-column label="提成金额" align="center" prop="money" width="90px" />
-        <el-table-column label="订单类型" align="center" prop="type" width="90px" />
+        <el-table-column label="对接客服" align="center" prop="kf" width="90px" />
+        <!-- <el-table-column label="订单类型" align="center" prop="type" width="90px" /> -->
         <!-- <el-table-column label="订单状态" align="center" prop="orderStatus" width="100px" /> -->
         <!-- <el-table-column label="结算状态" align="center" prop="jsStatus" width="100px" /> -->
         <!-- <el-table-column label="订单评价" align="center" prop="common" /> -->
@@ -95,33 +96,33 @@
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="900px" append-to-body>
       <el-form ref="orderFormRef" :model="form" :rules="rules" label-width="150px">
         <p class="item">订单信息</p>
-        <el-row :gutter="20" v-if="!add | isDisabled">
+        <!-- <el-row :gutter="20" v-if="!add | isDisabled">
           <el-form-item label="订单编号:" prop="id">
             <el-input v-model="form.id" disabled="true" placeholder="" />
           </el-form-item>
           <el-form-item label="订单标题:" prop="title">
             <el-input v-model="form.title" :disabled="isDisabled" placeholder="" />
           </el-form-item>
-        </el-row>
-        <el-row :gutter="20" v-else>
+        </el-row> -->
+        <el-row :gutter="20">
           <el-form-item label="订单标题:" prop="title">
-            <el-input v-model="form.title" :disabled="isDisabled" placeholder="" />
+            <el-select v-model="form.title" placeholder="" :disabled="isDisabled" clearable style="width: 250px; margin-bottom: 0">
+              <el-option v-for="dict in the_order_title" :key="dict.value" :label="dict.label" :value="dict.value" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="订单号:" prop="type">
+            <el-input v-model="form.type" :disabled="isDisabled" placeholder="" />
           </el-form-item>
         </el-row>
         <el-row :gutter="20">
           <el-form-item label="提成金额" prop="money">
             <el-input v-model="form.money" :disabled="isDisabled" placeholder="" />
           </el-form-item>
-          <el-form-item label="订单类型" prop="type">
-            <el-select v-model="form.type" placeholder="" :disabled="isDisabled" clearable style="width: 250px; margin-bottom: 0">
-              <el-option v-for="dict in the_dept" :key="dict.value" :label="dict.label" :value="dict.value" />
-            </el-select>
-          </el-form-item>
-        </el-row>
-        <el-row :gutter="20">
           <el-form-item label="客户旺旺号" prop="wangwang">
             <el-input v-model="form.wangwang" :disabled="isDisabled" placeholder="" />
           </el-form-item>
+        </el-row>
+        <el-row :gutter="20">
           <el-form-item label="对标客服" prop="kf" v-if="isDisabled">
             <el-input v-model="form.kf" :disabled="isDisabled" placeholder="" />
           </el-form-item>
@@ -219,16 +220,17 @@
 import { ref, reactive, getCurrentInstance, toRefs, onMounted, watch } from 'vue'
 import { listOrder, getOrder, addOrder, updateOrder, searchUser } from '@/api/order'
 const { proxy } = getCurrentInstance()
-const { the_dept } = toRefs(proxy?.useDict('the_dept'))
+const { the_order_title } = toRefs(proxy?.useDict('the_order_title'))
 import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
 import { rules } from '../rules'
 
 const testName = ref('')
 watch(testName, () => {
-  search()
+  if (enableSearch.value) search()
 })
 
+const enableSearch = ref(false)
 //搜索用户
 async function search() {
   if (' ' == testName.value) return
@@ -337,6 +339,10 @@ onMounted(() => {
 /** 查询【请填写功能名称】列表 */
 const getList = async () => {
   loading.value = true
+  queryParams.value.deptName = userStore.deptName
+  if (userStore.deptName == '客服部门') {
+    queryParams.value.sjsPhone = userStore.name
+  }
   const res = await listOrder(queryParams.value)
   orderList.value = res.rows
   total.value = res.total
@@ -415,6 +421,7 @@ function searchBlue() {
   searchView.value = false
 }
 function searchFocus() {
+  enableSearch.value = true
   searchView.value = true
   testName.value = ''
 }
@@ -422,8 +429,9 @@ function searchFocus() {
 /** 新增按钮操作 */
 const add = ref(false)
 const handleAdd = () => {
-  add.value = true
+  // add.value = true
   reset()
+  enableSearch.value = true
   isDisabled.value = false
   dialog.visible = true
   dialog.title = '新增订单'
@@ -434,26 +442,30 @@ const isDisabled = ref(false)
 
 /** 修改按钮操作 */
 const handleUpdate = async (row) => {
-  add.value = false
+  enableSearch.value = false
+  testName.value = row.sjsName
+
+  // add.value = false
   isDisabled.value = false
   reset()
   const _id = row?.id || ids.value[0]
   const res = await getOrder(_id)
   Object.assign(form.value, res.data)
+
   dialog.visible = true
   dialog.title = '修改订单'
 }
 
 /** 查看按钮 */
 const handleView = async (row) => {
-  add.value = false
+  enableSearch.value = false
+  testName.value = row.sjsName
+  // add.value = false
   isDisabled.value = true
   reset()
   const _id = row?.id || ids.value[0]
   const res = await getOrder(_id)
   Object.assign(form.value, res.data)
-
-  // testName.value = row.name
 
   dialog.visible = true
   dialog.title = '订单详情'

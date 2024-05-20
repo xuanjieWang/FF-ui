@@ -18,17 +18,17 @@
               <el-option v-for="dict in order_common_statu" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
           </el-form-item> -->
+          <el-form-item label="订单标题" prop="title">
+            <el-select v-model="queryParams.title" placeholder="选择订单标题" clearable style="width: 180px; margin-bottom: 0">
+              <el-option v-for="dict in the_order_title" :key="dict.value" :label="dict.label" :value="dict.value" />
+            </el-select>
+          </el-form-item>
           <el-form-item label="订单编号" prop="id">
             <el-input v-model="queryParams.id" placeholder="请输入订单编号" clearable style="width: 180px; margin-bottom: 0" />
           </el-form-item>
           <el-form-item label="设计师" prop="sjsName">
             <el-input v-model="queryParams.sjsName" placeholder="请输入设计师名称" clearable style="width: 180px; margin-bottom: 0" />
           </el-form-item>
-          <!-- <el-form-item label="订单类型" prop="type">
-            <el-select v-model="queryParams.type" placeholder="选择订单类型" clearable style="width: 180px; margin-bottom: 0">
-              <el-option v-for="dict in the_dept" :key="dict.value" :label="dict.label" :value="dict.value" />
-            </el-select>
-          </el-form-item> -->
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -44,13 +44,12 @@
             {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
           </template>
         </el-table-column>
-        <!-- <el-table-column label="订单编号" align="center" prop="id" width="180px" /> -->
         <el-table-column label="标题" align="center" prop="title" width="180px" />
+        <el-table-column label="订单编号" align="center" prop="type" width="180px" />
         <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column>
         <el-table-column label="设计师姓名" align="center" prop="sjsName" width="100px"> </el-table-column>
         <el-table-column label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column>
         <el-table-column label="提成金额" align="center" prop="money" width="90px" />
-        <el-table-column label="订单类型" align="center" prop="type" width="90px" />
         <el-table-column label="订单状态" align="center" prop="orderStatus" width="100px">
           <template #default="scope">
             <span v-if="scope.row.orderStatus == '交易完成'" style="color: green">交易完成</span>
@@ -58,9 +57,9 @@
           </template>
         </el-table-column>
         <el-table-column label="结算状态" align="center" prop="jsStatus" width="100px" />
-        <el-table-column label="评论" align="center" prop="commonType" width="100px" />
+        <!-- <el-table-column label="评论" align="center" prop="commonType" width="100px" /> -->
         <!-- <el-table-column label="下单时间" align="center" prop="xdTime" width="110px" /> -->
-        <el-table-column label="订单完成时间" align="center" prop="updateTime" width="110px" />
+        <el-table-column label="订单完成时间" align="center" prop="updateTime" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="120px">
           <template #default="scope">
             <el-tooltip content="查看" placement="top">
@@ -77,27 +76,24 @@
         <el-form ref="detailDatas" :model="detailData" label-width="150px">
           <p class="item">订单信息</p>
           <el-row :gutter="20">
-            <el-form-item label="订单编号:" prop="id">
-              <el-input v-model="detailData.id" disabled placeholder="" />
-            </el-form-item>
             <el-form-item label="订单标题:" prop="title">
-              <el-input v-model="detailData.title" disabled placeholder="" />
+              <el-select v-model="detailData.title" placeholder="" disabled clearable style="width: 250px; margin-bottom: 0">
+                <el-option v-for="dict in the_order_title" :key="dict.value" :label="dict.label" :value="dict.value" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="订单编号" prop="type">
+              <el-input v-model="detailData.type" disabled placeholder="" />
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
             <el-form-item label="提成金额" prop="money">
               <el-input v-model="detailData.money" disabled placeholder="" />
             </el-form-item>
-            <el-form-item label="订单类型" prop="type">
-              <el-select v-model="detailData.type" placeholder="" disabled clearable style="width: 250px; margin-bottom: 0">
-                <el-option v-for="dict in the_dept" :key="dict.value" :label="dict.label" :value="dict.value" />
-              </el-select>
-            </el-form-item>
-          </el-row>
-          <el-row :gutter="20">
             <el-form-item label="客户旺旺号" prop="wangwang">
               <el-input v-model="detailData.wangwang" disabled placeholder="" />
             </el-form-item>
+          </el-row>
+          <el-row :gutter="20">
             <el-form-item label="对标客服" prop="kf">
               <el-input v-model="detailData.kf" disabled placeholder="" />
             </el-form-item>
@@ -200,7 +196,7 @@
 import { ref, reactive, getCurrentInstance, toRefs, onMounted } from 'vue'
 import { listHis, subComm } from '@/api/order'
 const { proxy } = getCurrentInstance()
-const { the_dept, order_common_statu } = toRefs(proxy?.useDict('the_dept', 'order_common_statu'))
+const { the_order_title } = toRefs(proxy?.useDict('the_order_title'))
 import { commonType, commRules } from '../rules.js'
 import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
