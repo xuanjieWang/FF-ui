@@ -69,13 +69,9 @@
         <el-table-column label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column>
         <el-table-column label="提成金额" align="center" prop="money" width="90px" />
         <el-table-column label="对接客服" align="center" prop="kf" width="90px" />
-        <!-- <el-table-column label="订单类型" align="center" prop="type" width="90px" /> -->
-        <!-- <el-table-column label="订单状态" align="center" prop="orderStatus" width="100px" /> -->
-        <!-- <el-table-column label="结算状态" align="center" prop="jsStatus" width="100px" /> -->
-        <!-- <el-table-column label="订单评价" align="center" prop="common" /> -->
-        <el-table-column label="下单时间" align="center" prop="xdTime" width="110px" />
+        <el-table-column label="下单时间" align="center" prop="xdTime" width="170px" />
         <el-table-column label="交付时间" align="center" prop="jfTime" width="110px" />
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="120px">
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="查看" placement="top">
               <el-button link type="primary" icon="View" @click="handleView(scope.row)" v-hasPermi="['system:order:edit']"></el-button>
@@ -408,8 +404,9 @@ async function orderSuccess() {
 async function orderFail() {
   jsData.value.orderStatus = '交易失败'
   jsData.value.jsStatus = '订单取消'
-  await updateOrder(jsData.value)
-  proxy?.$modal.msgSuccess('操作成功')
+  await updateOrder(jsData.value).then(() => {
+    proxy?.$modal.msgSuccess('操作成功')
+  })
   dialog.jsVisible = false
   setTimeout(() => {
     getList()

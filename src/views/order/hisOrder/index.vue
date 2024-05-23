@@ -56,21 +56,24 @@
             <span v-else style="color: red">{{ scope.row.orderStatus }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="结算状态" align="center" prop="jsStatus" width="100px" />
-        <!-- <el-table-column label="评论" align="center" prop="commonType" width="100px" /> -->
-        <!-- <el-table-column label="下单时间" align="center" prop="xdTime" width="110px" /> -->
-        <el-table-column label="订单完成时间" align="center" prop="updateTime" />
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="120px">
+        <el-table-column label="结算状态" align="center" prop="jsStatus" width="110px">
+          <template #default="scope">
+            <span v-if="scope.row.jsStatus == '已结算'" style="color: green">交易完成</span>
+            <span v-if="scope.row.jsStatus == '订单取消'" style="color: red">订单取消</span>
+            <span v-if="scope.row.jsStatus == '订单失败'" style="color: red">订单失败</span>
+            <span v-if="scope.row.jsStatus == '订单核验中'" style="color: blue">订单核验中</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="订单完成时间" align="center" prop="updateTime" width="170px" />
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="查看" placement="top">
               <el-button link type="primary" icon="View" @click="handleView(scope.row)"></el-button>
             </el-tooltip>
-            <!-- <el-tooltip content="评价" placement="top" v-if="scope.row.commonType === '未评'">
-              <el-button link type="info" icon="ChatRound" @click="handleCommon(scope.row)"></el-button>
-            </el-tooltip> -->
           </template>
         </el-table-column>
       </el-table>
+
       <!-- 添加或修改【请填写功能名称】对话框 -->
       <el-dialog :title="dialog.title" v-model="dialog.visible" width="900px" append-to-body>
         <el-form ref="detailDatas" :model="detailData" label-width="150px">

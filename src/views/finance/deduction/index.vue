@@ -56,7 +56,12 @@ function handle() {
     if (valid) {
       buttonLoading.value = true
       await proxy?.$modal.confirm('确认对用户 ' + form.value.sjsName + ' 扣除金额: ' + form.value.money + ' 元 ?').then(async () => {
-        await setTx(form.value)
+        await setTx(form.value).then(() => {
+          form.value = { ...initFormData }
+          testName.value = ' '
+          proxy?.$modal.msgSuccess('扣款成功')
+          buttonLoading.value = false
+        })
       })
     }
   })

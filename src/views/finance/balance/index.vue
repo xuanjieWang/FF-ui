@@ -75,8 +75,8 @@
               {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
             </template>
           </el-table-column>
-          <el-table-column label="姓名" align="center" prop="sjsName" width="80px" />
-          <el-table-column label="账户" align="center" prop="sjsPhone" width="110" />
+          <el-table-column label="姓名" align="center" prop="sjsName" width="100px" />
+          <el-table-column label="账户" align="center" prop="sjsPhone" width="120" />
           <el-table-column label="支付宝号" align="center" prop="zfb" width="140px" />
           <el-table-column label="类型" align="center" width="80px">
             <template #default="scope">
@@ -87,19 +87,20 @@
           <el-table-column label="金额" align="center" prop="money" width="80px" />
           <el-table-column label="余额" align="center" prop="balance" width="80px" />
           <el-table-column label="扣款原因" align="center" prop="message" width="140px" />
-          <el-table-column label="打款时间" align="center" prop="txTime" width="110px" />
+          <el-table-column label="打款/扣款时间" align="center" prop="txTime" width="180px">
+            <template #default="scope">
+              <span v-if="!scope.row.txTime" style="color: blue">审核中</span>
+              <span v-else>{{ scope.row.txTime }}</span>
+            </template>
+          </el-table-column>
         </el-table>
         <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getTxList" />
       </div>
     </div>
     <el-dialog title="提现" v-model="buttonDis" width="500px" append-to-body>
-      <div style="flex">
-        <span>提现金额： </span>
-        <el-input-number v-model="TX.money" :max="userData.money" :precision="2" :min="10" />
-        <span>元</span>
-      </div>
-      <p style="margin: 20px 0 0 10px">当前提现金额: {{ TX.money.toFixed(2) }}, 体现后余额: {{ (userData.money - TX.money).toFixed(2) }}</p>
-      <el-button style="margin-left: 350px" type="success" @click="subTX">提现</el-button>
+      <span>请确认提现金额： {{ userData.money }} &nbsp;元</span>
+
+      <el-button style="margin-left: 350px; margin-top: 20px" type="primary" @click="subTX">提现</el-button>
     </el-dialog>
   </div>
 </template>
@@ -107,7 +108,7 @@
 <script setup>
 import { getInfo } from '@/api/login'
 import { getTxTime } from '@/api/order'
-import { onMounted, toRefs } from 'vue'
+import { onMounted, toRefs, onUnmounted } from 'vue'
 import { listDis, setTx } from '@/api/tx'
 const { proxy } = getCurrentInstance()
 
@@ -118,18 +119,22 @@ const time = ref({}) // 提现时间
 const total = ref(0)
 const txLoading = ref(false)
 
+let list = ''
 onMounted(() => {
   getData()
+  list = setTimeout(() => {
+    getData()
+  }, 1000 * 10)
+})
+onUnmounted(() => {
+  clearTimeout(list)
 })
 
 const buttonDis = ref(false)
 // 提现申请列表
-const TX = ref({
-  money: 10
-})
 
 // 判断余额是否充足
-function handleBut() {
+async function handleBut() {
   if (!userData.value.money || userData.value.money <= 0) {
     proxy?.$modal.msgError('账户余额不足')
     return
@@ -145,16 +150,21 @@ const data = reactive({
 })
 const { queryParams } = toRefs(data)
 
+// 提现全部金额
 async function subTX() {
-  TX.value.sjsPhone = userData.value.userName
-  TX.value.sjsName = userData.value.name
+  let tx = {
+    sjsPhone: userData.value.userName,
+    sjsName: userData.value.name,
+    money: userData.value.money
+  }
 
-  await setTx(TX.value)
-  setTimeout(() => {
-    proxy?.$modal.msgSuccess('提现申请成功')
-    buttonDis.value = false
-    getData()
-  }, 500)
+  await setTx(tx).then(
+    setTimeout(() => {
+      proxy?.$modal.msgSuccess('提现申请成功')
+      buttonDis.value = false
+      getData()
+    }, 500)
+  )
 }
 
 const txButtn = ref(false)
@@ -182,7 +192,6 @@ function checkTxtime(data) {
 
 async function getData() {
   const res = await getInfo()
-
   userData.value = res.data.user
   if ('设计师部门' == res.data.user.dept.deptName) {
     queryParams.value.sjsPhone = userData.value.userName
@@ -199,6 +208,7 @@ async function getData() {
 async function getTxList() {
   txLoading.value = true
   const txListRes = await listDis(queryParams.value)
+  console.log(txListRes.rows)
   txList.value = txListRes.rows
   total.value = txListRes.total
   txLoading.value = false

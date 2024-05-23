@@ -3,13 +3,13 @@
 }
 .leftPage {
   width: 30%;
-  margin-left: 5%;
+  margin-left: 2%;
   display: flex;
   flex-direction: column;
 }
 .rightPage {
-  width: 60%;
-  margin-left: 5%;
+  width: 66%;
+  margin-left: 2%;
 }
 
 .list-group-striped > .list-group-item {
@@ -62,4 +62,10 @@ span {
   justify-items: center;
   align-items: center;
   justify-content: space-around;
+}
+
+.txOrder {
+  width: 100%;
+  min-height: 200px;
+  overflow-y: auto;
 }

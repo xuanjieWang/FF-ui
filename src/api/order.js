@@ -1,4 +1,4 @@
-import request from '@/utils/request';
+import request from '@/utils/request'
 
 /**
  * 查询【请填写功能名称】列表
@@ -11,16 +11,16 @@ export const listOrder = (query) => {
     url: '/system/order/list',
     method: 'get',
     params: query
-  });
-};
+  })
+}
 
 export const listHis = (query) => {
   return request({
     url: '/system/order/listHis',
     method: 'get',
     params: query
-  });
-};
+  })
+}
 /**
  * 查询【请填写功能名称】详细
  * @param id
@@ -29,8 +29,8 @@ export const getOrder = (id) => {
   return request({
     url: '/system/order/' + id,
     method: 'get'
-  });
-};
+  })
+}
 
 /**
  * 新增【请填写功能名称】
@@ -41,8 +41,8 @@ export const addOrder = (data) => {
     url: '/system/order',
     method: 'post',
     data: data
-  });
-};
+  })
+}
 
 /**
  * 修改【请填写功能名称】
@@ -53,16 +53,16 @@ export const updateOrder = (data) => {
     url: '/system/order',
     method: 'put',
     data: data
-  });
-};
+  })
+}
 
 export const subComm = (data) => {
   return request({
     url: '/system/order/subcomm',
     method: 'put',
     data: data
-  });
-};
+  })
+}
 
 /**
  * 删除【请填写功能名称】
@@ -72,8 +72,8 @@ export const delOrder = (id) => {
   return request({
     url: '/system/order/' + id,
     method: 'delete'
-  });
-};
+  })
+}
 
 /**
  * 搜索用户
@@ -83,8 +83,8 @@ export const searchUser = (query) => {
     url: '/system/user/searchUser',
     method: 'get',
     params: query
-  });
-};
+  })
+}
 
 /**
  * 提现时间
@@ -93,8 +93,8 @@ export const getTxTime = () => {
   return request({
     url: '/system/money/getTime',
     method: 'get'
-  });
-};
+  })
+}
 
 /**
  * 提现时间
@@ -104,5 +104,12 @@ export const setTxTime = (data) => {
     url: '/system/money/setTxTime',
     method: 'get',
     params: data
-  });
-};
+  })
+}
+
+export const getTxOrder = (phoneNumber) => {
+  return request({
+    url: '/system/order/getTxOrder/' + phoneNumber,
+    method: 'get'
+  })
+}

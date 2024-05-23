@@ -12,11 +12,11 @@
         <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column>
         <el-table-column v-if="userStore.deptName != '设计师部门'" label="设计师姓名" align="center" prop="sjsName" width="100px"> </el-table-column>
         <el-table-column v-if="userStore.deptName != '设计师部门'" label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column>
-        <el-table-column label="订单类型" align="center" prop="orderType" width="90px" />
+        <el-table-column label="淘宝订单号" align="center" prop="orderType" width="200px" />
         <el-table-column label="订单金额" align="center" prop="money" width="90px" />
         <el-table-column label="余额" align="center" prop="balance" width="90px" />
         <el-table-column label="结算状态" align="center" prop="jsStatus" width="100px" />
-        <el-table-column label="结算时间" align="center" prop="createTime" width="110px" />
+        <el-table-column label="结算时间" align="center" prop="createTime" width="170px" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="订单详情" placement="top">
@@ -30,37 +30,35 @@
         <el-form ref="detailDatas" :model="detailData" label-width="150px">
           <p class="item">订单信息</p>
           <el-row :gutter="20">
-            <el-form-item label="订单编号:" prop="id">
+            <!-- <el-form-item label="订单编号:" prop="id">
               <el-input v-model="detailData.id" disabled placeholder="" />
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="订单标题:" prop="title">
               <el-input v-model="detailData.title" disabled placeholder="" />
             </el-form-item>
+            <el-form-item label="淘宝订单号:" prop="type">
+              <el-input v-model="detailData.type" disabled placeholder="" />
+            </el-form-item>
           </el-row>
           <el-row :gutter="20">
-            <el-form-item label="提成金额" prop="money">
+            <el-form-item label="提成金额:" prop="money">
               <el-input v-model="detailData.money" disabled placeholder="" />
             </el-form-item>
-            <el-form-item label="订单类型" prop="type">
-              <el-select v-model="detailData.type" placeholder="" disabled clearable style="width: 250px; margin-bottom: 0">
-                <el-option v-for="dict in the_dept" :key="dict.value" :label="dict.label" :value="dict.value" />
-              </el-select>
+            <el-form-item label="客户旺旺号:" prop="wangwang">
+              <el-input v-model="detailData.wangwang" disabled placeholder="" />
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
-            <el-form-item label="客户旺旺号" prop="wangwang">
-              <el-input v-model="detailData.wangwang" disabled placeholder="" />
-            </el-form-item>
-            <el-form-item label="对标客服" prop="kf">
+            <el-form-item label="对标客服:" prop="kf">
               <el-input v-model="detailData.kf" disabled placeholder="" />
             </el-form-item>
           </el-row>
           <p class="item">设计师信息</p>
           <el-row :gutter="20">
-            <el-form-item label="设计师姓名" prop="sjsName">
+            <el-form-item label="设计师姓名:" prop="sjsName">
               <el-input v-model="detailData.sjsName" disabled placeholder="" />
             </el-form-item>
-            <el-form-item label="设计师账户" prop="sjsPhone">
+            <el-form-item label="设计师账户:" prop="sjsPhone">
               <el-input v-model="detailData.sjsPhone" disabled placeholder="" />
             </el-form-item>
           </el-row>
@@ -113,7 +111,7 @@
               </el-date-picker>
             </el-form-item>
           </el-row>
-          <p class="item">评论</p>
+          <!-- <p class="item">评论</p>
           <el-row :gutter="20">
             <el-form-item label="评论类型:" prop="commonType">
               <el-input v-model="detailData.commonType" disabled placeholder="" />
@@ -123,7 +121,7 @@
             <el-form-item label="评论:" prop="common" type="textarea">
               <el-input style="width: 500px" :autosize="{ minRows: 4, maxRows: 6 }" type="textarea" v-model="detailData.common" disabled />
             </el-form-item>
-          </el-row>
+          </el-row> -->
         </el-form>
       </el-dialog>
       <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
@@ -176,6 +174,7 @@ const getList = async () => {
   queryParams.value.deptName = userStore.deptName
   queryParams.value.sjsPhone = userStore.name
   const res = await listAccount(queryParams.value)
+  console.log(res.rows)
   orderList.value = res.rows
   total.value = res.total
   loading.value = false
@@ -188,6 +187,7 @@ const dialog = reactive({
 /** 查看按钮 */
 const handleView = async (row) => {
   const res = await getOrder(row.orderId)
+  console.log(res.data)
   detailData.value = { ...res.data }
   add.value = false
   dialog.visible = true

@@ -40,9 +40,20 @@
     <el-dialog title="提现审核" v-model="buttonDis" width="500px" append-to-body>
       <span class="info">请确认打款信息!</span>
       <div class="item">
-        <span>姓名： {{ viewData.sjsName }}</span>
-        <span>账户：{{ viewData.zfb }} </span>
-        <span>打款金额 {{ viewData.money }}</span>
+        <span>姓名：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ viewData.sjsName }}</span>
+        <span>支付宝：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.zfb }} </span>
+        <span>打款总金额：&nbsp;&nbsp; {{ viewData.money }}</span>
+      </div>
+      <div class="txOrder">
+        <span>共有 {{ txOrder.length }}&nbsp;个交易完成的订单</span>
+        <div class="order" v-for="(item, index) in txOrder" :key="index">
+          <span>--订单{{ index + 1 }}</span>
+          <span>订单标题: {{ item.title }}</span>
+          <span>金额: {{ item.money }}</span>
+          <span>淘宝订单号: {{ item.type }}</span>
+          <span>客户旺旺号: {{ item.wangwang }}</span>
+          <span>下单时间: {{ item.createTime }}</span>
+        </div>
       </div>
       <el-button style="margin-left: 350px" type="primary" @click="adoptTx('0')">通&nbsp;&nbsp;过</el-button>
       <el-button style="margin-left: 250px; margin-top: -56px" type="danger" @click="adoptTx('1')">不通过</el-button>
@@ -53,11 +64,14 @@
 <script setup>
 import { onMounted, toRefs, onUnmounted } from 'vue'
 import { list, adopt } from '@/api/tx'
+import { getTxOrder } from '@/api/order'
+
 const { proxy } = getCurrentInstance()
 
 const txList = ref([]) //提现列表
 const total = ref(0)
 const txLoading = ref(false)
+const txOrder = ref([])
 
 let timer = ''
 onMounted(() => {
@@ -98,21 +112,34 @@ function adoptTx(success) {
 }
 
 const viewData = ref({})
-function handleView(data) {
+async function handleView(data) {
+  const res = await getTxOrder(data.sjsPhone)
+  txOrder.value = res.data || []
   buttonDis.value = true
   viewData.value = data
 }
 </script>
 <style lang="scss" scoped>
 .info {
-  font-size: 20px;
+  font-size: 16px;
   margin-left: 15px;
 }
 .item {
   display: flex;
   flex-direction: column;
   margin-left: 30px;
-  font-size: 16px;
-  margin-top: 20px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+.order {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.txOrder {
+  margin-top: 10px;
+  height: 200px;
+  overflow-y: auto;
+  margin-left: 20px;
 }
 </style>
