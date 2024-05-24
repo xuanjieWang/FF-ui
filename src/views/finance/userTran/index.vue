@@ -45,7 +45,7 @@
         <span>打款总金额：&nbsp;&nbsp; {{ viewData.money }}</span>
       </div>
       <div class="txOrder">
-        <span>共有 {{ txOrder.length }}&nbsp;个交易完成的订单</span>
+        <span v-if="txOrder.length > 0">共有 {{ txOrder.length }}&nbsp;个交易完成的订单</span>
         <div class="order" v-for="(item, index) in txOrder" :key="index">
           <span>--订单{{ index + 1 }}</span>
           <span>订单标题: {{ item.title }}</span>
@@ -138,7 +138,8 @@ async function handleView(data) {
 }
 .txOrder {
   margin-top: 10px;
-  height: 200px;
+  min-height: 30px;
+  max-height: 200px;
   overflow-y: auto;
   margin-left: 20px;
 }
