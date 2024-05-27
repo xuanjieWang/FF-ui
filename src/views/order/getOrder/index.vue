@@ -31,11 +31,12 @@
             {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
           </template>
         </el-table-column>
-        <el-table-column label="订单编号" align="center" prop="id" width="180px" />
+        <el-table-column label="店铺" align="center" prop="shop" width="200px" />
         <el-table-column label="标题" align="center" prop="title" width="200px" />
+        <!-- <el-table-column label="订单编号" align="center" prop="id" width="180px" /> -->
         <el-table-column label="对标客服" align="center" prop="kf" width="100px" />
         <el-table-column label="提成金额" align="center" prop="money" width="100px" />
-        <el-table-column label="订单类型" align="center" prop="type" width="100px" />
+        <el-table-column label="订单号" align="center" prop="type" width="100px" />
         <el-table-column label="订单状态" align="center" prop="orderStatus" width="100px" />
         <el-table-column label="结算状态" align="center" prop="jsStatus" width="100px" />
         <el-table-column label="下单时间" align="center" prop="xdTime" width="180px" />
@@ -56,21 +57,22 @@
       <el-form ref="orderFormRef" :model="form" :rules="rules" label-width="150px">
         <p class="item">订单信息</p>
         <el-row :gutter="20">
-          <el-form-item label="订单编号:" prop="id">
-            <el-input v-model="form.id" disabled placeholder="" />
+          <el-form-item label="店铺:" prop="shop">
+            <el-input v-model="form.shop" disabled placeholder="" />
           </el-form-item>
           <el-form-item label="订单标题:" prop="title">
             <el-input v-model="form.title" disabled placeholder="" />
           </el-form-item>
+          <!-- <el-form-item label="订单编号:" prop="id">
+            <el-input v-model="form.id" disabled placeholder="" />
+          </el-form-item> -->
         </el-row>
         <el-row :gutter="20">
           <el-form-item label="提成金额" prop="money">
             <el-input v-model="form.money" disabled placeholder="" />
           </el-form-item>
-          <el-form-item label="订单类型" prop="type">
-            <el-select v-model="form.type" placeholder="" disabled clearable style="width: 250px; margin-bottom: 0">
-              <el-option v-for="dict in the_dept" :key="dict.value" :label="dict.label" :value="dict.value" />
-            </el-select>
+          <el-form-item label="订单号" prop="type">
+            <el-input v-model="form.type" disabled placeholder="" />
           </el-form-item>
         </el-row>
         <el-row :gutter="20">

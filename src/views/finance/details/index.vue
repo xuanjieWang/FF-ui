@@ -7,16 +7,17 @@
             {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
           </template>
         </el-table-column>
-        <el-table-column label="订单编号" align="center" prop="orderId" width="180px" />
-        <el-table-column label="标题" align="center" prop="orderTitle" width="180px" />
+        <!-- <el-table-column label="订单编号" align="center" prop="orderId" width="180px" /> -->
+        <el-table-column label="店铺名称" align="center" prop="shop" width="180px" />
+        <el-table-column label="订单标题" align="center" prop="orderTitle" width="180px" />
         <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column>
         <el-table-column v-if="userStore.deptName != '设计师部门'" label="设计师姓名" align="center" prop="sjsName" width="100px"> </el-table-column>
-        <el-table-column v-if="userStore.deptName != '设计师部门'" label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column>
+        <!-- <el-table-column v-if="userStore.deptName != '设计师部门'" label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column> -->
         <el-table-column label="淘宝订单号" align="center" prop="orderType" width="200px" />
         <el-table-column label="订单金额" align="center" prop="money" width="90px" />
         <el-table-column label="余额" align="center" prop="balance" width="90px" />
         <el-table-column label="结算状态" align="center" prop="jsStatus" width="100px" />
-        <el-table-column label="结算时间" align="center" prop="createTime" width="170px" />
+        <el-table-column label="结算时间" align="center" prop="createTime" width="110px" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="订单详情" placement="top">
@@ -30,20 +31,18 @@
         <el-form ref="detailDatas" :model="detailData" label-width="150px">
           <p class="item">订单信息</p>
           <el-row :gutter="20">
-            <!-- <el-form-item label="订单编号:" prop="id">
-              <el-input v-model="detailData.id" disabled placeholder="" />
-            </el-form-item> -->
-            <el-form-item label="订单标题:" prop="title">
-              <el-input v-model="detailData.title" disabled placeholder="" />
+            <el-form-item label="订单编号:" prop="shop">
+              <el-input v-model="detailData.shop" disabled placeholder="" />
             </el-form-item>
-            <el-form-item label="淘宝订单号:" prop="type">
-              <el-input v-model="detailData.type" disabled placeholder="" />
+            <el-form-item label="订单标题:" prop="title">
+              <el-input v-model="detailData.title" disabled placeholder="" style="width: 300px" />
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
-            <el-form-item label="提成金额:" prop="money">
-              <el-input v-model="detailData.money" disabled placeholder="" />
+            <el-form-item label="淘宝订单号:" prop="type">
+              <el-input v-model="detailData.type" disabled placeholder="" />
             </el-form-item>
+
             <el-form-item label="客户旺旺号:" prop="wangwang">
               <el-input v-model="detailData.wangwang" disabled placeholder="" />
             </el-form-item>
@@ -51,6 +50,9 @@
           <el-row :gutter="20">
             <el-form-item label="对标客服:" prop="kf">
               <el-input v-model="detailData.kf" disabled placeholder="" />
+            </el-form-item>
+            <el-form-item label="提成金额:" prop="money">
+              <el-input v-model="detailData.money" disabled placeholder="" />
             </el-form-item>
           </el-row>
           <p class="item">设计师信息</p>
@@ -174,7 +176,6 @@ const getList = async () => {
   queryParams.value.deptName = userStore.deptName
   queryParams.value.sjsPhone = userStore.name
   const res = await listAccount(queryParams.value)
-  console.log(res.rows)
   orderList.value = res.rows
   total.value = res.total
   loading.value = false

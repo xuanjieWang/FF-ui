@@ -44,11 +44,12 @@
             {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
           </template>
         </el-table-column>
+        <el-table-column label="店铺" align="center" prop="shop" width="180px" />
         <el-table-column label="标题" align="center" prop="title" width="180px" />
-        <el-table-column label="订单编号" align="center" prop="type" width="180px" />
+        <el-table-column label="淘宝订单号" align="center" prop="type" width="180px" />
         <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column>
         <el-table-column label="设计师姓名" align="center" prop="sjsName" width="100px"> </el-table-column>
-        <el-table-column label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column>
+        <!-- <el-table-column label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column> -->
         <el-table-column label="提成金额" align="center" prop="money" width="90px" />
         <el-table-column label="订单状态" align="center" prop="orderStatus" width="100px">
           <template #default="scope">
@@ -79,24 +80,26 @@
         <el-form ref="detailDatas" :model="detailData" label-width="150px">
           <p class="item">订单信息</p>
           <el-row :gutter="20">
-            <el-form-item label="订单标题:" prop="title">
-              <el-select v-model="detailData.title" placeholder="" disabled clearable style="width: 250px; margin-bottom: 0">
-                <el-option v-for="dict in the_order_title" :key="dict.value" :label="dict.label" :value="dict.value" />
-              </el-select>
+            <el-form-item label="店铺名称:" prop="shop">
+              <el-input v-model="detailData.shop" placeholder="" disabled clearable style="width: 250px; margin-bottom: 0"> </el-input>
             </el-form-item>
-            <el-form-item label="订单编号" prop="type">
+            <el-form-item label="订单标题:" prop="title">
+              <el-input v-model="detailData.title" placeholder="" disabled clearable style="width: 300px; margin-bottom: 0"> </el-input>
+            </el-form-item>
+          </el-row>
+          <el-row :gutter="20">
+            <el-form-item label="淘宝订单号" prop="type">
               <el-input v-model="detailData.type" disabled placeholder="" />
+            </el-form-item>
+
+            <el-form-item label="客户旺旺号" prop="wangwang">
+              <el-input v-model="detailData.wangwang" disabled placeholder="" />
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
             <el-form-item label="提成金额" prop="money">
               <el-input v-model="detailData.money" disabled placeholder="" />
             </el-form-item>
-            <el-form-item label="客户旺旺号" prop="wangwang">
-              <el-input v-model="detailData.wangwang" disabled placeholder="" />
-            </el-form-item>
-          </el-row>
-          <el-row :gutter="20">
             <el-form-item label="对标客服" prop="kf">
               <el-input v-model="detailData.kf" disabled placeholder="" />
             </el-form-item>

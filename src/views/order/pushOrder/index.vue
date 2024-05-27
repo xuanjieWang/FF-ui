@@ -18,9 +18,9 @@
               <el-option v-for="dict in order_common_statu" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
           </el-form-item> -->
-          <el-form-item label="订单标题" prop="title">
-            <el-select v-model="queryParams.title" placeholder="选择订单标题" clearable style="width: 180px; margin-bottom: 0">
-              <el-option v-for="dict in the_order_title" :key="dict.value" :label="dict.label" :value="dict.value" />
+          <el-form-item label="店铺名称" prop="shop">
+            <el-select v-model="queryParams.title" placeholder="选择店铺名称" clearable style="width: 180px; margin-bottom: 0">
+              <el-option v-for="dict in the_shop_name" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
           </el-form-item>
           <el-form-item label="订单编号" prop="type">
@@ -62,16 +62,17 @@
             {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
           </template>
         </el-table-column>
-        <el-table-column label="订单标题" align="center" prop="title" width="180px" />
-        <el-table-column label="订单号" align="center" prop="type" width="180px" />
+        <el-table-column label="店铺名称" align="center" prop="shop" width="180px" />
+        <el-table-column label="订单标题" align="center" prop="title" width="200px" />
+        <el-table-column label="淘宝订单号" align="center" prop="type" width="180px" />
         <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column>
         <el-table-column label="设计师姓名" align="center" prop="sjsName" width="100px"> </el-table-column>
-        <el-table-column label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column>
+        <!-- <el-table-column label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column> -->
         <el-table-column label="提成金额" align="center" prop="money" width="90px" />
         <el-table-column label="对接客服" align="center" prop="kf" width="90px" />
-        <el-table-column label="下单时间" align="center" prop="xdTime" width="170px" />
+        <el-table-column label="下单时间" align="center" prop="xdTime" width="110px" />
         <el-table-column label="交付时间" align="center" prop="jfTime" width="110px" />
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150px">
           <template #default="scope">
             <el-tooltip content="查看" placement="top">
               <el-button link type="primary" icon="View" @click="handleView(scope.row)" v-hasPermi="['system:order:edit']"></el-button>
@@ -89,38 +90,43 @@
     </el-card>
 
     <!-- 添加或修改【请填写功能名称】对话框 -->
-    <el-dialog :title="dialog.title" v-model="dialog.visible" width="900px" append-to-body>
+    <el-dialog :title="dialog.title" v-model="dialog.visible" width="1000px" append-to-body>
       <el-form ref="orderFormRef" :model="form" :rules="rules" label-width="150px">
         <p class="item">订单信息</p>
-        <!-- <el-row :gutter="20" v-if="!add | isDisabled">
-          <el-form-item label="订单编号:" prop="id">
-            <el-input v-model="form.id" disabled="true" placeholder="" />
-          </el-form-item>
-          <el-form-item label="订单标题:" prop="title">
-            <el-input v-model="form.title" :disabled="isDisabled" placeholder="" />
-          </el-form-item>
-        </el-row> -->
         <el-row :gutter="20">
-          <el-form-item label="订单标题:" prop="title">
-            <el-select v-model="form.title" placeholder="" :disabled="isDisabled" clearable style="width: 250px; margin-bottom: 0">
-              <el-option v-for="dict in the_order_title" :key="dict.value" :label="dict.label" :value="dict.value" />
+          <el-form-item label="店铺名称:" prop="shop">
+            <el-select v-model="form.shop" placeholder="" :disabled="isDisabled" clearable style="width: 250px; margin-bottom: 0">
+              <el-option v-for="dict in the_shop_name" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
           </el-form-item>
-          <el-form-item label="订单号:" prop="type">
-            <el-input v-model="form.type" :disabled="isDisabled" placeholder="" />
+          <el-form-item label="订单标题:" prop="title" v-if="form.shop == the_shop_name[0].value">
+            <el-select v-model="form.title" placeholder="" :disabled="isDisabled" clearable style="width: 400px; margin-bottom: 0">
+              <el-option v-for="dict in the_ff_order_title" :key="dict.value" :label="dict.label" :value="dict.value" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="订单标题:" prop="title" v-if="form.shop == the_shop_name[1].value">
+            <el-select v-model="form.title1" placeholder="" :disabled="isDisabled" clearable style="width: 400px; margin-bottom: 0">
+              <el-option v-for="dict in the_cy_order_title" :key="dict.value" :label="dict.label" :value="dict.value" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="订单标题:" prop="title" v-if="!form.shop">
+            <el-select v-model="form.title" placeholder="请先选择店铺名称" disabled="clearable" style="width: 400px; margin-bottom: 0"> </el-select>
           </el-form-item>
         </el-row>
         <el-row :gutter="20">
-          <el-form-item label="提成金额" prop="money">
-            <el-input v-model="form.money" :disabled="isDisabled" placeholder="" />
+          <el-form-item label="淘宝订单号:" prop="type">
+            <el-input v-model="form.type" :disabled="isDisabled" placeholder="" />
           </el-form-item>
           <el-form-item label="客户旺旺号" prop="wangwang">
-            <el-input v-model="form.wangwang" :disabled="isDisabled" placeholder="" />
+            <el-input v-model="form.wangwang" :disabled="isDisabled" placeholder="" style="width: 300px" />
           </el-form-item>
         </el-row>
         <el-row :gutter="20">
           <el-form-item label="对标客服" prop="kf" v-if="isDisabled">
             <el-input v-model="form.kf" :disabled="isDisabled" placeholder="" />
+          </el-form-item>
+          <el-form-item label="提成金额" prop="money">
+            <el-input v-model="form.money" :disabled="isDisabled" placeholder="" />
           </el-form-item>
         </el-row>
         <p class="item">设计师信息</p>
@@ -199,12 +205,15 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog title="订单结算" v-model="dialog.jsVisible" width="500px" append-to-body>
-      <p style="line-height: 50px; margin-left: 100px; margin-top: -10px; font-size: 18px">确认结算订单: {{ jsData.title }} ？</p>
-      <span>订单失败： 不进行订单结算，设计师可以在历史订单中查看到此记录</span>
+    <el-dialog title="订单结算" v-model="dialog.jsVisible" width="600px" append-to-body>
+      <p style="line-height: 30px; margin-left: 10px; margin-top: -1px; font-size: 16px">
+        确认结算订单:
+        <br />店铺名称: {{ jsData.shop }} <br />订单标题: {{ jsData.title }} <br />设计师姓名: {{ jsData.sjsName }} <br />订单金额: {{ jsData.money }}
+      </p>
+      <span>订单失败： 取消订单，设计师可以在历史订单中查看取消结算的订单</span>
       <br />
-      <span>结算成功： 按照提成金额： {{ jsData.money }} 结算订单</span>
-      <div style="margin-left: 250px; margin-top: 10px">
+      <span>结算成功： 按照该提成金额： {{ jsData.money }} 结算订单。</span>
+      <div style="margin-left: 250px; margin-top: 20px">
         <el-button type="danger" @click="orderFail">订单失败</el-button>
         <el-button type="success" @click="orderSuccess">结算成功</el-button>
       </div>
@@ -216,7 +225,9 @@
 import { ref, reactive, getCurrentInstance, toRefs, onMounted, watch } from 'vue'
 import { listOrder, getOrder, addOrder, updateOrder, searchUser } from '@/api/order'
 const { proxy } = getCurrentInstance()
-const { the_order_title } = toRefs(proxy?.useDict('the_order_title'))
+const { the_order_title, the_shop_name, the_ff_order_title, the_cy_order_title } = toRefs(
+  proxy?.useDict('the_order_title', 'the_shop_name', 'the_ff_order_title', 'the_cy_order_title')
+)
 import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
 import { rules } from '../rules'
@@ -297,6 +308,9 @@ const { queryParams, form, searchParams } = toRefs(data)
 
 /** 提交按钮 */
 const submitForm = () => {
+  if (form.value.shop == the_shop_name.value[1].value) {
+    form.value.title = form.value.title1
+  }
   orderFormRef.value?.validate(async (valid) => {
     if (valid) {
       buttonLoading.value = true
@@ -310,6 +324,9 @@ const submitForm = () => {
         form.value.kf = userStore.name // 添加对应的客服信息
         await addOrder(form.value).then(() => (buttonLoading.value = false))
       }
+      setTimeout(() => {
+        buttonLoading.value = false
+      }, 1000)
       proxy?.$modal.msgSuccess(info + '成功!')
       dialog.visible = false
       await getList()

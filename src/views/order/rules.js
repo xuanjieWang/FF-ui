@@ -1,5 +1,6 @@
 const rules = {
   title: [{ required: true, message: '订单标题不能为空', trigger: 'blur' }],
+  shop: [{ required: true, message: '店铺名称不能为空', trigger: 'blur' }],
   money: [{ required: true, message: '提成金额不能为空', trigger: 'blur' }],
   type: [{ required: true, message: '订单编号不能为空', trigger: 'blur' }],
   wangwang: [{ required: true, message: '客户旺旺号不能为空', trigger: 'blur' }],
