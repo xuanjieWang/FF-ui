@@ -149,3 +149,10 @@ export function getTenantList(): AxiosPromise<TenantInfo> {
     method: 'get'
   });
 }
+export function getSmsCode(phone: String) {
+  return request({
+    url: '/auth/getSmsCode',
+    method: 'post',
+    data: phone,
+  });
+}

@@ -33,7 +33,7 @@
       <el-input v-model="regisData.code" size="large" auto-complete="off" placeholder="验证码" style="width: 63%" @keyup.enter="handleRegister">
         <template #prefix><svg-icon icon-class="validCode" class="el-input__icon input-icon" /></template>
       </el-input>
-      <div class="sms-code" @click="getSmsCode">
+      <div class="sms-code" @click="smsCode">
         <span v-if="!sendSmsButton">获取验证码</span>
         <span v-else>重发验证（{{ smsTime }}s）</span>
       </div>
@@ -55,7 +55,7 @@ import api from '@/api/system/user'
 import { to } from 'await-to-js'
 import SlideVerify from 'vue3-slide-verify'
 import 'vue3-slide-verify/dist/style.css'
-import { getInviteCode } from '@/api/login'
+import { getInviteCode, getSmsCode } from '@/api/login'
 const userStore = useUserStore()
 const router = useRouter()
 const loading = ref(false)
@@ -79,10 +79,8 @@ const password1 = ref('')
 // 验证码集合
 var InviteCodeList: string[]
 onMounted(async () => {
-  // 获取邀请码
   const res = await getInviteCode()
   InviteCodeList = res.data || []
-  console.log(InviteCodeList)
 })
 
 // 检查验证码是不是在其中
@@ -111,19 +109,20 @@ async function handleRegister() {
     }
     console.log('获取到注册的数据-----', regisData.value)
     regisData.value.username = regisData.value.phonenumber
-    await api.RegisUser(regisData.value)
-    ElMessage.success('注册成功!')
-    const [err] = await to(userStore.smsLogin(regisData.value))
-    if (!err) {
-      // 进入注册中状态
-      await router.push('/information')
-      loading.value = false
-    }
+    await api.RegisUser(regisData.value).then(async () => {
+      ElMessage.success('注册成功!')
+      const [err] = await to(userStore.smsLogin(regisData.value))
+      if (!err) {
+        // 进入注册中状态
+        await router.push('/information')
+        loading.value = false
+      }
+    })
   })
 }
 
 // 拼图验证成功回调
-const onSuccess = () => {
+const onSuccess = async () => {
   showCode.value = false
   smsTimer.value = setInterval(() => {
     if (smsTime.value > 0 && smsTime.value <= 60) {
@@ -133,6 +132,7 @@ const onSuccess = () => {
       sendSmsButton.value = false
     }
   }, 1000)
+  await getSmsCode(regisData.value.phonenumber)
 }
 
 const onFail = () => {
@@ -143,7 +143,7 @@ const onFail = () => {
 const sendSmsButton = ref(false)
 const smsTime = ref(60)
 const smsTimer = ref(<number>0)
-function getSmsCode() {
+async function smsCode() {
   if (sendSmsButton.value) return
   sendSmsButton.value = true
   showCode.value = true
