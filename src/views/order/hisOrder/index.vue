@@ -26,9 +26,9 @@
           <el-form-item label="订单编号" prop="id">
             <el-input v-model="queryParams.id" placeholder="请输入订单编号" clearable style="width: 180px; margin-bottom: 0" />
           </el-form-item>
-          <el-form-item label="设计师" prop="sjsName">
+          <!-- <el-form-item label="设计师" prop="sjsName">
             <el-input v-model="queryParams.sjsName" placeholder="请输入设计师名称" clearable style="width: 180px; margin-bottom: 0" />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -44,8 +44,8 @@
             {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
           </template>
         </el-table-column>
-        <el-table-column label="店铺" align="center" prop="shop" width="180px" />
-        <el-table-column label="标题" align="center" prop="title" width="180px" />
+        <el-table-column label="店铺名称" align="center" prop="shop" width="180px" />
+        <el-table-column label="订单标题" align="center" prop="title" width="180px" />
         <el-table-column label="淘宝订单号" align="center" prop="type" width="180px" />
         <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column>
         <el-table-column label="设计师姓名" align="center" prop="sjsName" width="100px"> </el-table-column>

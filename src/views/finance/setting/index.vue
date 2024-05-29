@@ -22,7 +22,7 @@
         </div>
         <div class="info">
           <span class="ps">ps: 提现类别可设置为按月或按周</span>
-          <el-button type="success" @click="updateTime">确定</el-button>
+          <el-button type="success" @click="updateTime" v-hasPermi="['system:money:setTime']">确定</el-button>
         </div>
       </div>
     </div>

@@ -18,6 +18,14 @@ export const listUser = (query: UserQuery): AxiosPromise<UserVO[]> => {
   });
 };
 
+export const listsjs = (query: any) => {
+  return request({
+    url: '/system/user/listsjs',
+    method: 'get',
+    params: query
+  });
+};
+
 /**
  * 获取用户详情
  * @param userId
@@ -210,6 +218,7 @@ export const deptTreeSelect = (): AxiosPromise<DeptVO[]> => {
 
 export default {
   listUser,
+  listsjs,
   getUser,
   addUser,
   RegisUser,

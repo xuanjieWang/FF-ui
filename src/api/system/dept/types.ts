@@ -24,6 +24,7 @@ export interface DeptVO extends BaseEntity {
   delFlag: string;
   ancestors: string;
   menuId: string | number;
+  label: string;
 }
 
 /**

@@ -30,7 +30,7 @@
       <el-table-column label="审核" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <div v-if="!scope.row.successFlag">
-            <el-button link type="primary" icon="Edit" @click="handleView(scope.row)"></el-button>
+            <el-button link type="primary" icon="Edit" v-hasPermi="['tx:data:adopt', 'system:order:getTxOrder']" @click="handleView(scope.row)"></el-button>
           </div>
           <div v-else>{{ scope.row.successFlag == '0' ? '通过' : '不通过' }}</div>
         </template>

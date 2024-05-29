@@ -1,42 +1,40 @@
 <template>
-  <div class="app-container">
-    <div style="display: flex">
-      <div class="info">
+  <div class="app-container" style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+    <!-- <div class="info">
         <h1 style="text-align: center">简介</h1>
         <text
           >本项目是一款面向设计师的计算系统，旨在提升客服工作效率，为设计师提供便捷的服务，通过结合先进的技术手段，打造一个功能完善、性能优越、易于操作的软件系统。以下是本项目的简要介绍：<br />
           1、项目名称：风飞结算系统 <br />2、项目类型：Web应用<br />
         </text>
-      </div>
-      <div class="notice">
-        <h1>公告</h1>
-        <el-card style="max-width: 100%" v-if="noticeList.length > 0">
-          <template #header>
-            <div class="card-header">
-              <div v-if="index > 0" @click="handleIndex(-1)">
-                <svg-icon icon-class="1" />
-                上一条
-              </div>
-              <div v-else></div>
-              <span>{{ noticeList[index].noticeTitle || '--' }}</span>
-              <div v-if="index < noticeList.length - 1" @click="handleIndex(1)">
-                下一条
-                <svg-icon icon-class="2" />
-              </div>
-              <div v-else></div>
+      </div> -->
+    <div class="notice">
+      <h1>公告</h1>
+      <el-card style="max-width: 100%" v-if="noticeList.length > 0">
+        <template #header>
+          <div class="card-header">
+            <div v-if="index > 0" @click="handleIndex(-1)">
+              <svg-icon icon-class="1" />
+              上一条
             </div>
-          </template>
-          <div v-html="noticeList[index].noticeContent || '--'"></div>
-          <div style="margin-top: 50px">发布时间： {{ noticeList[index].createTime || '--' }}</div>
-        </el-card>
-
-        <div v-if="userStore.deptName != '设计师部门'" style="display: flex; margin-top: 50px">
-          <div class="card">
-            <h2>邀请码</h2>
-            <el-card>
-              <div style="font-size: 30px; margin-top: 20px">{{ code }}</div>
-            </el-card>
+            <div v-else></div>
+            <span>{{ noticeList[index].noticeTitle || '--' }}</span>
+            <div v-if="index < noticeList.length - 1" @click="handleIndex(1)">
+              下一条
+              <svg-icon icon-class="2" />
+            </div>
+            <div v-else></div>
           </div>
+        </template>
+        <div v-html="noticeList[index].noticeContent || '--'"></div>
+        <div style="margin-top: 50px">发布时间： {{ noticeList[index].createTime || '--' }}</div>
+      </el-card>
+
+      <div v-if="userStore.deptName != '设计师部门'">
+        <div class="card">
+          <h2>邀请码</h2>
+          <el-card>
+            <div style="font-size: 30px; margin-top: 20px">{{ code }}</div>
+          </el-card>
         </div>
       </div>
     </div>
@@ -96,9 +94,11 @@ function handleIndex(data) {
   padding: 10px;
 }
 .notice {
-  width: 100%;
+  width: 50%;
+  min-width: 400px;
   text-align: center;
   padding: 10px;
+  align-items: center;
 }
 .card-header {
   display: flex;
@@ -109,6 +109,10 @@ function handleIndex(data) {
 }
 .card {
   width: 50%;
+  margin-top: 20px;
   padding: 10px;
+  left: 50%;
+  margin-left: 25%;
+  min-width: 400px;
 }
 </style>

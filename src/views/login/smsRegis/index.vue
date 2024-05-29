@@ -145,6 +145,8 @@ const smsTime = ref(60)
 const smsTimer = ref(<number>0)
 async function smsCode() {
   if (sendSmsButton.value) return
+  await getSmsCode(regisData.value.phonenumber)
+
   sendSmsButton.value = true
   showCode.value = true
 }

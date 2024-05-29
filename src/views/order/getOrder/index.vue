@@ -31,14 +31,14 @@
             {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
           </template>
         </el-table-column>
-        <el-table-column label="店铺" align="center" prop="shop" width="200px" />
-        <el-table-column label="标题" align="center" prop="title" width="200px" />
+        <el-table-column label="店铺名称" align="center" prop="shop" width="200px" />
+        <el-table-column label="订单标题" align="center" prop="title" width="200px" />
+        <el-table-column label="淘宝订单号" align="center" prop="type" width="100px" />
         <!-- <el-table-column label="订单编号" align="center" prop="id" width="180px" /> -->
-        <el-table-column label="对标客服" align="center" prop="kf" width="100px" />
         <el-table-column label="提成金额" align="center" prop="money" width="100px" />
-        <el-table-column label="订单号" align="center" prop="type" width="100px" />
         <el-table-column label="订单状态" align="center" prop="orderStatus" width="100px" />
         <el-table-column label="结算状态" align="center" prop="jsStatus" width="100px" />
+        <el-table-column label="对标客服" align="center" prop="kf" width="100px" />
         <el-table-column label="下单时间" align="center" prop="xdTime" width="180px" />
         <el-table-column label="交付时间" align="center" prop="jfTime" width="180px" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">

@@ -30,7 +30,7 @@
             </el-form-item>
           </el-row>
         </el-form>
-        <el-button :loading="buttonLoading" type="primary" @click="handle()">扣款</el-button>
+        <el-button :loading="buttonLoading" type="primary" @click="handle()" v-hasPermi="['tx:data:setTx']">扣款</el-button>
       </div>
     </div>
     <div class="rightPage"></div>

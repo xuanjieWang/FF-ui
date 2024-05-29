@@ -96,10 +96,20 @@
             <el-table-column type="selection" width="50" align="center" />
             <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" />
             <el-table-column label="账号" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
+            <el-table-column label="姓名" align="center" key="name" prop="name" v-if="columns[2].visible" :show-overflow-tooltip="true" />
             <el-table-column label="用户名" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
-            <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
+            <el-table-column label="部门" align="center" key="deptName" prop="deptName" v-if="columns[3].visible" :show-overflow-tooltip="true">
+              <template #default="scope">
+                <span v-if="scope.row.dept.deptName != '设计师部门'">{{ scope.row.dept.deptName }}</span>
+                <span v-else> {{ scope.row.designerType }}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" v-if="columns[4].visible" width="120" />
-            <el-table-column label="账号状态" align="center" key="regis_status" prop="regis_status" />
+            <el-table-column label="账号状态" align="center" key="regisStatus" prop="regisStatus">
+              <template #default="scope">
+                <span v-if="scope.row.regisStatus == '注册中'" style="color: red">{{ scope.row.regisStatus }}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="使用状态" align="center" key="status" v-if="columns[5].visible">
               <template #default="scope">
                 <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)"></el-switch>
@@ -355,7 +365,8 @@ const data = reactive<PageData<UserForm, UserQuery>>({
     userName: '',
     phonenumber: '',
     status: '',
-    deptId: ''
+    deptId: '',
+    designerType: ''
   },
   rules: {
     userName: [
@@ -401,8 +412,7 @@ const getTreeSelect = async () => {
 const getList = async () => {
   loading.value = true
   const res = await api.listUser(proxy?.addDateRange(queryParams.value, dateRange.value))
-  console.log(res)
-
+  console.log(res.rows)
   loading.value = false
   userList.value = res.rows
   total.value = res.total
@@ -410,7 +420,14 @@ const getList = async () => {
 
 /** 节点单击事件 */
 const handleNodeClick = (data: DeptVO) => {
-  queryParams.value.deptId = data.id
+  if (data.id == 0 || data.parentId == 100 || data.parentId == 0) {
+    queryParams.value.deptId = data.id
+    queryParams.value.designerType = ''
+  } else {
+    queryParams.value.deptId = undefined
+    queryParams.value.designerType = data.label
+  }
+  // 如果是子节点
   handleQuery()
 }
 

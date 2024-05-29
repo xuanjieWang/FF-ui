@@ -58,7 +58,7 @@
         <div class="txTime" style="color: green">目前可以进行提现</div>
         <div class="txTime2">
           <div>账户余额: {{ userData.money || 0 }}</div>
-          <el-button style="margin-left: 10%" type="success" @click="handleBut()" :disabled="buttonDis">提现</el-button>
+          <el-button v-if="txxbutton" style="margin-left: 10%" type="success" @click="handleBut()" :disabled="buttonDis">提现</el-button>
         </div>
         <div style="left: 1%; margin-top: 5%; color: #b1b8bd">
           <span v-if="'day' == time.type">ps(提现时间为每周的{{ time.beginTime }}-{{ time.endTime }}日)</span>
@@ -99,7 +99,6 @@
     </div>
     <el-dialog title="提现" v-model="buttonDis" width="500px" append-to-body>
       <span>请确认提现金额： {{ userData.money }} &nbsp;元</span>
-
       <el-button style="margin-left: 350px; margin-top: 20px" type="primary" @click="subTX">提现</el-button>
     </el-dialog>
   </div>
@@ -118,6 +117,7 @@ const time = ref({}) // 提现时间
 
 const total = ref(0)
 const txLoading = ref(false)
+const txxbutton = ref(true)
 
 let list = ''
 onMounted(() => {
@@ -136,7 +136,7 @@ const buttonDis = ref(false)
 // 判断余额是否充足
 async function handleBut() {
   if (!userData.value.money || userData.value.money <= 0) {
-    proxy?.$modal.msgError('账户余额不足')
+    // proxy?.$modal.msgError('账户余额不足')
     return
   }
   buttonDis.value = true
@@ -160,7 +160,7 @@ async function subTX() {
 
   await setTx(tx).then(
     setTimeout(() => {
-      proxy?.$modal.msgSuccess('提现申请成功')
+      proxy?.$modal.msgSuccess('提现申请成功,预计1-3日到账,请耐心等待！')
       buttonDis.value = false
       getData()
     }, 500)
@@ -193,6 +193,11 @@ function checkTxtime(data) {
 async function getData() {
   const res = await getInfo()
   userData.value = res.data.user
+  if (!userData.value.money || userData.value.money <= 0) {
+    txxbutton.value = false
+  } else {
+    txxbutton.value = true
+  }
   if ('设计师部门' == res.data.user.dept.deptName) {
     queryParams.value.sjsPhone = userData.value.userName
   }
