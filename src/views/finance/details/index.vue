@@ -11,7 +11,7 @@
         <el-table-column label="店铺名称" align="center" prop="shop" width="180px" />
         <el-table-column label="订单标题" align="center" prop="orderTitle" width="180px" />
         <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column>
-        <el-table-column v-if="userStore.deptName != '设计师部门'" label="设计师姓名" align="center" prop="sjsName" width="100px"> </el-table-column>
+        <el-table-column v-if="userStore.isDesigner != '1'" label="设计师姓名" align="center" prop="sjsName" width="100px"> </el-table-column>
         <!-- <el-table-column v-if="userStore.deptName != '设计师部门'" label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column> -->
         <el-table-column label="淘宝订单号" align="center" prop="orderType" width="200px" />
         <el-table-column label="订单金额" align="center" prop="money" width="90px" />
@@ -136,7 +136,6 @@ import { ref, reactive, getCurrentInstance, toRefs, onMounted } from 'vue'
 import { listAccount } from '@/api/account'
 import { getOrder } from '@/api/order'
 const { proxy } = getCurrentInstance()
-const { the_dept, order_common_statu } = toRefs(proxy?.useDict('the_dept', 'order_common_statu'))
 import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
 
@@ -188,7 +187,6 @@ const dialog = reactive({
 /** 查看按钮 */
 const handleView = async (row) => {
   const res = await getOrder(row.orderId)
-  console.log(res.data)
   detailData.value = { ...res.data }
   add.value = false
   dialog.visible = true

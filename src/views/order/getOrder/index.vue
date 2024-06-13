@@ -141,7 +141,6 @@
 import { ref, reactive, getCurrentInstance, toRefs, onMounted } from 'vue'
 import { listOrder, getOrder } from '@/api/order'
 const { proxy } = getCurrentInstance()
-const { order_push_statu, order_balance_statu } = toRefs(proxy?.useDict('the_dept', 'order_push_statu', 'order_balance_statu', 'order_common_statu'))
 import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
 

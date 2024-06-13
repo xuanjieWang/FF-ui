@@ -45,9 +45,18 @@
         <span>打款总金额：&nbsp;&nbsp; {{ viewData.money }}</span>
       </div>
       <div class="txOrder">
-        <span v-if="txOrder.length > 0">共有 {{ txOrder.length }}&nbsp;个交易完成的订单</span>
+        <span style="color: red" v-if="disOrder.length > 0">共有 {{ disOrder.length }}&nbsp;个扣款的订单</span>
+        <div class="order" v-for="(item, index) in disOrder" :key="index">
+          <span style="color: red">扣款订单：{{ index + 1 }}</span>
+          <span>扣款金额: {{ item.money }}</span>
+          <span>扣款原因: {{ item.message }}</span>
+          <span>扣款时间: {{ item.createTime }}</span>
+        </div>
+      </div>
+      <div class="txOrder">
+        <span style="color: green" v-if="txOrder.length > 0">共有 {{ txOrder.length }}&nbsp;个交易完成的订单</span>
         <div class="order" v-for="(item, index) in txOrder" :key="index">
-          <span>--订单{{ index + 1 }}</span>
+          <span style="color: green">交易订单{{ index + 1 }}</span>
           <span>订单标题: {{ item.title }}</span>
           <span>金额: {{ item.money }}</span>
           <span>淘宝订单号: {{ item.type }}</span>
@@ -63,7 +72,7 @@
 
 <script setup>
 import { onMounted, toRefs, onUnmounted } from 'vue'
-import { list, adopt } from '@/api/tx'
+import { list, adopt, getDisOrder } from '@/api/tx'
 import { getTxOrder } from '@/api/order'
 
 const { proxy } = getCurrentInstance()
@@ -112,8 +121,12 @@ function adoptTx(success) {
 }
 
 const viewData = ref({})
+const disOrder = ref({})
 async function handleView(data) {
   const res = await getTxOrder(data.sjsPhone)
+  const disOrderRes = await getDisOrder(data.sjsPhone)
+  disOrder.value = disOrderRes.data || []
+
   txOrder.value = res.data || []
   buttonDis.value = true
   viewData.value = data

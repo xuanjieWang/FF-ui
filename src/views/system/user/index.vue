@@ -100,7 +100,7 @@
             <el-table-column label="用户名" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
             <el-table-column label="部门" align="center" key="deptName" prop="deptName" v-if="columns[3].visible" :show-overflow-tooltip="true">
               <template #default="scope">
-                <span v-if="scope.row.dept.deptName != '设计师部门'">{{ scope.row.dept.deptName }}</span>
+                <span v-if="scope.row.isDesigner != '1'">{{ scope.row.dept.deptName }}</span>
                 <span v-else> {{ scope.row.designerType }}</span>
               </template>
             </el-table-column>
@@ -412,7 +412,6 @@ const getTreeSelect = async () => {
 const getList = async () => {
   loading.value = true
   const res = await api.listUser(proxy?.addDateRange(queryParams.value, dateRange.value))
-  console.log(res.rows)
   loading.value = false
   userList.value = res.rows
   total.value = res.total

@@ -198,7 +198,7 @@ async function getData() {
   } else {
     txxbutton.value = true
   }
-  if ('设计师部门' == res.data.user.dept.deptName) {
+  if ('1' == res.data.user.isDesigner) {
     queryParams.value.sjsPhone = userData.value.userName
   }
 
@@ -213,7 +213,6 @@ async function getData() {
 async function getTxList() {
   txLoading.value = true
   const txListRes = await listDis(queryParams.value)
-  console.log(txListRes.rows)
   txList.value = txListRes.rows
   total.value = txListRes.total
   txLoading.value = false

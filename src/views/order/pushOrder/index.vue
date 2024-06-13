@@ -3,21 +3,6 @@
     <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
       <div class="search" v-show="showSearch">
         <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="100px">
-          <!-- <el-form-item label="提交状态" prop="orderStatus">
-            <el-select v-model="queryParams.orderStatus" placeholder="选择订单提交状态" clearable style="width: 180px; margin-bottom: 0">
-              <el-option v-for="dict in order_push_statu" :key="dict.value" :label="dict.label" :value="dict.value" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="结算状态" prop="jsStatus">
-            <el-select v-model="queryParams.jsStatus" placeholder="选择订单结算状态" clearable style="width: 180px; margin-bottom: 0">
-              <el-option v-for="dict in order_balance_statu" :key="dict.value" :label="dict.label" :value="dict.value" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="订单评价" prop="commonType">
-            <el-select v-model="queryParams.commonType" placeholder="选择订单评价" clearable style="width: 180px; margin-bottom: 0">
-              <el-option v-for="dict in order_common_statu" :key="dict.value" :label="dict.label" :value="dict.value" />
-            </el-select>
-          </el-form-item> -->
           <el-form-item label="店铺名称" prop="shop">
             <el-select v-model="queryParams.title" placeholder="选择店铺名称" clearable style="width: 180px; margin-bottom: 0">
               <el-option v-for="dict in the_shop_name" :key="dict.value" :label="dict.label" :value="dict.value" />

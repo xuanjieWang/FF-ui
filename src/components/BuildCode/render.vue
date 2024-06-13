@@ -1,14 +1,13 @@
 <!-- 动态表单渲染 -->
 <script setup name="Render">
-
 const props = defineProps({
   formJson: {
     type: [String, Object],
-    default: ""
+    default: ''
   },
   formData: {
     type: [String, Object],
-    default: ""
+    default: ''
   },
   isView: {
     type: Boolean,
@@ -45,7 +44,6 @@ const initForm = (formConf) => {
       }, 200)
     }
     if (props.isView) {
-      console.log(props.isView)
       setTimeout(() => {
         vFormRef.value.disableForm()
       }, 100)

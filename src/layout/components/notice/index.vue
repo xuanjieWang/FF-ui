@@ -75,8 +75,6 @@ const getTableData = async () => {
   state.loading = true
   // 使用接口获取到通知信息
   const res = await listNotice(queryParams.value)
-  console.log('通知公告---', res)
-
   newsList.value = res.rows
 
   // newsList.value = noticeStore.state.value.notices

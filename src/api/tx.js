@@ -39,3 +39,10 @@ export const setTx = (data) => {
     data: data
   })
 }
+
+export const getDisOrder = (phoneNumber) => {
+  return request({
+    url: '/tx/data/getDisOrder/' + phoneNumber,
+    method: 'get'
+  })
+}

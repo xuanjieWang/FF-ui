@@ -29,7 +29,7 @@
         <div style="margin-top: 50px">发布时间： {{ noticeList[index].createTime || '--' }}</div>
       </el-card>
 
-      <div v-if="userStore.deptName != '设计师部门'">
+      <div v-if="userStore.isDesigner != '1'">
         <div class="card">
           <h2>邀请码</h2>
           <el-card>
@@ -75,7 +75,8 @@ async function getList() {
   noticeList.value = res.rows || []
 
   // 获取当前用户的邀请码
-  if (userStore.deptName != '设计师部门') {
+  if (userStore.isDesigner != '1') {
+    //不是设计师部门
     const res = await getCode(userStore.name)
     code.value = res.msg || '--'
   }

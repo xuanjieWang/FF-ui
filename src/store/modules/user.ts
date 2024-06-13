@@ -16,6 +16,7 @@ export const useUserStore = defineStore('user', () => {
   const regisStatus = ref<string>(''); //用户角色信息
   const designerType = ref<string>('');
   const deptName = ref<string>('');
+  const isDesigner = ref<string>('0');
 
   /**
    * 登录
@@ -63,7 +64,6 @@ export const useUserStore = defineStore('user', () => {
       const data = res.data;
       const user = data.user;
       const profile = user.avatar == '' || user.avatar == null ? defAva : user.avatar;
-      console.log('登录信息getInfo---', res.data.user);
 
       if (data.roles && data.roles.length > 0) {
         // 验证返回的roles是否是一个非空数组
@@ -73,6 +73,7 @@ export const useUserStore = defineStore('user', () => {
         roles.value = ['ROLE_DEFAULT'];
       }
 
+      isDesigner.value = user.isDesigner;
       name.value = user.userName;
       nickname.value = user.nickName;
       avatar.value = profile;
@@ -130,6 +131,7 @@ export const useUserStore = defineStore('user', () => {
     regisStatus,
     designerType,
     deptName, // 部门
+    isDesigner,
     login,
     smsLogin,
     loginSMS,

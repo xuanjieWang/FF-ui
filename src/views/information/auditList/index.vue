@@ -73,7 +73,6 @@ onUnmounted(() => {
 const getList = async () => {
   loading.value = true
   const res = await getAuditList(userStore.name)
-  console.log(res.data)
   info.value = res.data || []
   loading.value = false
 }
