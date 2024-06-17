@@ -31,6 +31,7 @@
         </el-table-column>
         <el-table-column label="店铺名称" align="center" prop="shop" width="180px" />
         <el-table-column label="订单标题" align="center" prop="title" width="180px" />
+        <el-table-column label="对标客服" align="center" prop="kf" width="100px" />
         <el-table-column label="淘宝订单号" align="center" prop="type" width="180px" />
         <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column>
         <el-table-column label="设计师姓名" align="center" prop="sjsName" width="100px"> </el-table-column>
@@ -50,7 +51,7 @@
             <span v-if="scope.row.jsStatus == '订单核验中'" style="color: blue">订单核验中</span>
           </template>
         </el-table-column>
-        <el-table-column label="订单完成时间" align="center" prop="updateTime" width="170px" />
+        <el-table-column label="订单完成时间" align="center" prop="updateTime" width="110px" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="查看" placement="top">
