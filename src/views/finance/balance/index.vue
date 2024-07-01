@@ -99,7 +99,7 @@
     </div>
     <el-dialog title="提现" v-model="buttonDis" width="500px" append-to-body>
       <span>请确认提现金额： {{ userData.money }} &nbsp;元</span>
-      <el-button style="margin-left: 350px; margin-top: 20px" type="primary" @click="subTX">提现</el-button>
+      <el-button :disabled="txButton" style="margin-left: 350px; margin-top: 20px" type="primary" @click="subTX">提现</el-button>
     </el-dialog>
   </div>
 </template>
@@ -118,6 +118,8 @@ const time = ref({}) // 提现时间
 const total = ref(0)
 const txLoading = ref(false)
 const txxbutton = ref(true)
+
+const txButton = ref(false)
 
 let list = ''
 onMounted(() => {
@@ -152,6 +154,7 @@ const { queryParams } = toRefs(data)
 
 // 提现全部金额
 async function subTX() {
+  txButton.value = true
   let tx = {
     sjsPhone: userData.value.userName,
     sjsName: userData.value.name,
@@ -163,7 +166,8 @@ async function subTX() {
       proxy?.$modal.msgSuccess('提现申请成功,预计1-3日到账,请耐心等待！')
       buttonDis.value = false
       getData()
-    }, 500)
+      txButton.value = false
+    }, 300)
   )
 }
 

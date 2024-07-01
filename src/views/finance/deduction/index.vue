@@ -33,23 +33,72 @@
         <el-button :loading="buttonLoading" type="primary" @click="handle()" v-hasPermi="['tx:data:setTx']">扣款</el-button>
       </div>
     </div>
-    <div class="rightPage"></div>
+    <div class="rightPage">
+      <div>
+        <h1 style="margin-left: 48%">扣款记录</h1>
+        <el-table v-loading="txLoading" :data="txList">
+          <el-table-column label="序号" prop="title" width="60px">
+            <template #default="scope">
+              {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
+            </template>
+          </el-table-column>
+          <el-table-column label="姓名" align="center" prop="sjsName" width="100px" />
+          <el-table-column label="账号" align="center" prop="sjsPhone" width="120" />
+          <el-table-column label="支付宝账户" align="center" prop="zfb" width="140px" />
+          <el-table-column label="扣款金额" align="center" prop="money" width="120px" />
+          <el-table-column label="余额" align="center" prop="balance" width="120px" />
+          <el-table-column label="原因" align="center" prop="message" width="140px" />
+          <el-table-column label="扣款时间" align="center" prop="txTime" width="180px">
+            <template #default="scope">
+              <span v-if="!scope.row.txTime" style="color: blue">审核中</span>
+              <span v-else>{{ scope.row.txTime }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+        <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getTxList" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { searchUser } from '@/api/order'
-import { setTx } from '@/api/tx'
-import { onMounted, watch } from 'vue'
+import { setTx, listDis } from '@/api/tx'
+import { onMounted, watch, reactive, toRefs } from 'vue'
 const { proxy } = getCurrentInstance()
 import { rules } from './rules'
 
 const orderFormRef = ref()
+const txList = ref([]) //提现列表
+const txLoading = ref(false)
+
+const txdata = reactive({
+  queryParams: {
+    pageNum: 1,
+    pageSize: 10,
+    successFlag: '3'
+  }
+})
+const { queryParams } = toRefs(txdata)
+
+const total = ref(0)
 
 onMounted(async () => {
   testName.value = ' '
+  getTxList()
 })
 
+//获取提交列表
+async function getTxList() {
+  txLoading.value = true
+  const txListRes = await listDis(queryParams.value)
+  console.log(txListRes.rows)
+  txList.value = txListRes.rows
+  total.value = txListRes.total
+  txLoading.value = false
+}
+
+// 扣钱
 const buttonLoading = ref(false)
 function handle() {
   orderFormRef.value?.validate(async (valid) => {
@@ -180,5 +229,9 @@ watch(testName, () => {
 }
 p {
   margin-left: 5px;
+}
+.rightPage {
+  width: 68%;
+  margin-left: 2%;
 }
 </style>

@@ -8,12 +8,12 @@
               <el-option v-for="dict in the_order_title" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
           </el-form-item>
-          <el-form-item label="订单编号" prop="id">
-            <el-input v-model="queryParams.id" placeholder="请输入订单编号" clearable style="width: 180px; margin-bottom: 0" />
+          <el-form-item label="订单号" prop="type">
+            <el-input v-model="queryParams.type" placeholder="请输入淘宝订单号" clearable style="width: 180px; margin-bottom: 0" />
           </el-form-item>
-          <!-- <el-form-item label="设计师" prop="sjsName">
+          <el-form-item label="设计师" prop="sjsName">
             <el-input v-model="queryParams.sjsName" placeholder="请输入设计师名称" clearable style="width: 180px; margin-bottom: 0" />
-          </el-form-item> -->
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -23,16 +23,13 @@
     </transition>
     <el-card shadow="never">
       <el-table v-loading="loading" :data="orderList">
-        <el-table-column type="selection" width="15" align="center" />
         <el-table-column label="序号" align="center" prop="title" width="80px">
-          <template #default="scope">
-            {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
-          </template>
+          <template #default="scope"> {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }} </template>
         </el-table-column>
-        <el-table-column label="店铺名称" align="center" prop="shop" width="180px" />
+        <el-table-column label="店铺名称" align="center" prop="shop" width="100px" />
         <el-table-column label="订单标题" align="center" prop="title" width="180px" />
         <el-table-column label="对标客服" align="center" prop="kf" width="100px" />
-        <el-table-column label="淘宝订单号" align="center" prop="type" width="180px" />
+        <el-table-column label="淘宝订单号" align="center" prop="type" width="200px" />
         <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column>
         <el-table-column label="设计师姓名" align="center" prop="sjsName" width="100px"> </el-table-column>
         <!-- <el-table-column label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column> -->
@@ -51,11 +48,14 @@
             <span v-if="scope.row.jsStatus == '订单核验中'" style="color: blue">订单核验中</span>
           </template>
         </el-table-column>
-        <el-table-column label="订单完成时间" align="center" prop="updateTime" width="110px" />
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <el-table-column label="订单完成时间" align="center" prop="updateTime" width="105px" />
+        <el-table-column label="操作" align="center" width="100px" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="查看" placement="top">
               <el-button link type="primary" icon="View" @click="handleView(scope.row)"></el-button>
+            </el-tooltip>
+            <el-tooltip content="删除" placement="top">
+              <el-button link type="danger" icon="Delete" @click="handleDel(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -186,7 +186,7 @@
 
 <script setup>
 import { ref, reactive, getCurrentInstance, toRefs, onMounted } from 'vue'
-import { listHis, subComm } from '@/api/order'
+import { listHis, subComm, delOrder } from '@/api/order'
 const { proxy } = getCurrentInstance()
 const { the_order_title } = toRefs(proxy?.useDict('the_order_title'))
 import { commonType, commRules } from '../rules.js'
@@ -233,9 +233,11 @@ const resetQuery = () => {
 const getList = async () => {
   loading.value = true
 
-  // 设计师查询自己的历史订单，需要
-  queryParams.value.deptName = userStore.deptName
-  queryParams.value.sjsPhone = userStore.name
+  // 设计师查询自己的历史订单，需要查询自己的部门
+  if (userStore.deptName == ('设计师部门' || '客服部门')) {
+    queryParams.value.deptName = userStore.deptName
+    queryParams.value.sjsPhone = userStore.name
+  }
   const res = await listHis(queryParams.value)
   orderList.value = res.rows
   total.value = res.total
@@ -274,6 +276,15 @@ async function subCom() {
       })
     }
   })
+}
+
+// 删除方法
+async function handleDel(row) {
+  await proxy?.$modal.confirm('是否确认删除设计师: ' + row.sjsName + ' ,金额： ' + row.money + ' 的订单?')
+  loading.value = true
+  await delOrder(row.id).finally(() => (loading.value = false))
+  await getList()
+  proxy?.$modal.msgSuccess('删除成功')
 }
 </script>
 
