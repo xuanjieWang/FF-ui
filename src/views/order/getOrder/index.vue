@@ -13,8 +13,8 @@
               <el-option v-for="dict in order_balance_statu" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
           </el-form-item> -->
-          <el-form-item label="订单编号" prop="id">
-            <el-input v-model="queryParams.id" placeholder="请输入订单编号" clearable style="width: 180px; margin-bottom: 0" />
+          <el-form-item label="订单编号" prop="type">
+            <el-input v-model="queryParams.type" placeholder="请输入订单编号" clearable style="width: 180px; margin-bottom: 0" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>

@@ -12,6 +12,7 @@
       <el-table-column label="提现金额(元)" align="center" prop="money" width="120px" />
       <el-table-column label="账户余额(元)" align="center" prop="balance" width="120px" />
       <el-table-column label="提现申请时间" align="center" prop="createTime" width="180px" />
+      <el-table-column label="审核时间" align="center" prop="txTime" width="180px" />
       <el-table-column label="审核状态" align="center" prop="successFlag" width="120px">
         <template #default="scope">
           <div v-if="scope.row.successFlag">
@@ -26,7 +27,6 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="审核时间" align="center" prop="txTime" width="180px" />
       <el-table-column label="审核" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <div v-if="!scope.row.successFlag">
@@ -111,7 +111,7 @@ async function getData() {
 
 function adoptTx(success) {
   viewData.value.successFlag = success
-  viewData.value.createTime = null
+  // viewData.value.createTime = null
   buttonDis.value = false
   adopt(viewData.value).then(() => {
     setTimeout(() => {
@@ -123,8 +123,13 @@ function adoptTx(success) {
 const viewData = ref({})
 const disOrder = ref({})
 async function handleView(data) {
-  const res = await getTxOrder(data.sjsPhone)
-  const disOrderRes = await getDisOrder(data.sjsPhone)
+  var params = {
+    sjsPhone: data.sjsPhone,
+    createTime: data.createTime
+  }
+
+  const res = await getTxOrder(params)
+  const disOrderRes = await getDisOrder(params)
   disOrder.value = disOrderRes.data || []
 
   txOrder.value = res.data || []

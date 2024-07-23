@@ -107,9 +107,10 @@ export const setTxTime = (data) => {
   })
 }
 
-export const getTxOrder = (phoneNumber) => {
+export const getTxOrder = (data) => {
   return request({
-    url: '/system/order/getTxOrder/' + phoneNumber,
-    method: 'get'
+    url: '/system/order/getTxOrder',
+    method: 'post',
+    data: data
   })
 }

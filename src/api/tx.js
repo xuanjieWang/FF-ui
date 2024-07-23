@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { data } from 'autoprefixer'
 
 /**
  * 查询【请填写功能名称】列表
@@ -23,11 +24,11 @@ export const listDis = (query) => {
 }
 
 // 审核
-export const adopt = (query) => {
+export const adopt = (data) => {
   return request({
     url: '/tx/data/adopt',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: data
   })
 }
 
@@ -40,9 +41,10 @@ export const setTx = (data) => {
   })
 }
 
-export const getDisOrder = (phoneNumber) => {
+export const getDisOrder = (data) => {
   return request({
-    url: '/tx/data/getDisOrder/' + phoneNumber,
-    method: 'get'
+    url: '/tx/data/getDisOrderList',
+    method: 'post',
+    data: data
   })
 }
