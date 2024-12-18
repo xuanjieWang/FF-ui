@@ -1,6 +1,8 @@
 import { UserConfig, ConfigEnv, loadEnv, defineConfig } from 'vite';
 
 import createPlugins from './vite/plugins';
+import tailwindcss from 'tailwindcss'
+import autoprefixer from 'autoprefixer'
 
 import path from 'path';
 export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
@@ -51,7 +53,7 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
                 }
               }
             }
-          }
+          },tailwindcss, autoprefixer
         ]
       }
     },
