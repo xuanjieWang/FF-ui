@@ -54,10 +54,10 @@ import { to } from 'await-to-js'
 import 'vue3-slide-verify/dist/style.css'
 import { getInviteCode, getSmsCode } from '@/api/login'
 import { getResult } from '@/api/sms'
-
+import { the_dept } from '../rules'
 const { proxy } = getCurrentInstance()
 
-const { the_dept } = toRefs(proxy?.useDict('the_dept'))
+// const { the_dept } = toRefs(proxy?.useDict('the_dept'))
 
 const userStore = useUserStore()
 const router = useRouter()

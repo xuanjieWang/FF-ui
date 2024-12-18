@@ -105,6 +105,7 @@ function handle() {
     if (valid) {
       buttonLoading.value = true
       await proxy?.$modal.confirm('确认对用户 ' + form.value.sjsName + ' 扣除金额: ' + form.value.money + ' 元 ?').then(async () => {
+        form.value.type = '账户扣款'
         await setTx(form.value).then(() => {
           form.value = { ...initFormData }
           testName.value = ' '

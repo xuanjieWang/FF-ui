@@ -111,6 +111,7 @@ async function getData() {
 
 function adoptTx(success) {
   viewData.value.successFlag = success
+  console.log(viewData.value)
   // viewData.value.createTime = null
   buttonDis.value = false
   adopt(viewData.value).then(() => {
@@ -127,8 +128,10 @@ async function handleView(data) {
     sjsPhone: data.sjsPhone,
     createTime: data.createTime
   }
-
+  // 获取提现订单
   const res = await getTxOrder(params)
+
+  // 获取扣款订单
   const disOrderRes = await getDisOrder(params)
   disOrder.value = disOrderRes.data || []
 
