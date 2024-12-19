@@ -1,18 +1,20 @@
 <template>
   <div class="p-2">
     <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
-      <div class="p-5 flex flex-col" v-loading="carouselImgloading">
-        <div>轮播图 -- 加载顺序由左至右</div>
-        <div>展示所有的图片,点击图片进行替换</div>
-        <div class="flex flex-wrap gap-2 p-2">
+      <div class="p-5 flex flex-col search" v-loading="carouselImgloading">
+        <div class="ml-5">轮播图-播放顺序由左至右&nbsp;&nbsp;(&nbsp;点击图片选中移动&nbsp;)&nbsp;&nbsp;</div>
+        <div class="flex gap-3 p-5 items-center">
+          <el-button type="primary" @click="editImg(1)">前移</el-button>
+          <el-button type="primary" @click="editImg(-1)">后移</el-button>
+          <el-button type="success" @click="saveImg()">保存</el-button>
+          <el-button type="danger" @click="editImg(0)">删除</el-button>
+        </div>
+        <div class="flex flex-wrap gap-2 p-2 ml-3">
           <div v-for="(item, index) in lbtList" :key="index" class="flex items-center">
-            <img class="img" :src="item.path" />
-            <div class="imgInfo flex justify-center items-center">
-              <el-button type="danger" @click="deleteImg()">删除</el-button>
-            </div>
+            <img class="img" :id="'carouseImg' + index" :src="item.path" @click="selectImg(index)" />
             <div class="ml-2">-></div>
           </div>
-          <div class="addImage flex justify-center items-center">
+          <div class="addImage flex justify-center items-center" @click="addCarouselImg()">
             <p>点击添加</p>
           </div>
         </div>
@@ -39,6 +41,7 @@ import { ref, reactive, getCurrentInstance, toRefs, onMounted } from 'vue'
 import { getWxImg, addWXImg } from '@/api/wx/image'
 const { proxy } = getCurrentInstance()
 import { useUserStore } from '@/store/modules/user'
+import Index from '@/views/login/index.vue'
 const userStore = useUserStore()
 const { the_ppt_region } = toRefs(proxy?.useDict('the_ppt_region'))
 
@@ -58,45 +61,64 @@ onMounted(() => {
   getData()
 })
 
-/** 查询【请填写功能名称】列表 */
 const getData = async () => {
+  carouselImgloading.value = true
   const res = await getWxImg('轮播图')
   lbtList.value = res.data || []
+  carouselImgloading.value = false
+}
+
+const addCarouselImg = async () => {
+  console.log('添加轮播图')
+}
+const selectIndex = ref(null)
+// 选中轮播图
+const selectImg = (index) => {
+  if (selectIndex.value === index) {
+    document.getElementById('carouseImg' + selectIndex.value).classList.remove('imgBorder')
+    selectIndex.value = null
+    return
+  }
+  if (selectIndex.value != null) {
+    document.getElementById('carouseImg' + selectIndex.value).classList.remove('imgBorder')
+  }
+  var newEle = document.getElementById('carouseImg' + index)
+  newEle.classList.add('imgBorder')
+  selectIndex.value = index
+}
+
+// 移动轮播图
+const editImg = async (data) => {
+  if (selectIndex.value == null) {
+    proxy?.$modal.msgError('请先选择图片!')
+    return
+  }
+  if (data == 0) {
+    await proxy?.$modal.confirm('是否删除第 ' + (selectIndex.value + 1) + ' 张轮播图片?')
+    proxy?.$modal.msgSuccess('删除成功')
+  }
+  if (selectIndex.value == 0 && data == 1) {
+    proxy?.$modal.msgError('已经是第一张了!')
+    return
+  }
+  if (selectIndex.value == lbtList.value.length - 1 && data == -1) {
+    proxy?.$modal.msgError('已经是最后一张了!')
+    return
+  }
+  console.log(selectIndex.value)
+
+  var temp = lbtList.value[selectIndex.value]
+  console.log(temp)
+  console.log(temp.sort)
+
+  lbtList.value[selectIndex.value] = lbtList.value[selectIndex.value - data]
+  lbtList.value[selectIndex.value - data] = temp
+
+  // lbtList.value[selectIndex.value - data].sort = lbtList.value[selectIndex.value].sort
+  // lbtList.value[selectIndex.value].sort = temp.sort
+  selectImg(selectIndex.value - data)
   console.log(lbtList.value)
 }
-// const addWXImg = async(() => {
-//   // 添加图片
-// })
-
-// const addCarouselImg = async () => {
-//   console.log('添加轮播图')
-// }
-
-// /** 表单重置 */
-// const reset = () => {
-//   form.value = { ...initFormData }
-//   orderFormRef.value?.resetFields()
-// }
-
-// /** 搜索按钮操作 */
-// const handleQuery = () => {
-//   queryParams.value.pageNum = 1
-//   getList()
-// }
-
-// /** 重置按钮操作 */
-// const resetQuery = () => {
-//   queryFormRef.value?.resetFields()
-//   handleQuery()
-// }
-
-// /** 查看订单详细数据 */
-// const handleView = async (row) => {
-//   reset()
-//   Object.assign(form.value, row)
-//   dialog.visible = true
-//   dialog.title = '查看订单详情'
-// }
 </script>
 <style scoped>
 .psInfo {
@@ -107,49 +129,24 @@ const getData = async () => {
 }
 
 .img {
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
 }
-.hover-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200px;
-  height: 200px;
-  opacity: 0; /* 默认不显示 */
-  transition: opacity 0.3s ease-in-out; /* 过渡效果 */
-  background: red;
-}
-
-/* .img:hover .hover-image {
-  opacity: 1;
-  width: 100px;
-  height: 100px;
-  background: red;
+/* .img:hover {
+  opacity: 0.9;
+  border: 5px solid red;
 } */
 
-.imgInfo:hover {
+.imgBorder {
   opacity: 0.9;
-  /* width: 200px;
-  height: 200px; */
+  border: 5px solid red;
 }
+
 .addImage {
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   border: 1px solid #ccc;
   border-radius: 5px;
-}
-.imgCard {
-  width: 100%;
-  height: 100%;
-}
-.imgInfo {
-  width: 200px;
-  height: 200px;
-  position: relative;
-  margin-left: -200px;
-  background: rgb(139, 138, 138);
-  z-index: 1000;
-  opacity: 0;
 }
 </style>
