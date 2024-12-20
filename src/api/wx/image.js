@@ -12,3 +12,11 @@ export function addWXImg(data) {
     data: data
   })
 }
+
+export function updateImageList(data) {
+  return request({
+    url: '/wx/image/updateImageList',
+    method: 'post',
+    data: data
+  })
+}
