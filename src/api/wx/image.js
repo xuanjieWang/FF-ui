@@ -7,7 +7,7 @@ export function getWxImg(type) {
 }
 export function addWXImg(data) {
   return request({
-    url: '/wx/image/addWXImg',
+    url: '/wx/image/add',
     method: 'post',
     data: data
   })

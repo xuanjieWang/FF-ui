@@ -59,6 +59,7 @@ onMounted(() => {
   geticonData()
 })
 
+// 更新图标信息
 const updateIcon = async () => {
   if (iconIndex.value == null) {
     proxy?.$modal.msgError('请先选择图片!')
@@ -69,7 +70,7 @@ const updateIcon = async () => {
 }
 
 const add = () => {
-  updateData.value = { path: '', name: '' }
+  updateData.value = { path: '', name: '', type: '图标' }
   update.value = true
 }
 const geticonData = async () => {
@@ -129,15 +130,19 @@ const editIcon = async (data) => {
 }
 
 const saveIcon = async (data) => {
-  if (data) {
+  console.log(data)
+  console.log(updateData.value)
+
+  if (null != data) {
     await updateImageList([updateData.value])
   } else {
-    await updateImageList(iconList.value)
+    updateData.value.type = ''
+    await addWXImg(updateData.value)
   }
-  setTimeout(() => {
-    geticonData()
-    proxy?.$modal.msgSuccess('保存成功！')
-  }, 500)
+  // setTimeout(() => {
+  //   geticonData()
+  //   proxy?.$modal.msgSuccess('保存成功！')
+  // }, 500)
 }
 
 // 文件上传到服务器中
@@ -145,11 +150,12 @@ const handleExceed = async (file) => {
   const reader = new FileReader()
   reader.readAsDataURL(file.raw)
   reader.onload = async () => {
-    console.log(reader.result)
-    await addWXImg({ type: '图标', img: reader.result }).then(() => {
-      proxy?.$modal.msgSuccess('图标文件上传成功')
-      geticonData()
-    })
+    updateData.value.path = reader.result
+    console.log('当前的图片信息是-====', reader.result)
+    // await addWXImg({ type: '图标', img: reader.result }).then(() => {
+    //   proxy?.$modal.msgSuccess('图标文件上传成功')
+    //   geticonData()
+    // })
   }
 }
 </script>
