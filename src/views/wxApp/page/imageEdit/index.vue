@@ -5,7 +5,6 @@
         <div class="flex gap-3 p-2 items-center">
           <el-button type="primary" @click="editImg(1)">前移</el-button>
           <el-button type="primary" @click="editImg(-1)">后移</el-button>
-          <!-- <el-button type="warning" @click="updateImage()">编辑</el-button> -->
           <el-button type="success" @click="saveImg()">保存</el-button>
           <el-button type="danger" @click="editImg(0)">删除</el-button>
           <div class="ml-5">轮播图</div>
@@ -51,7 +50,6 @@ onMounted(() => {
 const getLBTData = async () => {
   lbtLoading.value = true
   const res = await getWxImg('轮播图')
-  console.log(res)
 
   lbtList.value = res.data || []
   setTimeout(() => {

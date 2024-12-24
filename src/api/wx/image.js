@@ -20,3 +20,10 @@ export function updateImageList(data) {
     data: data
   })
 }
+
+export function delWxImg(id) {
+  return request({
+    url: '/wx/image/' + id,
+    method: 'delete'
+  })
+}

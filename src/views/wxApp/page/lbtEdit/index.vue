@@ -11,7 +11,8 @@
         </div>
         <div class="flex flex-wrap gap-2 p-2 ml-3">
           <div v-for="(item, index) in lbtList" :key="index" class="flex items-center cursor-pointer">
-            <img class="lbt" :id="'lbt' + index" :src="item.path" @click="selectImg(index)" />
+            <img v-if="item.path" class="lbt" :id="'lbt' + index" :src="item.path" @click="selectImg(index)" />
+            <img v-else class="lbt" src="../loading.png" />
             <div class="ml-2">-></div>
           </div>
           <div class="addLbt cursor-pointer flex justify-center items-center">
@@ -34,7 +35,7 @@
 
 <script setup>
 import { ref, getCurrentInstance, onMounted } from 'vue'
-import { getWxImg, addWXImg, updateImageList } from '@/api/wx/image'
+import { getWxImg, addWXImg, updateImageList, delWxImg } from '@/api/wx/image'
 const { proxy } = getCurrentInstance()
 
 const lbtLoading = ref(false)
@@ -75,9 +76,22 @@ const editImg = async (data) => {
     proxy?.$modal.msgError('请先选择图片!')
     return
   }
+  // 删除
   if (data == 0) {
-    await proxy?.$modal.confirm('是否删除第 ' + (lbtIndex.value + 1) + ' 张轮播图片?')
-    proxy?.$modal.msgSuccess('删除成功')
+    await ElMessageBox.confirm('是否删除第 ' + (lbtIndex.value + 1) + ' 张轮播图片?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+
+    await delWxImg(lbtList.value[lbtIndex.value].id)
+
+    setTimeout(() => {
+      getLBTData()
+      proxy?.$modal.msgSuccess('删除成功')
+    }, 500)
+    lbtIndex.value = null
+    return
   }
   if (lbtIndex.value == 0 && data == 1) {
     proxy?.$modal.msgError('已经是第一张了!')
@@ -101,6 +115,10 @@ const editImg = async (data) => {
 }
 
 const saveImg = async () => {
+  lbtLoading.value = true
+  lbtList.value.forEach((item) => {
+    item.path = null
+  })
   await updateImageList(lbtList.value)
   setTimeout(() => {
     getLBTData()
@@ -114,7 +132,7 @@ const handleExceed = async (file) => {
   reader.readAsDataURL(file.raw)
   reader.onload = async () => {
     console.log(reader.result)
-    await addWXImg({ type: '轮播图', img: reader.result }).then(() => {
+    await addWXImg({ type: '轮播图', path: reader.result }).then(() => {
       proxy?.$modal.msgSuccess('轮播图文件上传成功')
       getLBTData()
     })
