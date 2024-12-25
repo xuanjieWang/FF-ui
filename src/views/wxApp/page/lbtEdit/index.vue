@@ -1,13 +1,12 @@
 <template>
-  <div class="p-1">
-    <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
-      <div class="p-2 flex flex-col search" v-loading="lbtLoading">
+  <div class="page">
+    <div class="flex items-center">
+      <div class="flex flex-col w-[800px]" v-loading="lbtLoading">
         <div class="flex ml-3 gap-3 p-2 items-center">
           <el-button type="primary" @click="editImg(1)">前移</el-button>
           <el-button type="primary" @click="editImg(-1)">后移</el-button>
           <el-button type="success" @click="saveImg()">保存</el-button>
           <el-button type="danger" @click="editImg(0)">删除</el-button>
-          <div class="ml-5">轮播图</div>
         </div>
         <div class="flex flex-wrap gap-2 p-2 ml-3">
           <div v-for="(item, index) in lbtList" :key="index" class="flex items-center cursor-pointer">
@@ -29,7 +28,10 @@
           </div>
         </div>
       </div>
-    </transition>
+      <div>
+        <img src="./lbt.png" style="width: 300px; height: 150px" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -48,7 +50,8 @@ onMounted(() => {
 
 const getLBTData = async () => {
   lbtLoading.value = true
-  const res = await getWxImg('轮播图')
+  const res = await getWxImg('lbt')
+
   lbtList.value = res.data || []
   setTimeout(() => {
     lbtLoading.value = false
@@ -128,11 +131,15 @@ const saveImg = async () => {
 
 // 文件上传到服务器中
 const handleExceed = async (file) => {
+  const suffix = file.name.split('.')[1]
+  if (suffix != 'jpg' || suffix != 'png') {
+    proxy?.$modal.msgError('请上传jpg/png文件')
+    return
+  }
   const reader = new FileReader()
   reader.readAsDataURL(file.raw)
   reader.onload = async () => {
-    console.log(reader.result)
-    await addWXImg({ type: '轮播图', path: reader.result }).then(() => {
+    await addWXImg({ type: 'lbt', path: reader.result }).then(() => {
       proxy?.$modal.msgSuccess('轮播图文件上传成功')
       getLBTData()
     })
@@ -146,13 +153,12 @@ const handleExceed = async (file) => {
   border-radius: 10px;
 }
 .lbt:hover {
-  opacity: 0.9;
-  border: 2px solid red;
+  opacity: 0.5;
 }
 
 .lbtBorder {
   opacity: 0.9;
-  border: 2px solid red;
+  border: 4px solid red;
 }
 
 .addLbt {
@@ -162,5 +168,13 @@ const handleExceed = async (file) => {
   border-radius: 5px;
   border-radius: 10px;
   background-color: #000;
+}
+.page {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #696767;
+  border-radius: 10px;
+  margin: 10px;
+  background: #1d1e1f;
 }
 </style>
