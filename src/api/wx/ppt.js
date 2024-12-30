@@ -17,7 +17,7 @@ export function listData(query) {
 
 export function addPPTFile(data) {
   return request({
-    url: '/wx/ppt/add',
+    url: '/wx/upload/upload',
     method: 'post',
     data: data
   })

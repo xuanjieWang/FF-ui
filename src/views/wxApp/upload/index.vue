@@ -54,16 +54,16 @@
           <el-row :gutter="20">
             <el-form-item label="文件(ppt/mp4):">
               <el-upload
+                ref="upload"
                 class="upload-demo"
-                action="#"
-                :show-file-list="false"
-                :on-change="handleExceed"
-                :http-request="handleExceed"
+                :action="url"
+                :headers="uploadHeader"
+                :limit="1"
                 :auto-upload="false"
-                accept="ppt/mp4">
-                <el-button type="info"
-                  ><el-icon><Upload /></el-icon>上传附件</el-button
-                >
+                :show-file-list="false"
+                :on-change="handleChange"
+                :on-exceed="handleExceed">
+                <el-button type="primary">选择附件</el-button>
               </el-upload>
               <span class="ml-5">附件： {{ addData.fileName }} </span>
             </el-form-item>
@@ -84,6 +84,11 @@
 import { ref, reactive, getCurrentInstance, toRefs, onMounted } from 'vue'
 import { listData, deleteById, addPPTFile, update } from '@/api/wx/ppt'
 import { uploadFile } from '@/api/wx/upload'
+import { getToken } from '@/utils/auth'
+import { globalHeaders } from '@/utils/request'
+import SparkMD5 from 'spark-md5'
+const uploadHeader = globalHeaders()
+
 const { proxy } = getCurrentInstance()
 
 const list = ref([])
@@ -92,6 +97,7 @@ const total = ref(0)
 const dialogButton = ref(false)
 const dialogTitle = ref('')
 const addData = ref({})
+const url = import.meta.env.VITE_APP_BASE_API + '/wx/upload/upload'
 
 const data = reactive({
   queryParams: {
@@ -133,14 +139,20 @@ const addPPT = async () => {
     res = await update(addData.value)
     res.code == 200 ? proxy?.$modal.msgSuccess('修改PPT成功！') : proxy?.$modal.msgError('修改PPT失败！')
   } else {
-    // 大文件，设置为大文件上传
-    if (chunkSize > fileSize.value) {
-      res = await batchUpload()
+    if (addData.value.fileSize > chunkSize) {
+      const fileList = proxy.$refs.upload
+      uploadChunkFile()
+      // proxy.$refs.upload.submit()
     } else {
-      // 单文件直接进行上传
-      res = await addPPTFile(addData.value)
-      res.code == 200 ? proxy?.$modal.msgSuccess('添加文件成功！') : proxy?.$modal.msgError('添加文件失败！')
+      const fileList = proxy.$refs.upload
+      console.log('fileList', fileList)
+
+      proxy.$refs.upload.submit()
     }
+
+    // 添加文件信息
+    // res = await addPPTFile(addData.value)
+    // res.code == 200 ? proxy?.$modal.msgSuccess('添加文件成功！') : proxy?.$modal.msgError('添加文件失败！')
   }
   dialogButton.value = false
   getList()
@@ -160,81 +172,62 @@ const deletePPT = async (row) => {
     getList()
   }
 }
-// 设置分片的大小为8mb
-let chunkSize = 8 * 1024 * 1024
-const fileSize = ref(0)
+// 设置分片的大小为10mb
+let chunkSize = 10 * 1024 * 1024
+const upload = ref()
 const handleExceed = async (file) => {
+  proxy.$refs.upload.clearFiles() // 清除文件列表
+  proxy.$nextTick(() => {
+    proxy.$refs.upload.handleStart(file[0])
+  })
+}
+
+const saveFile = ref(null)
+const handleChange = async (file) => {
   const suffix = file.name.split('.')[1]
   if (suffix != 'ppt' && suffix != 'mp4' && suffix != 'pptx') {
     proxy?.$modal.msgError('请上传PPT/视频文件')
+    proxy.$refs.upload.clearFiles()
     return
   }
   addData.value.fileName = file.name // 文件名称
   addData.value.fileType = suffix // 文件类型
+  addData.value.fileSize = file.size // 文件大小
 
-  const reader = new FileReader()
-  reader.readAsDataURL(file.raw)
-  reader.onload = async () => {
-    addData.value.fileSize = file.size // 文件大小
-    addData.value.path = reader.result // 文件内容
-    fileSize.value = file.size
-  }
-  console.log(addData.value)
-}
+  saveFile.value = file
 
-const cancelUpload = ref(false)
-const batchUpload = async () => {
-  addData.value.md5 = getFileMd5()
-  let chunkCount = Math.ceil(fileSize.value / chunkSize)
-
-  for (let i = 0; i < chunkCount; i++) {
-    if (cancelUpload.value) return
-    const res = await uploadChunkFile(i)
-    if (res.code !== 200) {
-      dialogVisible.value = false
-      ElMessageBox({ message: `${fileData.value.name}上传失败`, title: '提示' })
-      return
-    }
-
-    // 合并切片,合并之后再添加PPT文件信息
-    if (i === chunkCount - 1) {
-      setTimeout(async () => {
-        dialogVisible.value = false
-        const res = await mergeUpload(addData.value.md5)
-        if (res.code == 200) {
-          addData.value.path = ''
-          res = await addPPTFile(addData.value)
-          ElMessageBox({ message: `${fileData.value.name}上传成功`, title: '提示' })
-        }
-      }, 500)
-    }
+  const fileReader = new FileReader()
+  fileReader.readAsDataURL(file.raw)
+  fileReader.onload = () => {
+    let hexHash = SparkMD5.hash(fileReader.result)
+    // 获取文件的md5值
+    console.log(hexHash, file.name)
+    file.name = hexHash + '.' + suffix
+    console.log(file.name)
   }
 }
-
 // 切片开始索引，切片文件
-const uploadChunkFile = async (index) => {
-  const chunkFile = addData.value.path.slice(index * chunkSize, Math.min(fileSize.value, index * chunkSize + chunkSize))
+const uploadChunkFile = async () => {
+  console.log('saveFile.value--------------', saveFile.value)
 
-  // 分片上传， md5,index,file，上传切片
-  const res = await uploadFile({
-    md5: addData.value.md5,
-    index: index + 1,
-    path: chunkFile
+  const data = new FormData().append('file', saveFile.value)
+  console.log('----------', data.value)
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + getToken(),
+      clientid: import.meta.env.VITE_APP_CLIENT_ID,
+      'Content-Type': 'multipart/form-data'
+    },
+    body: data.value
   })
-  if (res.code != 200) {
-    dialogVisible.value = false
-    proxy?.$modal.msgError('上传文件失败!' + index + 1)
-  }
-}
-
-// 重构项目没有断点续传等功能，故不需要做hash计算，只需要保证唯一即可，后端会拿这个值新建文件夹保存切片
-let counter = 0
-const getFileMd5 = () => {
-  let guid = (+new Date()).toString(32)
-  for (let i = 0; i < 5; i++) {
-    guid += Math.floor(Math.random() * 65535).toString(32)
-  }
-  return 'wu_' + guid + (counter++).toString(32)
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 }
 </script>
 <style scoped></style>

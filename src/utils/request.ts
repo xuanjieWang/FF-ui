@@ -41,6 +41,7 @@ service.interceptors.request.use(
     const isRepeatSubmit = (config.headers || {}).repeatSubmit === false;
     // 是否需要加密
     const isEncrypt = (config.headers || {}).isEncrypt === 'true';
+
     if (getToken() && !isToken) {
       config.headers['Authorization'] = 'Bearer ' + getToken(); // 让每个请求携带自定义token 请根据实际情况自行修改
     }
@@ -58,10 +59,12 @@ service.interceptors.request.use(
         data: typeof config.data === 'object' ? JSON.stringify(config.data) : config.data,
         time: new Date().getTime()
       };
-      console.log(requestObj.url);
 
-      // 文件重复提交判断
-      const sessionObj = cache.session.getJSON('sessionObj');
+      if(requestObj.url.includes('/wx/upload') || requestObj.url.includes('/wx/ppt')){
+        // config.headers['Content-Type'] = 'multipart/form-data';
+        // console.log(config);
+      }else{
+        const sessionObj = cache.session.getJSON('sessionObj');
       if (sessionObj === undefined || sessionObj === null || sessionObj === '') {
         cache.session.setJSON('sessionObj', requestObj);
       } else {
@@ -77,6 +80,8 @@ service.interceptors.request.use(
           cache.session.setJSON('sessionObj', requestObj);
         }
       }
+
+      }
     }
     // 当开启参数加密
     if (isEncrypt && (config.method === 'post' || config.method === 'put')) {
@@ -86,8 +91,11 @@ service.interceptors.request.use(
       config.data = typeof config.data === 'object' ? encryptWithAes(JSON.stringify(config.data), aesKey) : encryptWithAes(config.data, aesKey);
     }
     // FormData数据去请求头Content-Type
-    if (config.data instanceof FormData) {
-      delete config.headers['Content-Type'];
+    if (config.data instanceof FormData || config.url.includes('/wx/upload')) {
+      console.log("FormData请求数据----");
+      // config.headers['Content-Type'] = 'multipart/form-data';
+      // config.headers['content-type'] ="application/x-www-form-urlencoded; charset=UTF-8"
+      delete config.headers;
     }
     return config;
   },
