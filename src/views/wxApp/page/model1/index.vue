@@ -17,7 +17,7 @@
         </div>
         <div class="flex flex-wrap gap-2 p-2 ml-3">
           <div v-for="(item, index) in list" :key="index" class="flex items-center cursor-pointer">
-            <img v-if="item.path" class="img" :id="'img' + index" :src="item.path" @click="selectImg(index)" />
+            <img v-if="item.path" class="img" :id="'img1' + index" :src="item.path" @click="selectImg(index)" />
             <img v-else class="img" src="../loading.png" />
             <div v-if="index < 2" class="ml-2">-></div>
           </div>
@@ -88,7 +88,7 @@ const getData = async () => {
 const add = () => {
   // 取消选中图标
   if (selectIndex.value != null) {
-    document.getElementById('img' + selectIndex.value).classList.remove('imageBorder')
+    document.getElementById('img1' + selectIndex.value).classList.remove('imageBorder')
     selectIndex.value = null
   }
   dialogTitle.value = '新增模块一图片'
@@ -99,14 +99,14 @@ const add = () => {
 // 选中图片
 const selectImg = (index) => {
   if (selectIndex.value === index) {
-    document.getElementById('img' + selectIndex.value).classList.remove('imageBorder')
+    document.getElementById('img1' + selectIndex.value).classList.remove('imageBorder')
     selectIndex.value = null
     return
   }
   if (selectIndex.value != null) {
-    document.getElementById('img' + selectIndex.value).classList.remove('imageBorder')
+    document.getElementById('img1' + selectIndex.value).classList.remove('imageBorder')
   }
-  var newEle = document.getElementById('img' + index)
+  var newEle = document.getElementById('img1' + index)
   newEle.classList.add('imageBorder')
   selectIndex.value = index
 }
@@ -201,7 +201,7 @@ const save = async (data) => {
 // 文件上传到服务器中
 const handleExceed = async (file) => {
   const suffix = file.name.split('.')[1]
-  if (suffix != 'jpg' || suffix != 'png') {
+  if (suffix != 'jpg' && suffix != 'png') {
     proxy?.$modal.msgError('请上传jpg/png文件')
     return
   }

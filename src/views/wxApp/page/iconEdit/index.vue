@@ -42,7 +42,7 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="名称:">
-        <el-input v-model="updateData.name" placeholder="请输入图标名称(及PPT类别)" />
+        <el-input v-model="updateData.pptType" placeholder="请输入图标名称(及PPT类别)" />
       </el-form-item>
       <el-button type="primary" class="ml-10 mt-3" @click="saveIcon(selectIndex)">保存</el-button>
     </el-dialog>
@@ -92,7 +92,7 @@ const add = () => {
     selectIndex.value = null
   }
   dialogTitle.value = '新增图标'
-  updateData.value = { path: '', name: '', type: 'icon' }
+  updateData.value = { path: '', pptType: '', type: 'icon' }
   updateButton.value = true
 }
 
@@ -178,7 +178,8 @@ const saveIcon = async (data) => {
 
 // 文件上传到服务器中
 const handleExceed = async (file) => {
-  if (suffix != 'jpg' || suffix != 'png') {
+  const suffix = file.name.split('.')[1]
+  if (suffix != 'jpg' && suffix != 'png') {
     proxy?.$modal.msgError('请上传jpg/png文件')
     return
   }

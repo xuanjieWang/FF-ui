@@ -132,7 +132,7 @@ const saveImg = async () => {
 // 文件上传到服务器中
 const handleExceed = async (file) => {
   const suffix = file.name.split('.')[1]
-  if (suffix != 'jpg' || suffix != 'png') {
+  if (suffix != 'jpg' && suffix != 'png') {
     proxy?.$modal.msgError('请上传jpg/png文件')
     return
   }

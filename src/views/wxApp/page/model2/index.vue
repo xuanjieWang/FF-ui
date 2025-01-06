@@ -106,7 +106,7 @@ const selectImg = (index) => {
   if (selectIndex.value != null) {
     document.getElementById('img2' + selectIndex.value).classList.remove('imageBorder')
   }
-  var newEle = document.getElementById('img' + index)
+  var newEle = document.getElementById('img2' + index)
   newEle.classList.add('imageBorder')
   selectIndex.value = index
 }
@@ -201,7 +201,7 @@ const save = async (data) => {
 // 文件上传到服务器中
 const handleExceed = async (file) => {
   const suffix = file.name.split('.')[1]
-  if (suffix != 'jpg' || suffix != 'png') {
+  if (suffix != 'jpg' && suffix != 'png') {
     proxy?.$modal.msgError('请上传jpg/png文件')
     return
   }
