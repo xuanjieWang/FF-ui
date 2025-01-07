@@ -12,7 +12,8 @@
             {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
           </template>
         </el-table-column>
-        <el-table-column label="链接类型" align="center" prop="type" />
+        <el-table-column label="主题" align="center" prop="name" />
+        <el-table-column label="链接跳转类别" align="center" prop="type" />
         <el-table-column label="封面" align="center" prop="cover">
           <template #default="scope"> <img :src="scope.row.cover" class="w-[100px] h-[100px] cursor-pointer" /> </template>
         </el-table-column>
@@ -39,6 +40,11 @@
     <el-dialog :title="dialogTitle" v-model="dialogButton" width="800px" append-to-body>
       <div class="flex">
         <el-form :model="addData" label-width="220px">
+          <el-row :gutter="20">
+            <el-form-item label="主题(链接跳转类别):">
+              <el-input v-model="addData.name" :disabled="updateLoading" placeholder="请输入文件主题" />
+            </el-form-item>
+          </el-row>
           <el-row :gutter="20">
             <el-form-item label="链接类型:">
               <el-input v-model="addData.type" :disabled="updateLoading" placeholder="请选择类型(链接跳转)" />

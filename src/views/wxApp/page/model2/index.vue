@@ -47,7 +47,7 @@
           >
         </el-upload>
       </el-form-item>
-      <el-form-item label="PPT类别:">
+      <el-form-item label="链接跳转类别:">
         <el-input v-model="updateData.pptType" placeholder="请输入PPT类别" />
       </el-form-item>
       <el-button type="primary" class="ml-10 mt-3" @click="save(selectIndex)">保存</el-button>

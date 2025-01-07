@@ -41,7 +41,7 @@
           >
         </el-upload>
       </el-form-item>
-      <el-form-item label="名称:">
+      <el-form-item label="链接跳转类别:">
         <el-input v-model="updateData.pptType" placeholder="请输入图标名称(及PPT类别)" />
       </el-form-item>
       <el-button type="primary" class="ml-10 mt-3" @click="saveIcon(selectIndex)">保存</el-button>
