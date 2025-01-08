@@ -67,6 +67,7 @@ const getIconList = async () => {
   loading.value = true
   const res = await getWxImg('icon')
   list.value = res.data || []
+
   setTimeout(() => {
     loading.value = false
   }, 200)

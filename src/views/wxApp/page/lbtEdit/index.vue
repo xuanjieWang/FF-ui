@@ -51,6 +51,7 @@ onMounted(() => {
 const getLBTData = async () => {
   lbtLoading.value = true
   const res = await getWxImg('lbt')
+  console.log(res.data)
 
   lbtList.value = res.data || []
   setTimeout(() => {

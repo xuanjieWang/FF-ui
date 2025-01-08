@@ -3,8 +3,8 @@
     <div class="flex items-center">
       <div class="flex w-[800px] flex-col" v-loading="loading">
         <div class="ml-5 text-2xl w-[309px] mt-3 gap-3 flex">
-          <el-form-item label="名称:">
-            <el-input v-model="text.pptType" placeholder="请输入名称" />
+          <el-form-item label="标题:">
+            <el-input v-model="text.pptType" placeholder="请输入标题" />
           </el-form-item>
           <el-button type="success" @click="edit('updateText')">保存</el-button>
         </div>
