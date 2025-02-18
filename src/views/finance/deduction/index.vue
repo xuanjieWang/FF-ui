@@ -92,7 +92,6 @@ onMounted(async () => {
 async function getTxList() {
   txLoading.value = true
   const txListRes = await listDis(queryParams.value)
-  console.log(txListRes.rows)
   txList.value = txListRes.rows
   total.value = txListRes.total
   txLoading.value = false

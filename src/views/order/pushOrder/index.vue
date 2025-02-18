@@ -59,10 +59,10 @@
         <el-table-column label="交付时间" align="center" prop="jfTime" width="110px" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150px">
           <template #default="scope">
-            <el-tooltip content="查看" placement="top">
+            <el-tooltip content="查看详情" placement="top">
               <el-button link type="primary" icon="View" @click="handleView(scope.row)" v-hasPermi="['system:order:edit']"></el-button>
             </el-tooltip>
-            <el-tooltip content="修改" placement="top">
+            <el-tooltip content="修改订单信息" placement="top">
               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:order:edit']"></el-button>
             </el-tooltip>
             <el-tooltip content="交易完成" placement="top">
@@ -342,6 +342,7 @@ const getList = async () => {
     queryParams.value.sjsPhone = userStore.name
   }
   const res = await listOrder(queryParams.value)
+
   orderList.value = res.rows
   total.value = res.total
   loading.value = false

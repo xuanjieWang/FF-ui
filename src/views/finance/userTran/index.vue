@@ -128,11 +128,16 @@ async function handleView(data) {
     sjsPhone: data.sjsPhone,
     createTime: data.createTime
   }
+  console.log(params)
+
   // 获取提现订单
   const res = await getTxOrder(params)
+  console.log('提现订单--', res)
 
   // 获取扣款订单
   const disOrderRes = await getDisOrder(params)
+  console.log('扣款订单--', res)
+
   disOrder.value = disOrderRes.data || []
 
   txOrder.value = res.data || []

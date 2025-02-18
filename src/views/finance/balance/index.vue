@@ -128,6 +128,7 @@ onMounted(() => {
     getData()
   }, 1000 * 10)
 })
+
 onUnmounted(() => {
   clearTimeout(list)
 })
@@ -194,8 +195,11 @@ function checkTxtime(data) {
   }
 }
 
+//获取用户详细信息
 async function getData() {
   const res = await getInfo()
+  console.log(res)
+
   userData.value = res.data.user
   if (!userData.value.money || userData.value.money <= 0) {
     txxbutton.value = false
