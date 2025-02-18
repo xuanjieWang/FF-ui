@@ -138,6 +138,7 @@ const dialogTitle = ref('')
 const addData = ref({})
 const fileSize = ref(0)
 const url = import.meta.env.VITE_APP_BASE_API + '/wx/upload/upload'
+// const url = 'http://49.235.107.117:8887/wx/upload/upload'
 
 const data = reactive({
   queryParams: {
@@ -154,7 +155,6 @@ onMounted(() => {
 const getList = async () => {
   loading.value = true
   const res = await listData(queryParams.value)
-  console.log(res)
 
   list.value = res.rows
   total.value = res.total
