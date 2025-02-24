@@ -108,8 +108,9 @@ function getInstance(instance) {
   captcha.value = instance
 }
 async function captchaVerifyCallback(captchaVerifyParam) {
+  // 确认滑块是否成功
   const result = await getResult(captchaVerifyParam)
-  if (result.msg && result.msg === 'true') {
+  if (result.data) {
     return {
       captchaResult: true // 验证码验证是否通过，boolean类型，必选
     }
