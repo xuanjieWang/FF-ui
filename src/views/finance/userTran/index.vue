@@ -38,11 +38,11 @@
     </el-table>
     <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getData" />
     <el-dialog title="提现审核" v-model="buttonDis" width="500px" append-to-body>
-      <span class="info">请确认打款信息!</span>
       <div class="item">
-        <span>姓名：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ viewData.sjsName }}</span>
+        <span>姓名：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ viewData.sjsName }}</span>
+        <span>账户: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ viewData.sjsPhone }}</span>
         <span>支付宝：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ viewData.zfb }} </span>
-        <span>打款总金额：&nbsp;&nbsp; {{ viewData.money }}</span>
+        <span>打款金额：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ viewData.money }} 元</span>
       </div>
       <div class="txOrder">
         <span style="color: red" v-if="disOrder.length > 0">共有 {{ disOrder.length }}&nbsp;个扣款的订单</span>
@@ -64,15 +64,17 @@
           <span>下单时间: {{ item.createTime }}</span>
         </div>
       </div>
-      <el-button style="margin-left: 350px" type="primary" @click="adoptTx('0')">通&nbsp;&nbsp;过</el-button>
-      <el-button style="margin-left: 250px; margin-top: -56px" type="danger" @click="adoptTx('1')">不通过</el-button>
+      <div>
+        <el-button style="margin-left: 250px" type="danger" @click="adoptTx('1')">不通过</el-button>
+        <el-button style="margin-left: 350px; margin-top: -50px" type="primary" @click="adoptTx('0')">通&nbsp;&nbsp;过</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script setup>
 import { onMounted, toRefs, onUnmounted } from 'vue'
-import { list, adopt, getDisOrder } from '@/api/tx'
+import { listTx, adopt, getDisOrder } from '@/api/tx'
 import { getTxOrder } from '@/api/order'
 
 const { proxy } = getCurrentInstance()
@@ -103,16 +105,17 @@ const data = reactive({
 const { queryParams } = toRefs(data)
 async function getData() {
   txLoading.value = true
-  const txListRes = await list(queryParams.value)
+  const txListRes = await listTx(queryParams.value)
+
   txList.value = txListRes.rows
   total.value = txListRes.total
   txLoading.value = false
 }
 
 function adoptTx(success) {
+  console.log('审核数据---', viewData.value)
+
   viewData.value.successFlag = success
-  console.log(viewData.value)
-  // viewData.value.createTime = null
   buttonDis.value = false
   adopt(viewData.value).then(() => {
     setTimeout(() => {
@@ -128,15 +131,16 @@ async function handleView(data) {
     sjsPhone: data.sjsPhone,
     createTime: data.createTime
   }
-  console.log(params)
+
+  console.log('提现订单', params)
 
   // 获取提现订单
   const res = await getTxOrder(params)
-  console.log('提现订单--', res)
+  console.log('提现订单', res.data)
 
   // 获取扣款订单
   const disOrderRes = await getDisOrder(params)
-  console.log('扣款订单--', res)
+  console.log('扣款订单', disOrderRes.data)
 
   disOrder.value = disOrderRes.data || []
 
@@ -154,8 +158,8 @@ async function handleView(data) {
   display: flex;
   flex-direction: column;
   margin-left: 30px;
-  font-size: 14px;
-  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 600;
 }
 .order {
   margin-top: 10px;

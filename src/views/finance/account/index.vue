@@ -41,7 +41,7 @@
 
 <script setup>
 import { onMounted, toRefs, onUnmounted } from 'vue'
-import { list } from '@/api/tx'
+import { listTx } from '@/api/tx'
 const { proxy } = getCurrentInstance()
 
 const txList = ref([]) //提现列表
@@ -71,7 +71,7 @@ const data = reactive({
 const { queryParams } = toRefs(data)
 async function getData() {
   txLoading.value = true
-  const txListRes = await list(queryParams.value)
+  const txListRes = await listTx(queryParams.value)
   txList.value = txListRes.rows
   total.value = txListRes.total
   txLoading.value = false

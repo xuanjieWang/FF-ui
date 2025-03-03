@@ -1,12 +1,5 @@
 <template>
   <div class="app-container" style="display: flex; flex-direction: column; justify-content: center; align-items: center">
-    <!-- <div class="info">
-        <h1 style="text-align: center">简介</h1>
-        <text
-          >本项目是一款面向设计师的计算系统，旨在提升客服工作效率，为设计师提供便捷的服务，通过结合先进的技术手段，打造一个功能完善、性能优越、易于操作的软件系统。以下是本项目的简要介绍：<br />
-          1、项目名称：风飞结算系统 <br />2、项目类型：Web应用<br />
-        </text>
-      </div> -->
     <div class="notice">
       <h1>公告</h1>
       <el-card style="max-width: 100%" v-if="noticeList.length > 0">
@@ -28,21 +21,18 @@
         <div v-html="noticeList[index].noticeContent || '--'"></div>
         <div style="margin-top: 50px">发布时间： {{ noticeList[index].createTime || '--' }}</div>
       </el-card>
-
-      <div v-if="userStore.isDesigner != '1'">
-        <div class="card">
-          <h2>邀请码</h2>
-          <el-card>
-            <div style="font-size: 30px; margin-top: 20px">{{ code }}</div>
-          </el-card>
-        </div>
-      </div>
+    </div>
+    <div v-if="userStore.isDesigner != '1'" class="card">
+      <h2>邀请码</h2>
+      <el-card>
+        <div style="font-size: 30px; margin-top: 20px">{{ code }}</div>
+      </el-card>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, reactive, toRefs, watch } from 'vue'
+import { onMounted, reactive, toRefs } from 'vue'
 import { listNotice, getCode } from '@/api/notice'
 import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
@@ -91,7 +81,6 @@ function handleIndex(data) {
 .info {
   width: 100%;
   padding: 10px;
-  // text-align: center;
   padding: 10px;
 }
 .notice {
@@ -110,10 +99,10 @@ function handleIndex(data) {
 }
 .card {
   width: 50%;
-  margin-top: 20px;
-  padding: 10px;
-  left: 50%;
-  margin-left: 25%;
   min-width: 400px;
+  text-align: center;
+  padding: 10px;
+  align-items: center;
+  margin-top: 50px;
 }
 </style>

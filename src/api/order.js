@@ -21,10 +21,6 @@ export const listHis = (query) => {
     params: query
   })
 }
-/**
- * 查询【请填写功能名称】详细
- * @param id
- */
 export const getOrder = (id) => {
   return request({
     url: '/system/order/' + id,
@@ -32,10 +28,6 @@ export const getOrder = (id) => {
   })
 }
 
-/**
- * 新增【请填写功能名称】
- * @param data
- */
 export const addOrder = (data) => {
   return request({
     url: '/system/order',
@@ -44,10 +36,6 @@ export const addOrder = (data) => {
   })
 }
 
-/**
- * 修改【请填写功能名称】
- * @param data
- */
 export const updateOrder = (data) => {
   return request({
     url: '/system/order',
@@ -56,18 +44,6 @@ export const updateOrder = (data) => {
   })
 }
 
-export const subComm = (data) => {
-  return request({
-    url: '/system/order/subcomm',
-    method: 'put',
-    data: data
-  })
-}
-
-/**
- * 删除【请填写功能名称】
- * @param id
- */
 export const delOrder = (id) => {
   return request({
     url: '/system/order/' + id,

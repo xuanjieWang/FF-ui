@@ -1,3 +1,4 @@
+<!---订单添加-->
 <template>
   <div class="p-2">
     <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
@@ -55,17 +56,17 @@
         <!-- <el-table-column label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column> -->
         <el-table-column label="提成金额" align="center" prop="money" width="90px" />
         <el-table-column label="对接客服" align="center" prop="kf" width="90px" />
-        <el-table-column label="下单时间" align="center" prop="xdTime" width="110px" />
-        <el-table-column label="交付时间" align="center" prop="jfTime" width="110px" />
+        <el-table-column label="下单时间" align="center" prop="xdTime" width="100px" />
+        <el-table-column label="交付时间" align="center" prop="jfTime" width="100px" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150px">
           <template #default="scope">
-            <el-tooltip content="查看详情" placement="top">
+            <el-tooltip content="详情" placement="top">
               <el-button link type="primary" icon="View" @click="handleView(scope.row)" v-hasPermi="['system:order:edit']"></el-button>
             </el-tooltip>
-            <el-tooltip content="修改订单信息" placement="top">
-              <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:order:edit']"></el-button>
+            <el-tooltip content="修改订单" placement="top">
+              <el-button link type="primary" icon="EditPen" @click="handleUpdate(scope.row)" v-hasPermi="['system:order:edit']"></el-button>
             </el-tooltip>
-            <el-tooltip content="交易完成" placement="top">
+            <el-tooltip content="订单结算" placement="top">
               <el-button link type="primary" icon="Edit" @click="handleOrder(scope.row)" v-hasPermi="['system:order:edit']"></el-button>
             </el-tooltip>
           </template>
@@ -191,16 +192,15 @@
       </template>
     </el-dialog>
     <el-dialog title="订单结算" v-model="dialog.jsVisible" width="600px" append-to-body>
-      <p style="line-height: 30px; margin-left: 10px; margin-top: -1px; font-size: 16px">
-        确认结算订单:
-        <br />店铺名称: {{ jsData.shop }} <br />订单标题: {{ jsData.title }} <br />设计师姓名: {{ jsData.sjsName }} <br />订单金额: {{ jsData.money }}
+      <p style="line-height: 30px; margin-left: 10px; font-size: 16px">
+        店铺: {{ jsData.shop }} <br />订单: {{ jsData.title }} <br />设计师: {{ jsData.sjsName }} <br />金额: {{ jsData.money }} 元
       </p>
-      <span>订单失败： 取消订单，设计师可以在历史订单中查看取消结算的订单</span>
+      <span>订单取消： 订单状态设置为交易失败，设计师可以在历史订单中查看取消结算的订单</span>
       <br />
-      <span>结算成功： 按照该提成金额： {{ jsData.money }} 结算订单。</span>
-      <div style="margin-left: 250px; margin-top: 20px">
-        <el-button type="danger" @click="orderFail">订单失败</el-button>
-        <el-button type="success" @click="orderSuccess">结算成功</el-button>
+      <span>订单结算： 按照提成金额 {{ jsData.money }} 结算订单。</span>
+      <div style="margin-left: 350px; margin-top: 20px">
+        <el-button type="danger" @click="orderFail">订单取消</el-button>
+        <el-button type="success" @click="orderSuccess">订单结算</el-button>
       </div>
     </el-dialog>
   </div>
@@ -394,7 +394,7 @@ const handleOrder = async (row) => {
 //订单结算成功
 async function orderSuccess() {
   jsData.value.orderStatus = '交易完成'
-  jsData.value.jsStatus = '已结算'
+  jsData.value.jsStatus = '订单核验中'
   await updateOrder(jsData.value)
   proxy?.$modal.msgSuccess('结算成功')
   dialog.jsVisible = false
@@ -405,7 +405,7 @@ async function orderSuccess() {
 
 //订单结算失败
 async function orderFail() {
-  jsData.value.orderStatus = '交易失败'
+  jsData.value.orderStatus = '订单失败'
   jsData.value.jsStatus = '订单取消'
   await updateOrder(jsData.value).then(() => {
     proxy?.$modal.msgSuccess('操作成功')
@@ -498,6 +498,7 @@ const handleView = async (row) => {
   width: 250px;
   font-size: 15px;
   line-height: 25px;
+  color: #000;
 }
 .searchItem:focus,
 .searchItem:hover {

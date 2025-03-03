@@ -1,3 +1,4 @@
+<!---订单列表-->
 <template>
   <div class="p-2">
     <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
@@ -32,30 +33,27 @@
           </template>
         </el-table-column>
         <el-table-column label="店铺名称" align="center" prop="shop" width="200px" />
-        <el-table-column label="订单标题" align="center" prop="title" width="200px" />
+        <el-table-column label="订单标题" align="center" prop="title" />
         <el-table-column label="淘宝订单号" align="center" prop="type" width="100px" />
-        <!-- <el-table-column label="订单编号" align="center" prop="id" width="180px" /> -->
         <el-table-column label="提成金额" align="center" prop="money" width="100px" />
         <el-table-column label="订单状态" align="center" prop="orderStatus" width="100px" />
-        <el-table-column label="结算状态" align="center" prop="jsStatus" width="100px" />
-        <el-table-column label="对标客服" align="center" prop="kf" width="100px" />
+        <el-table-column label="对标客服" align="center" prop="kf" />
         <el-table-column label="下单时间" align="center" prop="xdTime" width="180px" />
         <el-table-column label="交付时间" align="center" prop="jfTime" width="180px" />
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="查看" placement="top">
               <el-button link type="primary" icon="View" @click="handleView(scope.row)"></el-button>
             </el-tooltip>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
     </el-card>
 
-    <!-- 添加或修改【请填写功能名称】对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="900px" append-to-body>
       <el-form ref="orderFormRef" :model="form" :rules="rules" label-width="150px">
-        <p class="item">订单信息</p>
+        <!-- <p class="item">订单信息</p> -->
         <el-row :gutter="20">
           <el-form-item label="店铺:" prop="shop">
             <el-input v-model="form.shop" disabled placeholder="" />
@@ -63,9 +61,6 @@
           <el-form-item label="订单标题:" prop="title">
             <el-input v-model="form.title" disabled placeholder="" />
           </el-form-item>
-          <!-- <el-form-item label="订单编号:" prop="id">
-            <el-input v-model="form.id" disabled placeholder="" />
-          </el-form-item> -->
         </el-row>
         <el-row :gutter="20">
           <el-form-item label="提成金额" prop="money">
@@ -83,16 +78,7 @@
             <el-input v-model="form.kf" disabled placeholder="" />
           </el-form-item>
         </el-row>
-        <!-- <p class="item">设计师信息</p>
-        <el-row :gutter="20">
-          <el-form-item label="设计师姓名" prop="sjsName">
-            <el-input v-model="form.sjsName" disabled placeholder="" />
-          </el-form-item>
-          <el-form-item label="设计师账户" prop="sjsPhone">
-            <el-input v-model="form.sjsPhone" disabled placeholder="" />
-          </el-form-item>
-        </el-row> -->
-        <p class="item">时间</p>
+        <!-- <p class="item">时间</p> -->
         <el-row :gutter="20">
           <el-form-item label="下单时间:" prop="xdTime">
             <el-date-picker style="width: 250px" clearable v-model="form.xdTime" disabled type="datetime" value-format="YYYY-MM-DD HH:mm:ss" placeholder="">
@@ -108,30 +94,7 @@
             <el-date-picker style="width: 250px" clearable v-model="form.createTime" disabled type="datetime" value-format="YYYY-MM-DD HH:mm:ss" placeholder="">
             </el-date-picker>
           </el-form-item>
-          <!-- <el-form-item label="订单完成时间:" prop="updateTime">
-            <el-date-picker
-              style="width:250px"
-              clearable
-              v-model="form.updateTime"
-              disabled
-              type="datetime"
-              value-format="YYYY-MM-DD HH:mm:ss"
-              placeholder=""
-            >
-            </el-date-picker>
-          </el-form-item> -->
         </el-row>
-        <!-- <p class="item">订单评价</p>
-        <el-row :gutter="20">
-          <el-form-item label="订单评价" prop="commonType">
-            <el-input v-model="form.commonType" disabled placeholder="" />
-          </el-form-item>
-        </el-row>
-        <el-row :gutter="20">
-          <el-form-item label="订单评论" prop="common">
-            <el-input v-model="form.common" type="textarea" style="width: 540px; height: 100px;" disabled placeholder="" />
-          </el-form-item>
-        </el-row> -->
       </el-form>
     </el-dialog>
   </div>
@@ -139,7 +102,7 @@
 
 <script setup>
 import { ref, reactive, getCurrentInstance, toRefs, onMounted } from 'vue'
-import { listOrder, getOrder } from '@/api/order'
+import { listOrder } from '@/api/order'
 const { proxy } = getCurrentInstance()
 import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
@@ -147,9 +110,6 @@ const userStore = useUserStore()
 const orderList = ref([])
 const loading = ref(true)
 const showSearch = ref(true)
-const ids = ref([])
-const single = ref(true)
-const multiple = ref(true)
 const total = ref(0)
 
 const queryFormRef = ref()
@@ -176,7 +136,6 @@ onMounted(() => {
   getList()
 })
 
-/** 查询【请填写功能名称】列表 */
 const getList = async () => {
   loading.value = true
   queryParams.value.deptName = userStore.deptName
@@ -210,7 +169,7 @@ const handleView = async (row) => {
   reset()
   Object.assign(form.value, row)
   dialog.visible = true
-  dialog.title = '查看订单详情'
+  dialog.title = '订单详情'
 }
 </script>
 <style scoped>

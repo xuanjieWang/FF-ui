@@ -7,7 +7,7 @@ import { data } from 'autoprefixer'
  * @returns {*}
  */
 
-export const list = (query) => {
+export const listTx = (query) => {
   return request({
     url: '/tx/data/list',
     method: 'get',

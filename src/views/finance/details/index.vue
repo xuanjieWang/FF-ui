@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="p-2">
     <el-card shadow="never">
       <el-table v-loading="loading" :data="orderList">
@@ -7,12 +7,10 @@
             {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
           </template>
         </el-table-column>
-        <!-- <el-table-column label="订单编号" align="center" prop="orderId" width="180px" /> -->
         <el-table-column label="店铺名称" align="center" prop="shop" width="180px" />
         <el-table-column label="订单标题" align="center" prop="orderTitle" width="180px" />
         <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column>
         <el-table-column v-if="userStore.isDesigner != '1'" label="设计师姓名" align="center" prop="sjsName" width="100px"> </el-table-column>
-        <!-- <el-table-column v-if="userStore.deptName != '设计师部门'" label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column> -->
         <el-table-column label="淘宝订单号" align="center" prop="orderType" width="200px" />
         <el-table-column label="订单金额" align="center" prop="money" width="90px" />
         <el-table-column label="余额" align="center" prop="balance" width="90px" />
@@ -26,7 +24,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <!-- 添加或修改【请填写功能名称】对话框 -->
       <el-dialog :title="dialog.title" v-model="dialog.visible" width="900px" append-to-body>
         <el-form ref="detailDatas" :model="detailData" label-width="150px">
           <p class="item">订单信息</p>
@@ -113,17 +110,6 @@
               </el-date-picker>
             </el-form-item>
           </el-row>
-          <!-- <p class="item">评论</p>
-          <el-row :gutter="20">
-            <el-form-item label="评论类型:" prop="commonType">
-              <el-input v-model="detailData.commonType" disabled placeholder="" />
-            </el-form-item>
-          </el-row>
-          <el-row :gutter="20">
-            <el-form-item label="评论:" prop="common" type="textarea">
-              <el-input style="width: 500px" :autosize="{ minRows: 4, maxRows: 6 }" type="textarea" v-model="detailData.common" disabled />
-            </el-form-item>
-          </el-row> -->
         </el-form>
       </el-dialog>
       <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
@@ -159,7 +145,6 @@ onMounted(() => {
 })
 const queryFormRef = ref()
 
-/** 搜索按钮操作 */
 const handleQuery = () => {
   queryParams.value.pageNum = 1
   getList()
@@ -169,7 +154,6 @@ const resetQuery = () => {
   handleQuery()
 }
 
-/** 查询【请填写功能名称】列表 */
 const getList = async () => {
   loading.value = true
   queryParams.value.deptName = userStore.deptName
@@ -184,7 +168,6 @@ const dialog = reactive({
   visible: false,
   title: ''
 })
-/** 查看按钮 */
 const handleView = async (row) => {
   const res = await getOrder(row.orderId)
   detailData.value = { ...res.data }
@@ -207,4 +190,4 @@ const handleView = async (row) => {
 :deep(.el-picker-width100pr .el-input__wrapper) {
   width: 100% !important;
 }
-</style>
+</style> -->

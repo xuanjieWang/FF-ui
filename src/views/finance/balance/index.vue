@@ -1,3 +1,4 @@
+<!---用户提现页面-->
 <template>
   <div class="body">
     <div class="leftPage">
@@ -198,7 +199,6 @@ function checkTxtime(data) {
 //获取用户详细信息
 async function getData() {
   const res = await getInfo()
-  console.log(res)
 
   userData.value = res.data.user
   if (!userData.value.money || userData.value.money <= 0) {

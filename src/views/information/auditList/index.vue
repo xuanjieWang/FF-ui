@@ -86,7 +86,7 @@ async function Audit(data, flag) {
   }
   params.audit = flag ? 'yes' : 'no'
   let title = flag ? '通过' : '不通过'
-  await proxy?.$modal.confirm(title + ': ' + data.name + '  的数据项？').then(async () => await handleAudit(params))
+  await proxy?.$modal.confirm(' ' + title + ' 用户: ' + data.name + '  的用户申请？').then(async () => await handleAudit(params))
 
   setTimeout(() => {
     getList()

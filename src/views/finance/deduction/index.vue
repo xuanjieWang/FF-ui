@@ -1,4 +1,4 @@
-<!--页面-->
+<!--账户扣款页面-->
 <template>
   <div class="body">
     <div class="leftPage">
@@ -113,6 +113,9 @@ function handle() {
         })
       })
     }
+    setTimeout(() => {
+      getTxList()
+    }, 500)
   })
 }
 

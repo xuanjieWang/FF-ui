@@ -130,7 +130,7 @@ async function onBizResultCallback() {
   regisRef.value?.validate(async (valid) => {
     if (!valid) return
     if (password1.value != regisData.value.password) {
-      ElMessage.error('请确认输入密码!')
+      ElMessage.error('请确认输入密码一致!')
       return
     }
     if (!checkCode(regisData.value.inviteCode)) {
