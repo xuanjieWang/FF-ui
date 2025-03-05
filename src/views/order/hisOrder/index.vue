@@ -40,15 +40,20 @@
             <span v-else style="color: red">{{ scope.row.orderStatus }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="结算状态" align="center" prop="jsStatus" width="110px">
+        <el-table-column label="核验状态" align="center" prop="jsStatus" width="110px">
           <template #default="scope">
-            <span v-if="scope.row.jsStatus == '已结算'" style="color: green">交易完成</span>
+            <span v-if="scope.row.jsStatus == '已结算'" style="color: green">核验完成</span>
             <span v-if="scope.row.jsStatus == '订单取消'" style="color: red">订单取消</span>
             <span v-if="scope.row.jsStatus == '订单失败'" style="color: red">订单失败</span>
             <span v-if="scope.row.jsStatus == '订单核验中'" style="color: blue">订单核验中</span>
           </template>
         </el-table-column>
-        <el-table-column label="提现状态" align="center" prop="txStatus" width="100px"></el-table-column>
+        <el-table-column label="提现状态" align="center" prop="txStatus" width="100px">
+          <template #default="scope">
+            <span v-if="scope.row.txStatus == '提现成功'" style="color: green">提现成功</span>
+            <span v-if="scope.row.txStatus == '提现失败'" style="color: red">提现失败</span>
+          </template>
+        </el-table-column>
         <el-table-column label="订单完成时间" align="center" prop="updateTime" width="105px" />
         <el-table-column label="操作" align="center" width="100px" class-name="small-padding fixed-width">
           <template #default="scope">

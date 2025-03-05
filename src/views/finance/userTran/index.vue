@@ -6,7 +6,7 @@
           {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
         </template>
       </el-table-column>
-      <el-table-column label="姓名" align="center" prop="sjsName" width="120px" />
+      <el-table-column label="姓名" align="center" prop="sjsName" />
       <el-table-column label="账户" align="center" prop="sjsPhone" width="120px" />
       <el-table-column label="支付宝号" align="center" prop="zfb" width="140px" />
       <el-table-column label="提现金额(元)" align="center" prop="money" width="120px" />
@@ -18,6 +18,7 @@
           <div v-if="scope.row.successFlag">
             <el-switch
               v-model="scope.row.successFlag"
+              disabled
               style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949; height: 40px"
               active-value="0"
               inactive-value="1" />
@@ -32,12 +33,12 @@
           <div v-if="!scope.row.successFlag">
             <el-button link type="primary" icon="Edit" v-hasPermi="['tx:data:adopt', 'system:order:getTxOrder']" @click="handleView(scope.row)"></el-button>
           </div>
-          <div v-else>{{ scope.row.successFlag == '0' ? '通过' : '不通过' }}</div>
+          <!-- <div v-else>{{ scope.row.successFlag == '0' ? '通过' : '不通过' }}</div> -->
         </template>
       </el-table-column>
     </el-table>
     <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getData" />
-    <el-dialog title="提现审核" v-model="buttonDis" width="500px" append-to-body>
+    <el-dialog title="提现审核" v-model="buttonDis" width="700px" append-to-body>
       <div class="item">
         <span>姓名：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ viewData.sjsName }}</span>
         <span>账户: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ viewData.sjsPhone }}</span>
@@ -64,9 +65,10 @@
           <span>下单时间: {{ item.createTime }}</span>
         </div>
       </div>
+      <div class="mt-5 ml-100">ps(提现不通过，订单设置为失败状态)</div>
       <div>
-        <el-button style="margin-left: 250px" type="danger" @click="adoptTx('1')">不通过</el-button>
-        <el-button style="margin-left: 350px; margin-top: -50px" type="primary" @click="adoptTx('0')">通&nbsp;&nbsp;过</el-button>
+        <el-button style="margin-left: 250px; margin-top: 20px" type="danger" @click="adoptTx('1')">不通过</el-button>
+        <el-button style="margin-left: 350px; margin-top: -50px" type="success" @click="adoptTx('0')">通&nbsp;&nbsp;&nbsp;过</el-button>
       </div>
     </el-dialog>
   </div>
@@ -131,17 +133,11 @@ async function handleView(data) {
     sjsPhone: data.sjsPhone,
     createTime: data.createTime
   }
-
-  console.log('提现订单', params)
-
   // 获取提现订单
   const res = await getTxOrder(params)
-  console.log('提现订单', res.data)
 
   // 获取扣款订单
   const disOrderRes = await getDisOrder(params)
-  console.log('扣款订单', disOrderRes.data)
-
   disOrder.value = disOrderRes.data || []
 
   txOrder.value = res.data || []
@@ -169,7 +165,7 @@ async function handleView(data) {
 .txOrder {
   margin-top: 10px;
   min-height: 30px;
-  max-height: 200px;
+  max-height: 250px;
   overflow-y: auto;
   margin-left: 20px;
 }

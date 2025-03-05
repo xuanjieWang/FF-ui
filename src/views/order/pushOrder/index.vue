@@ -195,9 +195,9 @@
       <p style="line-height: 30px; margin-left: 10px; font-size: 16px">
         店铺: {{ jsData.shop }} <br />订单: {{ jsData.title }} <br />设计师: {{ jsData.sjsName }} <br />金额: {{ jsData.money }} 元
       </p>
-      <span>订单取消： 订单状态设置为交易失败，设计师可以在历史订单中查看取消结算的订单</span>
+      <span>订单取消： 状态设置为交易失败，在历史订单中查看。</span>
       <br />
-      <span>订单结算： 按照提成金额 {{ jsData.money }} 结算订单。</span>
+      <span>订单结算： 按照提成金额 {{ jsData.money }} 结算订单，核验7日后到账。</span>
       <div style="margin-left: 350px; margin-top: 20px">
         <el-button type="danger" @click="orderFail">订单取消</el-button>
         <el-button type="success" @click="orderSuccess">订单结算</el-button>

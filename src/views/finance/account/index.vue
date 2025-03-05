@@ -29,11 +29,11 @@
       <el-table-column label="姓名" align="center" prop="sjsName" width="120px" />
       <el-table-column label="账户" align="center" prop="sjsPhone" width="120px" />
       <el-table-column label="淘宝订单号" align="center" prop="tbOrderId" />
-      <el-table-column label="支付宝号" align="center" prop="zfb" width="160px" />
+      <el-table-column label="支付宝" align="center" prop="zfb" />
       <el-table-column label="提现金额(元)" align="center" prop="money" width="120px" />
-      <el-table-column label="账户余额(元)" align="center" prop="balance" width="120px" />
+      <!-- <el-table-column label="账户余额(元)" align="center" prop="balance" width="120px" /> -->
       <el-table-column label="提现申请时间" align="center" prop="createTime" width="180px" />
-      <el-table-column label="审核时间" align="center" prop="txTime" width="180px" />
+      <el-table-column label="提现审核时间" align="center" prop="txTime" width="180px" />
     </el-table>
     <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getData" />
   </div>
@@ -72,6 +72,8 @@ const { queryParams } = toRefs(data)
 async function getData() {
   txLoading.value = true
   const txListRes = await listTx(queryParams.value)
+  console.log(txListRes)
+
   txList.value = txListRes.rows
   total.value = txListRes.total
   txLoading.value = false
