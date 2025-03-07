@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div class="p-2">
     <el-card shadow="never">
       <el-table v-loading="loading" :data="orderList">
@@ -190,4 +190,4 @@ const handleView = async (row) => {
 :deep(.el-picker-width100pr .el-input__wrapper) {
   width: 100% !important;
 }
-</style> -->
+</style>
