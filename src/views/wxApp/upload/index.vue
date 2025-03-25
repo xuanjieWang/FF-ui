@@ -155,6 +155,7 @@ onMounted(() => {
 const getList = async () => {
   loading.value = true
   const res = await listData(queryParams.value)
+  console.log(res.rows)
 
   list.value = res.rows
   total.value = res.total
@@ -163,6 +164,8 @@ const getList = async () => {
 
 // 修改文件
 const openAddUpdate = (data) => {
+  console.log('文件详情------------', data)
+
   if (updateLoading.value) return proxy?.$modal.msgSuccess('请等待文件上传完成')
   addData.value = data
   dialogButton.value = true
@@ -259,7 +262,10 @@ const handleCover = async (file) => {
 
 const saveFile = ref(null)
 const handleChange = async (file) => {
-  const suffix = file.name.split('.')[1]
+  const list = file.name.split('.')
+  const suffix = list[list.length - 1]
+  console.log(suffix)
+
   if (suffix != 'mp4' && suffix != 'pptx') {
     proxy?.$modal.msgError('请上传PPT/视频文件')
     proxy.$refs.upload.clearFiles()

@@ -72,7 +72,6 @@ const { queryParams } = toRefs(data)
 async function getData() {
   txLoading.value = true
   const txListRes = await listTx(queryParams.value)
-  console.log(txListRes)
 
   txList.value = txListRes.rows
   total.value = txListRes.total
