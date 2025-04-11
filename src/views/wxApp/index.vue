@@ -13,7 +13,7 @@
     <div class="mt-1 p-5">-----------------------文件上传------------------------------------</div>
     <img class="p-5 w-[400px] h-[200px]" src="./ppt.png" />
     <span>1. 名称： 文件名称</span>
-    <span>2. 链接类型： ppt类型管理（链接跳转）</span>
+    <span>2. 链接类型： ppt类型管理（）</span>
     <span>3. 文件封面 </span>
     <span>4. 文件类型（ppt/pptx/mp4）</span>
 

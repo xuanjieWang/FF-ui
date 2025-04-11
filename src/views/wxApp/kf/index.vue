@@ -7,10 +7,10 @@
         </div>
         <div class="flex flex-wrap gap-2 ml-5 w-[1000px]">
           <div v-for="(item, index) in list" :key="index" class="flex flex-col gap-1 items-center">
-            <img :src="item.path" class="w-[200px] h-[200px]" />
+            <img :src="item.path" class="w-[120px] h-[120px]" />
           </div>
           <div v-if="list.length < 1" class="addIcon cursor-pointer flex mt-1 justify-center items-center" @click="add()">
-            <div>+新增</div>
+            <div>+添加</div>
           </div>
         </div>
       </div>
@@ -18,7 +18,7 @@
 
     <el-dialog v-model="updateButton" title="新增客服链接" width="600px">
       <el-form-item label="客服二维码:">
-        <img class="w-[200px] h-[200px] cursor-pointer" :src="updateData.path" />
+        <img class="w-[120px] h-[120px] cursor-pointer" :src="updateData.path" />
         <el-upload
           class="upload-demo ml-5"
           action="#"
@@ -122,7 +122,7 @@ const handleExceed = async (file) => {
   border: 1px solid #ccc;
   border-radius: 5px;
   border-radius: 10px;
-  background-color: #000000;
+  background-color: #ffffff;
 }
 .page {
   width: 100%;
@@ -130,6 +130,6 @@ const handleExceed = async (file) => {
   border: 1px solid #696767;
   border-radius: 10px;
   margin: 0px 10px 10px 10px;
-  background: #1d1e1f;
+  background: #ffffff;
 }
 </style>

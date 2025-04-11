@@ -41,8 +41,8 @@
           >
         </el-upload>
       </el-form-item>
-      <el-form-item label="链接跳转类别:">
-        <el-input v-model="updateData.pptType" placeholder="请输入图标名称(及PPT类别)" />
+      <el-form-item label="链接类型:">
+        <el-input v-model="updateData.pptType" placeholder="请输入跳转链接类型" />
       </el-form-item>
       <el-button type="primary" class="ml-10 mt-3" @click="saveIcon(selectIndex)">保存</el-button>
     </el-dialog>
@@ -212,7 +212,7 @@ const handleExceed = async (file) => {
   border: 1px solid #ccc;
   border-radius: 5px;
   border-radius: 10px;
-  background-color: #000000;
+  background-color: #ffffff;
 }
 .page {
   width: 100%;
@@ -220,6 +220,6 @@ const handleExceed = async (file) => {
   border: 1px solid #696767;
   border-radius: 10px;
   margin: 0px 10px 10px 10px;
-  background: #1d1e1f;
+  background: #ffffff;
 }
 </style>

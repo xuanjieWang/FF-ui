@@ -45,7 +45,7 @@
             <span v-if="scope.row.jsStatus == '已结算'" style="color: green">核验完成</span>
             <span v-if="scope.row.jsStatus == '订单取消'" style="color: red">订单取消</span>
             <span v-if="scope.row.jsStatus == '订单失败'" style="color: red">订单失败</span>
-            <span v-if="scope.row.jsStatus == '订单核验中'" style="color: blue">订单核验中</span>
+            <span v-if="scope.row.jsStatus == '订单核验中'" style="color: blue">售后中（7天）</span>
           </template>
         </el-table-column>
         <el-table-column label="提现状态" align="center" prop="txStatus" width="100px">

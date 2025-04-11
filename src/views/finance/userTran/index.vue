@@ -115,8 +115,6 @@ async function getData() {
 }
 
 function adoptTx(success) {
-  console.log('审核数据---', viewData.value)
-
   viewData.value.successFlag = success
   buttonDis.value = false
   adopt(viewData.value).then(() => {

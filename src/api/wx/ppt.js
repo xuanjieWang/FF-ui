@@ -37,3 +37,20 @@ export function update(data) {
     data: data
   })
 }
+
+// 获取img类型数据
+export function getFileById(id) {
+  return request({
+    url: '/wx/ppt/getId/' + id,
+    method: 'get',
+    params: id
+  })
+}
+
+// 查询所有的文件种类
+export function listFileType() {
+  return request({
+    url: '/wx/ppt/listFileType',
+    method: 'get'
+  })
+}

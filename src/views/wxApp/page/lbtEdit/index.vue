@@ -51,8 +51,6 @@ onMounted(() => {
 const getLBTData = async () => {
   lbtLoading.value = true
   const res = await getWxImg('lbt')
-  console.log(res.data)
-
   lbtList.value = res.data || []
   setTimeout(() => {
     lbtLoading.value = false
@@ -168,7 +166,7 @@ const handleExceed = async (file) => {
   border: 1px solid #ccc;
   border-radius: 5px;
   border-radius: 10px;
-  background-color: #000;
+  background-color: #ffffff;
 }
 .page {
   width: 100%;
@@ -176,6 +174,6 @@ const handleExceed = async (file) => {
   border: 1px solid #696767;
   border-radius: 10px;
   margin: 10px;
-  background: #1d1e1f;
+  background: #ffffff;
 }
 </style>
