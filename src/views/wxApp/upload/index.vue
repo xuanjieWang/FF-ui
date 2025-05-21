@@ -350,7 +350,7 @@ const delFile = async (row) => {
 
 // 封面文件上传到服务器中
 const handleCover = async (file) => {
-  const suffix = file.name.split('.')[1]
+  let suffix = file.name.split('.')[1].toLowerCase()
   if (suffix != 'jpg' && suffix != 'png') {
     proxy?.$modal.msgError('请上传jpg/png文件')
     return
