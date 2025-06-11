@@ -77,9 +77,10 @@ const getData = async () => {
   loading.value = true
   const res = await getWxImg('model1')
   list.value = res.data || []
-
-  text.value = list.value[0] || { pptType: {} }
+  text.value = list.value[0] || { pptType: '' }
   list.value.splice(0, 1)
+
+  // 第一项是标题，其他设置为图片
 
   setTimeout(() => {
     loading.value = false
@@ -124,7 +125,11 @@ const update = async () => {
 
 // 移动轮播图
 const edit = async (data) => {
+  console.log('data-----------', data)
+  console.log(text.value)
+
   if (data == 'updateText') {
+    text.value.type = 'model1'
     await updateImageList([text.value])
 
     setTimeout(() => {
@@ -177,6 +182,8 @@ const edit = async (data) => {
 }
 
 const save = async (data) => {
+  console.log('save-----------', data)
+
   let info = ''
   loading.value = true
 

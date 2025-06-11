@@ -7,11 +7,15 @@
             <el-option v-for="item in pptTypeList" :label="item" :value="item"> </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="文件类型" prop="fileType">
+
+        <el-form-item label="链接类型" prop="type">
+          <el-input v-model="queryParams.type" :disabled="updateLoading" placeholder="链接类型" style="width: 120px; margin-bottom: 0" />
+        </el-form-item>
+        <!-- <el-form-item label="文件类型" prop="fileType">
           <el-select placeholder="" v-model="queryParams.fileType" clearable :value-key="'id'" style="width: 120px; margin-bottom: 0">
             <el-option v-for="item in fileTypeList" :label="item.value" :value="item.value"> </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item label="排序" prop="sort">
           <el-select placeholder="" v-model="queryParams.sort" clearable :value-key="'id'" style="width: 120px; margin-bottom: 0">
@@ -24,7 +28,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="success" icon="Plus" @click="openAdd()">上传文件</el-button>
+          <el-button type="success" icon="Plus" @click="openAdd()">上传</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -37,12 +41,13 @@
           </template>
         </el-table-column>
         <el-table-column label="主题" align="center" prop="name" />
-        <el-table-column label="链接类型" align="center" prop="type" />
         <el-table-column label="封面" align="center" prop="cover">
           <template #default="scope"> <img :src="scope.row.cover" class="w-[100px] h-[100px] cursor-pointer" /> </template>
         </el-table-column>
-        <el-table-column label="文件类型" align="center" prop="fileType" />
-        <el-table-column label="视频大小" align="center" prop="size" />
+        <el-table-column label="链接类型" align="center" prop="type" />
+
+        <!-- <el-table-column label="文件类型" align="center" prop="fileType" /> -->
+        <!-- <el-table-column label="视频大小" align="center" prop="size" /> -->
 
         <el-table-column label="排序" align="center" prop="sort" />
         <el-table-column label="添加时间" align="center" prop="createTime" width="100px" />
@@ -72,7 +77,8 @@
           </el-row>
           <el-row :gutter="20">
             <el-form-item label="链接类型:">
-              <el-input v-model="addData.type" :disabled="updateLoading" placeholder="(小程序页面管理链接类型)" />
+              <el-input v-model="addData.type" :disabled="updateLoading" placeholder="(小程序链接类型)" />
+              <span style="color: red; font-size: 12px"> 多类型使用逗号(,)隔开 </span>
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
@@ -98,7 +104,7 @@
               <div v-if="dialogTitle == '添加文件'">
                 <el-radio-group v-model="addData.fileType">
                   <el-radio-button label="img" value="img" />
-                  <el-radio-button label="mp4" value="mp4" />
+                  <!-- <el-radio-button label="mp4" value="mp4" /> -->
                 </el-radio-group>
               </div>
               <div v-else>{{ addData.fileType }}</div>
@@ -183,7 +189,6 @@
 import { ref, reactive, getCurrentInstance, toRefs, onMounted, watchEffect } from 'vue'
 import { listData, deleteById, addPPTFile, update, getFileById, listFileType } from '@/api/wx/ppt'
 import SparkMD5 from 'spark-md5'
-import { Plus } from '@element-plus/icons-vue'
 import { globalHeaders } from '@/utils/request'
 
 const { proxy } = getCurrentInstance()
@@ -242,7 +247,6 @@ const { queryParams } = toRefs(data)
 //获取数据
 onMounted(() => {
   getFileTypeList()
-
   getList()
 })
 
@@ -288,9 +292,9 @@ const openAdd = () => {
 }
 // 上传文件
 async function addFile() {
-  if (!fileIsUpload.value && addData.value.fileType === 'mp4') {
-    return proxy?.$modal.msgError('请先上传视频文件')
-  }
+  // if (!fileIsUpload.value && addData.value.fileType === 'mp4') {
+  //   return proxy?.$modal.msgError('请先上传视频文件')
+  // }
 
   // 文件设置为上传中
   updateLoading.value = true
@@ -300,7 +304,7 @@ async function addFile() {
 
   setTimeout(async () => {
     const res = await addPPTFile(addData.value)
-    res.code == 200 ? proxy?.$modal.msgSuccess('文件上传成功！') : proxy?.$modal.msgError('添加文件失败！')
+    res.code == 200 ? proxy?.$modal.msgSuccess('添加成功！') : proxy?.$modal.msgError('添加失败！')
     getList()
     addData.value = {}
     updateLoading.value = false
@@ -312,7 +316,7 @@ async function addFile() {
 const updateFile = async () => {
   addData.value.fileImages = null
   const res = await update(addData.value)
-  res.code == 200 ? proxy?.$modal.msgSuccess('修改文件成功！') : proxy?.$modal.msgError('修改文件失败！')
+  res.code == 200 ? proxy?.$modal.msgSuccess('修改成功！') : proxy?.$modal.msgError('修改失败！')
 
   setTimeout(() => {
     dialogButton.value = false

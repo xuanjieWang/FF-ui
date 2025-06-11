@@ -34,8 +34,8 @@
         <template #prefix><svg-icon icon-class="validCode" class="el-input__icon input-icon" /></template>
       </el-input>
       <div class="sms-code">
-        <div v-if="!sendSmsButton" id="captcha-button">获取验证码</div>
-        <span v-else>重发验证（{{ smsTime }}s）</span>
+        <div v-if="!sendSmsButton" id="captcha-button">获取短信验证码</div>
+        <span style="color: #1c1c1c" v-else>重发（{{ smsTime }}s）</span>
       </div>
     </el-form-item>
     <div id="captcha-element"></div>
@@ -142,8 +142,8 @@ async function onBizResultCallback() {
       if (smsTime.value > 0 && smsTime.value <= 60) {
         smsTime.value--
       } else {
-        clearInterval(smsTimer.value)
         sendSmsButton.value = false
+        clearInterval(smsTimer.value)
       }
     }, 1000)
     await getSmsCode(regisData.value.phonenumber)

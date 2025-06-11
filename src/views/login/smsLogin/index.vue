@@ -14,7 +14,7 @@
         </el-input>
         <div class="sms-code" @click="getSmsCode">
           <span v-if="!sendSmsButton">获取验证码</span>
-          <span v-else>重发验证（{{ smsTime }}s）</span>
+          <span v-else>重发（{{ smsTime }}s）</span>
         </div>
       </el-form-item>
       <el-card style="position: fixed; z-index: 999; margin-top: -8%" v-if="showCode">

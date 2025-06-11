@@ -77,7 +77,7 @@ const getData = async () => {
   loading.value = true
   const res = await getWxImg('model2')
   list.value = res.data || []
-  text.value = list.value[0] || { pptType: {} }
+  text.value = list.value[0] || { pptType: '' }
   list.value.splice(0, 1)
 
   setTimeout(() => {
@@ -124,6 +124,7 @@ const update = async () => {
 // 移动轮播图
 const edit = async (data) => {
   if (data == 'updateText') {
+    text.value.type = 'model2'
     await updateImageList([text.value])
 
     setTimeout(() => {
