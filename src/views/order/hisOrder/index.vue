@@ -2,17 +2,17 @@
   <div class="p-2">
     <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
       <div class="search">
-        <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="68px">
+        <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="88px">
+          <el-form-item label="设计师姓名" prop="sjsName">
+            <el-input v-model="queryParams.sjsName" placeholder="请输入设计师名称" clearable style="width: 180px; margin-bottom: 0" />
+          </el-form-item>
+          <el-form-item label="淘宝订单号" prop="type">
+            <el-input v-model="queryParams.type" placeholder="请输入淘宝订单号" clearable style="width: 180px; margin-bottom: 0" />
+          </el-form-item>
           <el-form-item label="订单标题" prop="title">
             <el-select v-model="queryParams.title" placeholder="选择订单标题" clearable style="width: 180px; margin-bottom: 0">
               <el-option v-for="dict in the_order_title" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
-          </el-form-item>
-          <el-form-item label="订单号" prop="type">
-            <el-input v-model="queryParams.type" placeholder="请输入淘宝订单号" clearable style="width: 180px; margin-bottom: 0" />
-          </el-form-item>
-          <el-form-item label="设计师" prop="sjsName">
-            <el-input v-model="queryParams.sjsName" placeholder="请输入设计师名称" clearable style="width: 180px; margin-bottom: 0" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -23,29 +23,29 @@
     </transition>
     <el-card shadow="never">
       <el-table v-loading="loading" :data="orderList">
-        <el-table-column label="序号" align="center" prop="title" width="80px">
+        <el-table-column label="序号" align="center" prop="title" width="60px">
           <template #default="scope"> {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }} </template>
         </el-table-column>
         <el-table-column label="店铺名称" align="center" prop="shop" width="100px" />
         <el-table-column label="订单标题" align="center" prop="title" width="180px" />
-        <el-table-column label="对标客服" align="center" prop="kf" width="100px" />
-        <el-table-column label="淘宝订单号" align="center" prop="type" width="200px" />
-        <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column>
         <el-table-column label="设计师姓名" align="center" prop="sjsName" width="100px"> </el-table-column>
-        <!-- <el-table-column label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column> -->
+        <el-table-column label="淘宝订单号" align="center" prop="type" width="150px" />
         <el-table-column label="提成金额" align="center" prop="money" width="90px" />
-        <el-table-column label="订单状态" align="center" prop="orderStatus" width="100px">
+        <el-table-column label="设计师账户" align="center" prop="sjsPhone" width="150px"> </el-table-column>
+        <el-table-column label="对标客服" align="center" prop="kf" width="100px" />
+        <el-table-column label="客户旺旺号" align="center" prop="wangwang" width="180px"> </el-table-column>
+        <!-- <el-table-column label="订单状态" align="center" prop="orderStatus" width="100px">
           <template #default="scope">
             <span v-if="scope.row.orderStatus == '交易完成'" style="color: green">交易完成</span>
             <span v-else style="color: red">{{ scope.row.orderStatus }}</span>
           </template>
-        </el-table-column>
-        <el-table-column label="核验状态" align="center" prop="jsStatus" width="110px">
+        </el-table-column> -->
+        <el-table-column label="核验状态" align="center" prop="jsStatus">
           <template #default="scope">
             <span v-if="scope.row.jsStatus == '已结算'" style="color: green">核验完成</span>
             <span v-if="scope.row.jsStatus == '订单取消'" style="color: red">订单取消</span>
             <span v-if="scope.row.jsStatus == '订单失败'" style="color: red">订单失败</span>
-            <span v-if="scope.row.jsStatus == '订单核验中'" style="color: blue">售后中（7天）</span>
+            <span v-if="scope.row.jsStatus == '订单核验中'" style="color: blue">售后中</span>
           </template>
         </el-table-column>
         <el-table-column label="提现状态" align="center" prop="txStatus" width="100px">

@@ -4,16 +4,6 @@
     <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
       <div class="search" v-show="showSearch">
         <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="68px">
-          <!-- <el-form-item label="提交状态" prop="orderStatus">
-            <el-select v-model="queryParams.orderStatus" placeholder="选择订单提交状态" clearable style="width: 180px; margin-bottom: 0">
-              <el-option v-for="dict in order_push_statu" :key="dict.value" :label="dict.label" :value="dict.value" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="结算状态" prop="jsStatus">
-            <el-select v-model="queryParams.jsStatus" placeholder="选择订单结算状态" clearable style="width: 180px; margin-bottom: 0">
-              <el-option v-for="dict in order_balance_statu" :key="dict.value" :label="dict.label" :value="dict.value" />
-            </el-select>
-          </el-form-item> -->
           <el-form-item label="订单编号" prop="type">
             <el-input v-model="queryParams.type" placeholder="请输入订单编号" clearable style="width: 180px; margin-bottom: 0" />
           </el-form-item>
@@ -34,19 +24,12 @@
         </el-table-column>
         <el-table-column label="店铺名称" align="center" prop="shop" width="200px" />
         <el-table-column label="订单标题" align="center" prop="title" />
-        <el-table-column label="淘宝订单号" align="center" prop="type" width="100px" />
+        <el-table-column label="淘宝订单号" align="center" prop="type" width="200px" />
         <el-table-column label="提成金额" align="center" prop="money" width="100px" />
         <el-table-column label="订单状态" align="center" prop="orderStatus" width="100px" />
         <el-table-column label="对标客服" align="center" prop="kf" />
         <el-table-column label="下单时间" align="center" prop="xdTime" width="180px" />
         <el-table-column label="交付时间" align="center" prop="jfTime" width="180px" />
-        <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-          <template #default="scope">
-            <el-tooltip content="查看" placement="top">
-              <el-button link type="primary" icon="View" @click="handleView(scope.row)"></el-button>
-            </el-tooltip>
-          </template>
-        </el-table-column> -->
       </el-table>
       <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
     </el-card>

@@ -4,16 +4,16 @@
     <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
       <div class="search" v-show="showSearch">
         <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="100px">
-          <el-form-item label="店铺名称" prop="shop">
-            <el-select v-model="queryParams.title" placeholder="选择店铺名称" clearable style="width: 180px; margin-bottom: 0">
-              <el-option v-for="dict in the_shop_name" :key="dict.value" :label="dict.label" :value="dict.value" />
-            </el-select>
+          <el-form-item label="设计师姓名" prop="sjsName">
+            <el-input v-model="queryParams.sjsName" placeholder="请输入设计师名称" clearable style="width: 180px; margin-bottom: 0" />
           </el-form-item>
           <el-form-item label="订单编号" prop="type">
             <el-input v-model="queryParams.type" placeholder="请输入订单编号" clearable style="width: 180px; margin-bottom: 0" />
           </el-form-item>
-          <el-form-item label="设计师姓名" prop="sjsName">
-            <el-input v-model="queryParams.sjsName" placeholder="请输入设计师名称" clearable style="width: 180px; margin-bottom: 0" />
+          <el-form-item label="店铺名称" prop="shop">
+            <el-select v-model="queryParams.title" placeholder="选择店铺名称" clearable style="width: 180px; margin-bottom: 0">
+              <el-option v-for="dict in the_shop_name" :key="dict.value" :label="dict.label" :value="dict.value" />
+            </el-select>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -29,11 +29,6 @@
           <el-col :span="1.5">
             <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['system:order:add']">新增</el-button>
           </el-col>
-          <!-- <el-col :span="1.5">
-            <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()" v-hasPermi="['system:order:remove']"
-              >删除</el-button
-            >
-          </el-col> -->
           <el-col :span="1.5">
             <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['system:order:export']">导出</el-button>
           </el-col>
@@ -195,12 +190,12 @@
       <p style="line-height: 30px; margin-left: 10px; font-size: 16px">
         店铺: {{ jsData.shop }} <br />订单: {{ jsData.title }} <br />设计师: {{ jsData.sjsName }} <br />金额: {{ jsData.money }} 元
       </p>
-      <span>订单取消： 状态设置为交易失败，在历史订单中查看。</span>
+      <span>取消： 状态设置为交易失败，在历史订单中查看。</span>
       <br />
-      <span>订单结算： 按照提成金额 {{ jsData.money }} 结算订单，核验7日后到账。</span>
+      <span>结算： 按照提成金额 {{ jsData.money }} 结算订单，核验7日后到账。</span>
       <div style="margin-left: 350px; margin-top: 20px">
-        <el-button type="danger" @click="orderFail">订单取消</el-button>
-        <el-button type="success" @click="orderSuccess">订单结算</el-button>
+        <el-button type="danger" @click="orderFail">取消</el-button>
+        <el-button type="primary" @click="orderSuccess">结算</el-button>
       </div>
     </el-dialog>
   </div>

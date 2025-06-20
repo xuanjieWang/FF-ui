@@ -1,16 +1,33 @@
 <template>
   <div class="body p-2">
-    <el-table v-loading="txLoading" :data="txList">
+    <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
+      <div class="search">
+        <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="100px">
+          <el-form-item label="设计师姓名" prop="sjsName">
+            <el-input v-model="queryParams.sjsName" placeholder="请输入设计师姓名" clearable style="width: 180px; margin-bottom: 0" />
+          </el-form-item>
+          <el-form-item label="设计师账号" prop="sjsPhone">
+            <el-input v-model="queryParams.sjsPhone" placeholder="请输入设计师账号" clearable style="width: 180px; margin-bottom: 0" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="Search" @click="getData">搜索</el-button>
+            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </transition>
+
+    <el-table :data="txList">
       <el-table-column label="序号" align="center" prop="title" width="80px">
         <template #default="scope">
           {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
         </template>
       </el-table-column>
       <el-table-column label="姓名" align="center" prop="sjsName" />
-      <el-table-column label="账户" align="center" prop="sjsPhone" width="120px" />
-      <el-table-column label="支付宝号" align="center" prop="zfb" width="140px" />
+      <el-table-column label="账户/手机号" align="center" prop="sjsPhone" width="120px" />
+      <el-table-column label="支付宝" align="center" prop="zfb" width="180px" />
       <el-table-column label="提现金额(元)" align="center" prop="money" width="120px" />
-      <el-table-column label="账户余额(元)" align="center" prop="balance" width="120px" />
+      <el-table-column label="余额(元)" align="center" prop="balance" width="120px" />
       <el-table-column label="提现申请时间" align="center" prop="createTime" width="180px" />
       <el-table-column label="审核时间" align="center" prop="txTime" width="180px" />
       <el-table-column label="审核状态" align="center" prop="successFlag" width="120px">
@@ -33,7 +50,6 @@
           <div v-if="!scope.row.successFlag">
             <el-button link type="primary" icon="Edit" v-hasPermi="['tx:data:adopt', 'system:order:getTxOrder']" @click="handleView(scope.row)"></el-button>
           </div>
-          <!-- <div v-else>{{ scope.row.successFlag == '0' ? '通过' : '不通过' }}</div> -->
         </template>
       </el-table-column>
     </el-table>
@@ -83,7 +99,6 @@ const { proxy } = getCurrentInstance()
 
 const txList = ref([]) //提现列表
 const total = ref(0)
-const txLoading = ref(false)
 const txOrder = ref([])
 
 let timer = ''
@@ -106,12 +121,10 @@ const data = reactive({
 })
 const { queryParams } = toRefs(data)
 async function getData() {
-  txLoading.value = true
   const txListRes = await listTx(queryParams.value)
 
   txList.value = txListRes.rows
   total.value = txListRes.total
-  txLoading.value = false
 }
 
 function adoptTx(success) {
@@ -141,6 +154,12 @@ async function handleView(data) {
   txOrder.value = res.data || []
   buttonDis.value = true
   viewData.value = data
+}
+const queryFormRef = ref()
+
+const resetQuery = () => {
+  queryFormRef.value?.resetFields()
+  getData()
 }
 </script>
 <style lang="scss" scoped>
