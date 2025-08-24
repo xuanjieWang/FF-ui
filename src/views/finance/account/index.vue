@@ -45,11 +45,11 @@ import { listTx } from '@/api/tx'
 const { proxy } = getCurrentInstance()
 
 const txList = ref([]) //提现列表
-const total = ref(0)
-const txLoading = ref(false)
-const queryFormRef = ref()
+const total = ref(0) //总数
+const txLoading = ref(false) //加载状态
+const queryFormRef = ref() //查询表单引用
 
-let timer = ''
+let timer = '' //定时器
 onMounted(() => {
   getData()
   timer = setInterval(() => {
@@ -90,4 +90,6 @@ const resetQuery = () => {
   handleQuery()
 }
 </script>
-<style lang="scss" scoped></style>
+<style scoped>
+@import './index.css';
+</style>

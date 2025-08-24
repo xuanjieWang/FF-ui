@@ -3,7 +3,7 @@
   <div class="body">
     <div class="leftPage">
       <div>
-        <h1 style="margin-left: 32%">设置提现时间</h1>
+        <h1>设置提现时间</h1>
       </div>
       <div class="tx">
         <div class="item" style="margin-top: 30px">
@@ -35,8 +35,9 @@ import { getTxTime, setTxTime } from '@/api/order'
 import { onMounted, watch } from 'vue'
 const { proxy } = getCurrentInstance()
 
-const timeMax = ref(30)
+const timeMax = ref(30) // 时间最大值
 const timeType = [
+  // 时间类型选项
   {
     value: 'day',
     label: '每周'
@@ -46,8 +47,8 @@ const timeType = [
     label: '每月'
   }
 ]
-const type = ref('')
-const txData = ref({})
+const type = ref('') // 选中的时间类型
+const txData = ref({}) // 提现时间数据
 onMounted(async () => {
   const res = await getTxTime()
   txData.value = res.data
@@ -83,73 +84,4 @@ watch(type, () => {
   }
 })
 </script>
-<style lang="scss" scoped>
-.body {
-  display: flex;
-}
-.leftPage {
-  width: 35%;
-  display: flex;
-  flex-direction: column;
-}
-
-.list-group-striped > .list-group-item {
-  border-left: 0;
-  border-right: 0;
-  border-radius: 0;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.list-group {
-  padding-left: 0px;
-  list-style: none;
-}
-
-.list-group-item {
-  border-bottom: 1px solid #e7eaec;
-  border-top: 1px solid #e7eaec;
-  margin-bottom: -1px;
-  padding: 11px 0px;
-  font-size: 16px;
-  margin-left: 10px;
-}
-.pull-right {
-  margin-left: 5px;
-}
-span {
-  margin-left: 10px;
-}
-.tx {
-  width: 90%;
-  height: 300px;
-  border-radius: 10px;
-  border: 1px solid #b1b5ba;
-  margin: 10px 0px 0px 20px;
-  text-align: center;
-}
-.item {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 50px;
-  color: #000;
-  font-size: 18px;
-  margin-top: 5px;
-}
-.ps {
-  color: #b1b5ba;
-  font-size: 14px;
-}
-
-.info {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 50px;
-  color: #000;
-  font-size: 18px;
-  margin-top: 5px;
-  margin-top: 40px;
-}
-</style>
+<style lang="scss" scoped src="./index.css"></style>

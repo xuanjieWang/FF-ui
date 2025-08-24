@@ -84,4 +84,6 @@ const resetQuery = () => {
   handleQuery()
 }
 </script>
-<style lang="scss" scoped></style>
+<style scoped>
+@import './index.css';
+</style>

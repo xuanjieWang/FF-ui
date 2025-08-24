@@ -1,0 +1,277 @@
+/* 设计师账户管理页面 - 简约风格样式 */
+
+/* 页面整体布局 */
+.body {
+  min-height: 100vh;
+  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 搜索区域样式 */
+.search {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.search:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* 表单样式优化 */
+.el-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.el-form-item {
+  margin-bottom: 0 !important;
+}
+
+.el-form-item__label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+/* 输入框样式 */
+.el-input {
+  border-radius: 8px;
+}
+
+.el-input__wrapper {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.el-input__wrapper:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.el-input__wrapper.is-focus {
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3);
+}
+
+/* 按钮样式 */
+.el-button {
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 12px 24px;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.el-button--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.el-button--primary:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.el-button:not(.el-button--primary) {
+  background: rgba(255, 255, 255, 0.9);
+  color: #667eea;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+.el-button:not(.el-button--primary):hover {
+  background: rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+/* 表格容器样式 */
+.el-table {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 24px;
+}
+
+/* 表格头部样式 */
+.el-table__header-wrapper {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.el-table__header-wrapper .el-table__header {
+  background: transparent;
+}
+
+.el-table__header-wrapper th {
+  background: transparent !important;
+  color: white !important;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 16px 12px;
+  border: none;
+}
+
+.el-table__header-wrapper th.is-leaf {
+  border-bottom: none;
+}
+
+/* 表格行样式 */
+.el-table__body-wrapper .el-table__row {
+  transition: all 0.3s ease;
+}
+
+.el-table__body-wrapper .el-table__row:hover {
+  background: rgba(102, 126, 234, 0.05) !important;
+  transform: scale(1.01);
+}
+
+.el-table__body-wrapper .el-table__row td {
+  padding: 16px 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+/* 序号列特殊样式 */
+.el-table__body-wrapper .el-table__row td:first-child {
+  font-weight: 600;
+  color: #667eea;
+}
+
+/* 姓名列样式 */
+.el-table__body-wrapper .el-table__row td:nth-child(2) {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* 余额列特殊样式 */
+.el-table__body-wrapper .el-table__row td:nth-child(6) {
+  font-weight: 600;
+  color: #e74c3c;
+  font-size: 15px;
+}
+
+/* 支付宝号列样式 */
+.el-table__body-wrapper .el-table__row td:nth-child(5) {
+  color: #3498db;
+  font-weight: 500;
+}
+
+/* 加载状态样式 */
+.el-loading-mask {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+/* 分页组件样式 */
+.el-pagination {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  justify-content: center;
+}
+
+.el-pagination .el-pager li {
+  border-radius: 6px;
+  margin: 0 2px;
+  transition: all 0.3s ease;
+}
+
+.el-pagination .el-pager li:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
+.el-pagination .el-pager li.is-active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.el-pagination .btn-prev,
+.el-pagination .btn-next {
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.el-pagination .btn-prev:hover,
+.el-pagination .btn-next:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .body {
+    padding: 12px;
+  }
+
+  .search {
+    padding: 16px;
+  }
+
+  .el-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .el-form-item {
+    width: 100%;
+  }
+
+  .el-input {
+    width: 100% !important;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search,
+.el-table,
+.el-pagination {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}

@@ -26,12 +26,12 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="work">
-          <el-input v-model="info.work" type="text" auto-complete="off" placeholder="请输入您目前从事的工作">
+          <el-input v-model="info.work" type="text" auto-complete="off" placeholder="您目前从事的工作">
             <template #prefix> <p>在职工作:</p> </template>
           </el-input>
         </el-form-item>
         <el-form-item prop="proficient">
-          <el-input v-model="info.proficient" type="text" auto-complete="off" placeholder="请输入您的擅长方向">
+          <el-input v-model="info.proficient" type="text" auto-complete="off" placeholder="您的擅长方向">
             <template #prefix> <p>擅长方向:</p> </template>
           </el-input>
         </el-form-item>
@@ -45,7 +45,7 @@
             <template #prefix> <p>身份证照片: </p> </template>
           </el-input>
         </el-form-item> -->
-        <el-button type="primary" style="width: 150px; margin: 5px 0px 0px 80px" @click.prevent="submit" :disabled="isDisabled"> 提交 </el-button>
+        <el-button type="primary" @click.prevent="submit" :disabled="isDisabled"> 提交 </el-button>
       </el-form>
     </div>
   </div>
@@ -57,10 +57,11 @@ import { useUserStore } from '@/store/modules/user'
 import { rules } from './rules'
 import { addRealInfo } from '@/api/audit'
 
-const userStore = useUserStore()
-const router = useRouter()
+const userStore = useUserStore() // 用户状态管理
+const router = useRouter() // 路由实例
 
 const info = ref({
+  // 用户信息表单数据
   userId: null,
   qq: null,
   qqMail: null,
@@ -85,7 +86,7 @@ async function logout() {
 }
 
 // 提交表达信息，讲信息提交到用户信息中
-const isDisabled = ref(false)
+const isDisabled = ref(false) // 提交按钮禁用状态
 async function submit() {
   isDisabled.value = true
   info.value.userId = userStore.userId
@@ -96,36 +97,4 @@ async function submit() {
   await addRealInfo(info.value)
 }
 </script>
-<style lang="scss" scoped>
-.body {
-  height: 100%;
-  width: 100%;
-  background-image: url('../../assets/images/info.png');
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.info {
-  width: 800px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.el-input {
-  height: 40px;
-  width: 300px;
-  input {
-    height: 40px;
-  }
-}
-.logout {
-  position: absolute;
-  top: 5%;
-  left: 5%;
-}
-p {
-  width: 70px;
-  text-align: left;
-}
-</style>
+<style src="./index.css" scoped></style>

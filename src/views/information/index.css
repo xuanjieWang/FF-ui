@@ -1,0 +1,213 @@
+/* 简约风格的个人信息页面样式 */
+
+/* 页面整体布局 */
+.body {
+  min-height: 100vh; /* 最小高度为视窗高度 */
+  width: 100%;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* 简约渐变背景 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* 页面标题 */
+.body h1 {
+  color: #2c3e50; /* 深灰蓝色标题 */
+  font-size: 28px;
+  font-weight: 300; /* 轻字重 */
+  margin-bottom: 40px;
+  text-align: center;
+  letter-spacing: 1px; /* 字母间距 */
+}
+
+/* 信息表单容器 */
+.info {
+  width: 100%;
+  max-width: 480px; /* 最大宽度限制 */
+  background: rgba(255, 255, 255, 0.95); /* 半透明白色背景 */
+  border-radius: 16px; /* 圆角 */
+  padding: 40px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* 轻微阴影 */
+  backdrop-filter: blur(10px); /* 背景模糊效果 */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* 边框 */
+}
+
+/* 表单项样式 */
+.el-form-item {
+  margin-bottom: 24px; /* 表单项间距 */
+}
+
+/* 输入框样式 */
+.el-input {
+  width: 100%;
+  height: 48px; /* 输入框高度 */
+}
+
+.el-input .el-input__wrapper {
+  border-radius: 8px; /* 圆角 */
+  border: 1px solid #e1e8ed; /* 边框颜色 */
+  background-color: #ffffff; /* 背景色 */
+  transition: all 0.3s ease; /* 过渡效果 */
+  box-shadow: none;
+}
+
+.el-input .el-input__wrapper:hover {
+  border-color: #3498db; /* 悬停边框颜色 */
+}
+
+.el-input.is-focus .el-input__wrapper {
+  border-color: #3498db; /* 聚焦边框颜色 */
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1); /* 聚焦阴影 */
+}
+
+.el-input .el-input__inner {
+  height: 46px; /* 内部输入框高度 */
+  line-height: 46px;
+  font-size: 14px;
+  color: #2c3e50; /* 文字颜色 */
+  padding-left: 12px;
+}
+
+/* 输入框前缀样式 */
+.el-input .el-input__prefix {
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+}
+
+.el-input .el-input__prefix p {
+  width: 80px; /* 标签宽度 */
+  text-align: left;
+  font-size: 14px;
+  color: #5a6c7d; /* 标签颜色 */
+  font-weight: 400;
+  margin: 0;
+  white-space: nowrap; /* 不换行 */
+}
+
+/* 提交按钮样式 */
+.el-button {
+  width: 160px !important;
+  height: 48px;
+  margin: 32px auto 0 !important; /* 居中显示 */
+  display: block;
+  border-radius: 8px; /* 圆角 */
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease; /* 过渡效果 */
+}
+
+.el-button--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* 渐变背景 */
+  border: none;
+  color: #ffffff;
+}
+
+.el-button--primary:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%); /* 悬停渐变 */
+  transform: translateY(-2px); /* 悬停上移效果 */
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3); /* 悬停阴影 */
+}
+
+.el-button--primary:active {
+  transform: translateY(0); /* 点击效果 */
+}
+
+.el-button:disabled {
+  background: #bdc3c7 !important; /* 禁用状态背景 */
+  color: #ffffff !important;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* 返回按钮样式 */
+.logout {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  width: auto !important;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 20px; /* 圆角按钮 */
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.9); /* 半透明背景 */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #5a6c7d;
+  transition: all 0.3s ease;
+}
+
+.logout:hover {
+  background: rgba(255, 255, 255, 1); /* 悬停背景 */
+  color: #2c3e50;
+  transform: translateY(-1px); /* 轻微上移 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 悬停阴影 */
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .body {
+    padding: 16px;
+  }
+  
+  .body h1 {
+    font-size: 24px;
+    margin-bottom: 32px;
+  }
+  
+  .info {
+    max-width: 100%;
+    padding: 32px 24px;
+  }
+  
+  .el-input .el-input__prefix p {
+    width: 70px; /* 移动端标签宽度 */
+    font-size: 13px;
+  }
+  
+  .logout {
+    top: 16px;
+    left: 16px;
+    font-size: 13px;
+    padding: 0 16px;
+  }
+}
+
+/* 输入框占位符样式 */
+.el-input .el-input__inner::placeholder {
+  color: #a0a9b8; /* 占位符颜色 */
+  font-size: 13px;
+}
+
+/* 表单验证错误样式 */
+.el-form-item.is-error .el-input .el-input__wrapper {
+  border-color: #e74c3c; /* 错误边框颜色 */
+}
+
+.el-form-item.is-error .el-input .el-input__wrapper:hover,
+.el-form-item.is-error .el-input.is-focus .el-input__wrapper {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.1); /* 错误阴影 */
+}
+
+/* 加载状态动画 */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.el-button:disabled {
+  animation: pulse 1.5s infinite; /* 禁用状态脉冲动画 */
+}

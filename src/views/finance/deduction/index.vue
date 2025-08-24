@@ -2,7 +2,7 @@
 <template>
   <div class="body">
     <div class="leftPage">
-      <h1 style="margin-left: 45%">账户扣款</h1>
+      <h1>账户扣款</h1>
       <div class="tx">
         <el-form ref="orderFormRef" :model="form" :rules="rules" label-width="150px" style="margin-top: 30px">
           <el-row :gutter="20">
@@ -35,7 +35,7 @@
     </div>
     <div class="rightPage">
       <div>
-        <h1 style="margin-left: 48%">扣款记录</h1>
+        <h1>扣款记录</h1>
         <el-table v-loading="txLoading" :data="txList">
           <el-table-column label="序号" prop="title" width="60px">
             <template #default="scope">
@@ -179,62 +179,6 @@ watch(testName, () => {
   search()
 })
 </script>
-<style lang="scss" scoped>
-.body {
-  display: flex;
-}
-.leftPage {
-  width: 35%;
-  min-width: 450px;
-  display: flex;
-  flex-direction: column;
-}
-.tx {
-  width: 100%;
-  height: 400px;
-  border-radius: 10px;
-  border: 1px solid #b1b5ba;
-  margin: 10px 0px 0px 20px;
-  text-align: center;
-}
-.el-input {
-  width: 250px;
-}
-.item {
-  margin: 0px 20px 15px 20px;
-  font-size: 16px;
-  color: black;
-  font-weight: 600;
-}
-:deep(.el-picker-width100pr .el-input__wrapper) {
-  width: 100% !important;
-}
-.searchResult {
-  position: absolute;
-  top: 40px;
-  z-index: 1000;
-  height: 130px;
-  overflow: auto;
-  width: 250px;
-  background: rgb(220, 214, 214);
-}
-.searchItem {
-  height: 25px;
-  width: 250px;
-  font-size: 15px;
-  line-height: 25px;
-}
-.searchItem:focus,
-.searchItem:hover {
-  cursor: pointer;
-  background: rgb(86, 82, 82);
-  color: #fff;
-}
-p {
-  margin-left: 5px;
-}
-.rightPage {
-  width: 68%;
-  margin-left: 2%;
-}
+<style scoped>
+@import './index.css';
 </style>

@@ -118,7 +118,7 @@
               <div v-if="searchView" class="searchResult" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
                 <div v-for="(item, index) in searchList" :key="index">
                   <div style="display: flex; align-items: center" class="searchItem" @mousedown="checkUser(item, e)">
-                    <p style="width: 90px">{{ item.name || '无姓名' }}</p>
+                    <p style="width: 60px">{{ item.name || '无姓名' }}</p>
                     <p style="width: 180px">{{ item.userName }}-{{ item.designerType }}</p>
                   </div>
                 </div>
@@ -212,12 +212,12 @@ import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
 import { rules } from '../rules'
 
-const testName = ref('')
+const testName = ref('') // 测试姓名输入
 watch(testName, () => {
   if (enableSearch.value) search()
 })
 
-const enableSearch = ref(false)
+const enableSearch = ref(false) // 启用搜索标志
 //搜索用户
 async function search() {
   if (' ' == testName.value) return
@@ -227,39 +227,39 @@ async function search() {
     searchParams.value.name = testName.value
   }
   const res = await searchUser(searchParams.value)
-  searchList.value = res.rows
-  searchView.value = true
+  searchList.value = res.rows // 搜索结果列表
+  searchView.value = true // 显示搜索结果
 }
 
-const orderList = ref([])
-const buttonLoading = ref(false)
-const loading = ref(true)
-const showSearch = ref(true)
-const ids = ref([])
-const single = ref(true)
-const multiple = ref(true)
-const total = ref(0)
+const orderList = ref([]) // 订单列表数据
+const buttonLoading = ref(false) // 按钮加载状态
+const loading = ref(true) // 页面加载状态
+const showSearch = ref(true) // 显示搜索区域
+const ids = ref([]) // 选中的ID列表
+const single = ref(true) // 单选状态
+const multiple = ref(true) // 多选状态
+const total = ref(0) // 总数据量
 
-const queryFormRef = ref()
-const orderFormRef = ref()
+const queryFormRef = ref() // 查询表单引用
+const orderFormRef = ref() // 订单表单引用
 
 const dialog = reactive({
-  visible: false,
-  title: '',
-  jsVisible: false
+  visible: false, // 弹窗显示状态
+  title: '', // 弹窗标题
+  jsVisible: false // 结算弹窗显示状态
 })
 
-const initFormData = {}
+const initFormData = {} // 初始表单数据
 const data = reactive({
-  form: { ...initFormData },
+  form: { ...initFormData }, // 表单数据
   queryParams: {
-    pageNum: 1,
-    pageSize: 10
+    pageNum: 1, // 当前页码
+    pageSize: 10 // 每页数量
   },
   searchParams: {
-    pageNum: 1,
-    pageSize: 10,
-    name: ''
+    pageNum: 1, // 搜索页码
+    pageSize: 10, // 搜索每页数量
+    name: '' // 搜索姓名
   }
 })
 
@@ -276,11 +276,11 @@ function onMouseLeave() {
 
 //选中标签
 function checkUser(data) {
-  form.value.sjsName = data.name
-  form.value.sjsPhone = data.userName
-  testName.value = data.name
+  form.value.sjsName = data.name // 设置设计师姓名
+  form.value.sjsPhone = data.userName // 设置设计师账户
+  testName.value = data.name // 设置测试姓名
   setTimeout(() => {
-    searchView.value = false
+    searchView.value = false // 隐藏搜索结果
   }, 100)
 }
 
@@ -297,7 +297,7 @@ const submitForm = () => {
       let info = ''
       if (form.value.id) {
         info = '修改订单信息成功！'
-        form.value.updateUser = userStore.name
+        form.value.updateUser = userStore.name // 设置更新用户
         await updateOrder(form.value).then(() => (buttonLoading.value = false))
       } else {
         info = '添加订单成功！'
@@ -332,14 +332,14 @@ onMounted(() => {
 /** 查询【请填写功能名称】列表 */
 const getList = async () => {
   loading.value = true
-  queryParams.value.deptName = userStore.deptName
+  queryParams.value.deptName = userStore.deptName // 设置部门名称
   if (userStore.deptName == '客服部门') {
-    queryParams.value.sjsPhone = userStore.name
+    queryParams.value.sjsPhone = userStore.name // 设置设计师手机号
   }
   const res = await listOrder(queryParams.value)
 
-  orderList.value = res.rows
-  total.value = res.total
+  orderList.value = res.rows // 设置订单列表数据
+  total.value = res.total // 设置总数据量
   loading.value = false
 }
 
@@ -369,16 +369,16 @@ const resetQuery = () => {
 
 /** 多选框选中数据 */
 const handleSelectionChange = (selection) => {
-  ids.value = selection.map((item) => item.id)
-  single.value = selection.length != 1
-  multiple.value = !selection.length
+  ids.value = selection.map((item) => item.id) // 设置选中ID列表
+  single.value = selection.length != 1 // 设置单选状态
+  multiple.value = !selection.length // 设置多选状态
 }
 
 const jsData = ref({
-  id: '',
-  orderStatus: '',
-  jsStatus: '',
-  title: ''
+  id: '', // 结算订单ID
+  orderStatus: '', // 订单状态
+  jsStatus: '', // 结算状态
+  title: '' // 订单标题
 })
 const handleOrder = async (row) => {
   jsData.value.id = row.id
@@ -388,8 +388,8 @@ const handleOrder = async (row) => {
 
 //订单结算成功
 async function orderSuccess() {
-  jsData.value.orderStatus = '交易完成'
-  jsData.value.jsStatus = '订单核验中'
+  jsData.value.orderStatus = '交易完成' // 设置订单状态
+  jsData.value.jsStatus = '订单核验中' // 设置结算状态
   await updateOrder(jsData.value)
   proxy?.$modal.msgSuccess('结算成功')
   dialog.jsVisible = false
@@ -400,8 +400,8 @@ async function orderSuccess() {
 
 //订单结算失败
 async function orderFail() {
-  jsData.value.orderStatus = '订单失败'
-  jsData.value.jsStatus = '订单取消'
+  jsData.value.orderStatus = '订单失败' // 设置订单状态
+  jsData.value.jsStatus = '订单取消' // 设置结算状态
   await updateOrder(jsData.value).then(() => {
     proxy?.$modal.msgSuccess('操作成功')
   })
@@ -410,8 +410,8 @@ async function orderFail() {
     getList()
   }, 200)
 }
-const searchView = ref(false)
-const searchList = ref([])
+const searchView = ref(false) // 搜索结果显示状态
+const searchList = ref([]) // 搜索结果列表
 function searchBlue() {
   searchView.value = false
 }
@@ -422,7 +422,7 @@ function searchFocus() {
 }
 
 /** 新增按钮操作 */
-const add = ref(false)
+const add = ref(false) // 新增状态
 const handleAdd = () => {
   // add.value = true
   reset()
@@ -433,7 +433,7 @@ const handleAdd = () => {
   testName.value = ' '
 }
 
-const isDisabled = ref(false)
+const isDisabled = ref(false) // 禁用状态
 
 /** 修改按钮操作 */
 const handleUpdate = async (row) => {
@@ -467,6 +467,8 @@ const handleView = async (row) => {
 }
 </script>
 <style scoped>
+@import './index.css';
+
 .el-input {
   width: 250px;
 }

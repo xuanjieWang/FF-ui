@@ -163,27 +163,5 @@ const resetQuery = () => {
 }
 </script>
 <style lang="scss" scoped>
-.info {
-  font-size: 16px;
-  margin-left: 15px;
-}
-.item {
-  display: flex;
-  flex-direction: column;
-  margin-left: 30px;
-  font-size: 15px;
-  font-weight: 600;
-}
-.order {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-}
-.txOrder {
-  margin-top: 10px;
-  min-height: 30px;
-  max-height: 250px;
-  overflow-y: auto;
-  margin-left: 20px;
-}
+@import './index.css';
 </style>

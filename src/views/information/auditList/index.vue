@@ -39,12 +39,13 @@ import { getAuditList, handleAudit } from '@/api/audit'
 import { useUserStore } from '@/store/modules/user'
 const { proxy } = getCurrentInstance()
 
-const userStore = useUserStore()
-const loading = ref(true)
-const total = ref(10)
+const userStore = useUserStore() // 用户状态管理
+const loading = ref(true) // 加载状态
+const total = ref(10) // 总数据量
 
-const info = ref([])
+const info = ref([]) // 审核列表数据
 const params = reactive({
+  // 查询参数
   queryParams: {
     pageNum: 1,
     pageSize: 10
@@ -56,7 +57,7 @@ const params = reactive({
 })
 const { queryParams } = toRefs(params)
 
-let listTimer = ''
+let listTimer = '' // 定时器
 onMounted(() => {
   getList()
   listTimer = setInterval(() => {
@@ -80,12 +81,13 @@ const getList = async () => {
 // 审核按钮
 async function Audit(data, flag) {
   var params = {
+    // 审核参数
     id: data.id,
     userId: data.userId,
     audit: ''
   }
   params.audit = flag ? 'yes' : 'no'
-  let title = flag ? '通过' : '不通过'
+  let title = flag ? '通过' : '不通过' // 操作标题
   await proxy?.$modal.confirm(' ' + title + ' 用户: ' + data.name + '  的用户申请？').then(async () => await handleAudit(params))
 
   setTimeout(() => {
@@ -93,8 +95,4 @@ async function Audit(data, flag) {
   }, 200)
 }
 </script>
-<style scoped>
-.el-input {
-  width: 300px;
-}
-</style>
+<style src="./index.css" scoped></style>

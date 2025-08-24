@@ -8,20 +8,9 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="链接类型" prop="type">
+        <!-- <el-form-item label="链接类型" prop="type">
           <el-input v-model="queryParams.type" :disabled="updateLoading" placeholder="链接类型" style="width: 120px; margin-bottom: 0" />
-        </el-form-item>
-        <!-- <el-form-item label="文件类型" prop="fileType">
-          <el-select placeholder="" v-model="queryParams.fileType" clearable :value-key="'id'" style="width: 120px; margin-bottom: 0">
-            <el-option v-for="item in fileTypeList" :label="item.value" :value="item.value"> </el-option>
-          </el-select>
         </el-form-item> -->
-
-        <el-form-item label="排序" prop="sort">
-          <el-select placeholder="" v-model="queryParams.sort" clearable :value-key="'id'" style="width: 120px; margin-bottom: 0">
-            <el-option v-for="item in sortList" :label="item.label" :value="item.value"> </el-option>
-          </el-select>
-        </el-form-item>
 
         <el-form-item>
           <el-button type="primary" @click="getList()">搜索</el-button>
@@ -46,13 +35,9 @@
         </el-table-column>
         <el-table-column label="链接类型" align="center" prop="type" />
 
-        <!-- <el-table-column label="文件类型" align="center" prop="fileType" /> -->
-        <!-- <el-table-column label="视频大小" align="center" prop="size" /> -->
-
-        <el-table-column label="排序" align="center" prop="sort" />
         <el-table-column label="添加时间" align="center" prop="createTime" width="100px" />
         <el-table-column label="更新时间" align="center" prop="updateTime" width="100px" />
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="100px">
           <template #default="scope">
             <el-tooltip content="修改" placement="top">
               <el-button link type="primary" icon="Edit" @click="openAddUpdate(scope.row)"></el-button>
@@ -112,9 +97,9 @@
           </el-row>
 
           <!---修改文件展示文件的内容-->
-          <el-row :gutter="20" v-if="dialogTitle === '修改文件'">
+          <!-- <el-row :gutter="20" v-if="dialogTitle === '修改文件'">
             <el-form-item label="排序:"> <el-input v-model="addData.sort" /> </el-form-item>
-          </el-row>
+          </el-row> -->
 
           <!---获取到图片对应的地址-->
           <el-row :gutter="20" v-if="dialogTitle === '修改文件'">
@@ -204,26 +189,6 @@ const fileSize = ref(0)
 const url = import.meta.env.VITE_APP_BASE_API + '/wx/upload/upload'
 const uploadHeader = globalHeaders()
 
-var fileTypeList = [
-  {
-    value: 'img'
-  },
-  {
-    value: 'mp4'
-  }
-]
-
-var sortList = [
-  {
-    label: '降序',
-    value: '1'
-  },
-  {
-    label: '升序',
-    value: '-1'
-  }
-]
-
 const pptTypeList = ref([])
 
 const fileImages = ref([])
@@ -261,6 +226,8 @@ const getList = async () => {
 // 获取到链接跳转类型
 const getFileTypeList = async () => {
   const res = await listFileType()
+  console.log(res)
+
   pptTypeList.value = res.data
 }
 

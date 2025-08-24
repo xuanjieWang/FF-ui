@@ -1,0 +1,447 @@
+/* userTran页面 - 提现审核管理简约风格样式 */
+
+/* 页面整体布局 */
+.body {
+  min-height: 100vh;
+  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+  position: relative;
+}
+
+.body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* 搜索区域样式 */
+.search {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 25px 30px;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.search::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+/* 表单样式优化 */
+.el-form {
+  position: relative;
+  z-index: 2;
+}
+
+.el-form-item {
+  margin-bottom: 0 !important;
+}
+
+.el-form-item__label {
+  font-weight: 600 !important;
+  color: #2c3e50 !important;
+  font-size: 14px !important;
+}
+
+/* 输入框样式 */
+.el-input {
+  --el-input-border-radius: 12px;
+}
+
+.el-input__wrapper {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 2px solid rgba(102, 126, 234, 0.2) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.el-input__wrapper:hover {
+  border-color: rgba(102, 126, 234, 0.4) !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15) !important;
+  transform: translateY(-1px);
+}
+
+.el-input__wrapper.is-focus {
+  border-color: #667eea !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+}
+
+.el-input__inner {
+  color: #2c3e50 !important;
+  font-weight: 500 !important;
+}
+
+/* 按钮样式 */
+.el-button {
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  padding: 12px 24px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: none !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.el-button--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+}
+
+.el-button--primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6) !important;
+}
+
+.el-button:not(.el-button--primary) {
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #667eea !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.el-button:not(.el-button--primary):hover {
+  background: rgba(102, 126, 234, 0.1) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* 表格样式 */
+.el-table {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  margin-bottom: 25px;
+}
+
+.el-table::before {
+  display: none !important;
+}
+
+.el-table__header-wrapper {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.el-table__header th {
+  background: transparent !important;
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  border: none !important;
+  padding: 20px 12px !important;
+}
+
+.el-table__header th:first-child {
+  border-top-left-radius: 20px;
+}
+
+.el-table__header th:last-child {
+  border-top-right-radius: 20px;
+}
+
+.el-table__body tr {
+  transition: all 0.3s ease !important;
+}
+
+.el-table__body tr:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%) !important;
+  transform: scale(1.01);
+}
+
+.el-table__body td {
+  border: none !important;
+  padding: 16px 12px !important;
+  color: #2c3e50 !important;
+  font-weight: 500 !important;
+}
+
+/* 状态开关样式 */
+.el-switch {
+  --el-switch-on-color: #67c23a !important;
+  --el-switch-off-color: #f56c6c !important;
+}
+
+/* 审核状态文字样式 */
+.el-table__body p {
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #f56c6c 0%, #ff7875 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(245, 108, 108, 0.3);
+}
+
+/* 操作按钮样式 */
+.el-button.is-link {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  padding: 8px 16px !important;
+  border-radius: 20px !important;
+  font-size: 12px !important;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3) !important;
+}
+
+.el-button.is-link:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5) !important;
+}
+
+/* 分页样式 */
+.el-pagination {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  border-radius: 15px !important;
+  padding: 15px 20px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  justify-content: center !important;
+}
+
+.el-pagination .el-pager li {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 8px !important;
+  margin: 0 3px !important;
+  transition: all 0.3s ease !important;
+}
+
+.el-pagination .el-pager li:hover,
+.el-pagination .el-pager li.is-active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  transform: translateY(-1px);
+}
+
+/* 弹窗样式 */
+.el-dialog {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.el-dialog__header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-radius: 20px 20px 0 0 !important;
+  padding: 20px 30px !important;
+  border-bottom: none !important;
+}
+
+.el-dialog__title {
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
+}
+
+.el-dialog__headerbtn {
+  top: 20px !important;
+  right: 25px !important;
+}
+
+.el-dialog__headerbtn .el-dialog__close {
+  color: white !important;
+  font-size: 18px !important;
+}
+
+.el-dialog__body {
+  padding: 30px !important;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 0 0 20px 20px;
+}
+
+/* 弹窗内容样式 */
+.item {
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.item span {
+  display: block;
+  margin-bottom: 12px;
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.txOrder {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 15px 0;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.txOrder > span {
+  display: block;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 15px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.order {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.order:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.order span {
+  display: block;
+  margin-bottom: 8px;
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* 自定义滚动条 */
+.txOrder::-webkit-scrollbar {
+  width: 6px;
+}
+
+.txOrder::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.txOrder::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 3px;
+}
+
+.txOrder::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
+/* 弹窗按钮样式 */
+.el-dialog .el-button--danger {
+  background: linear-gradient(135deg, #f56c6c 0%, #ff7875 100%) !important;
+  border: none !important;
+  border-radius: 25px !important;
+  padding: 12px 30px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 15px rgba(245, 108, 108, 0.4) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.el-dialog .el-button--danger:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(245, 108, 108, 0.6) !important;
+}
+
+.el-dialog .el-button--success {
+  background: linear-gradient(135deg, #67c23a 0%, #85ce61 100%) !important;
+  border: none !important;
+  border-radius: 25px !important;
+  padding: 12px 30px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 15px rgba(103, 194, 58, 0.4) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.el-dialog .el-button--success:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(103, 194, 58, 0.6) !important;
+}
+
+/* 提示文字样式 */
+.mt-5 {
+  margin-top: 20px;
+  color: #909399;
+  font-style: italic;
+  text-align: center;
+  padding: 15px;
+  background: rgba(144, 147, 153, 0.1);
+  border-radius: 10px;
+  border-left: 4px solid #909399;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .search {
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  .el-table {
+    border-radius: 15px;
+  }
+
+  .el-dialog {
+    margin: 5vh auto !important;
+    width: 95% !important;
+  }
+
+  .item span {
+    font-size: 14px;
+  }
+
+  .order span {
+    font-size: 13px;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search,
+.el-table,
+.el-pagination {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* 加载状态优化 */
+.el-loading-mask {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.el-loading-spinner {
+  color: #667eea !important;
+}

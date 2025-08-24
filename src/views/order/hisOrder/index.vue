@@ -169,14 +169,15 @@ const { the_order_title } = toRefs(proxy?.useDict('the_order_title'))
 import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
 
-const orderList = ref([])
-const loading = ref(true)
-const total = ref(0)
+const orderList = ref([]) // 订单列表数据
+const loading = ref(true) // 加载状态
+const total = ref(0) // 总数据量
 
 const initFormData = {}
 const data = reactive({
-  detailData: { ...initFormData },
+  detailData: { ...initFormData }, // 详情数据
   queryParams: {
+    // 查询参数
     pageNum: 1,
     pageSize: 10
   }
@@ -187,7 +188,7 @@ const { queryParams, detailData } = toRefs(data)
 onMounted(() => {
   getList()
 })
-const queryFormRef = ref()
+const queryFormRef = ref() // 查询表单引用
 
 const getList = async () => {
   loading.value = true
@@ -199,14 +200,13 @@ const getList = async () => {
   }
   const res = await listHis(queryParams.value)
 
-  console.log(queryParams.value)
-
   orderList.value = res.rows
   total.value = res.total
   loading.value = false
 }
-const add = ref(false)
+const add = ref(false) // 是否为新增模式
 const dialog = reactive({
+  // 弹窗配置
   title: '',
   visible: false
 })
@@ -237,6 +237,8 @@ const resetQuery = () => {
 </script>
 
 <style scoped>
+@import './index.css';
+
 .el-input {
   width: 250px;
 }

@@ -90,27 +90,27 @@ const { proxy } = getCurrentInstance()
 import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
 
-const orderList = ref([])
-const loading = ref(true)
-const showSearch = ref(true)
-const total = ref(0)
+const orderList = ref([]) // 订单列表数据
+const loading = ref(true) // 加载状态
+const showSearch = ref(true) // 显示搜索区域
+const total = ref(0) // 总数据量
 
-const queryFormRef = ref()
-const orderFormRef = ref()
+const queryFormRef = ref() // 查询表单引用
+const orderFormRef = ref() // 订单表单引用
 
 const dialog = reactive({
-  visible: false,
-  title: ''
+  visible: false, // 弹窗显示状态
+  title: '' // 弹窗标题
 })
 
-const initFormData = {}
+const initFormData = {} // 初始表单数据
 const data = reactive({
-  form: { ...initFormData },
+  form: { ...initFormData }, // 表单数据
   queryParams: {
-    pageNum: 1,
-    pageSize: 10,
-    sjsPhone: '',
-    deptName: ''
+    pageNum: 1, // 当前页码
+    pageSize: 10, // 每页数量
+    sjsPhone: '', // 设计师手机号
+    deptName: '' // 部门名称
   }
 })
 
@@ -121,11 +121,11 @@ onMounted(() => {
 
 const getList = async () => {
   loading.value = true
-  queryParams.value.deptName = userStore.deptName
-  queryParams.value.sjsPhone = userStore.name
+  queryParams.value.deptName = userStore.deptName // 设置部门名称
+  queryParams.value.sjsPhone = userStore.name // 设置设计师手机号
   const res = await listOrder(queryParams.value)
-  orderList.value = res.rows
-  total.value = res.total
+  orderList.value = res.rows // 设置订单列表数据
+  total.value = res.total // 设置总数据量
   loading.value = false
 }
 
@@ -156,6 +156,8 @@ const handleView = async (row) => {
 }
 </script>
 <style scoped>
+@import './index.css';
+
 .el-input {
   width: 250px;
 }

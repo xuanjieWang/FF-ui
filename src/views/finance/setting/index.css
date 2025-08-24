@@ -1,0 +1,236 @@
+/* 财务设置页面样式 - 简洁风格 */
+.body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 24px;
+  display: flex;
+  gap: 24px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.leftPage {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rightPage {
+  display: none;
+}
+
+/* 标题区域 */
+.leftPage > div:first-child {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.leftPage h1 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* 设置卡片 */
+.tx {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e6ecf1;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  text-align: left;
+}
+
+/* 设置项样式 */
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid #f0f2f5;
+  margin-top: 0;
+  height: auto;
+}
+
+.item:last-of-type {
+  border-bottom: none;
+}
+
+.item span {
+  font-size: 15px;
+  font-weight: 500;
+  color: #2c3e50;
+  margin-left: 0;
+  min-width: 100px;
+}
+
+/* Element UI 组件样式 */
+.el-select {
+  width: 180px;
+}
+
+.el-select .el-input__wrapper {
+  background: #f8f9fa;
+  border: 1px solid #e6ecf1;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.el-select .el-input__wrapper:hover {
+  border-color: #667eea;
+}
+
+.el-select .el-input__wrapper.is-focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.el-input-number {
+  width: 120px;
+}
+
+.el-input-number .el-input__wrapper {
+  background: #f8f9fa;
+  border: 1px solid #e6ecf1;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.el-input-number .el-input__wrapper:hover {
+  border-color: #667eea;
+}
+
+.el-input-number .el-input__wrapper.is-focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.el-input-number .el-input-number__decrease,
+.el-input-number .el-input-number__increase {
+  background: #f0f2f5;
+  border: none;
+  color: #667eea;
+}
+
+.el-input-number .el-input-number__decrease:hover,
+.el-input-number .el-input-number__increase:hover {
+  background: #e6ecf1;
+}
+
+/* 信息和按钮区域 */
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 0 0;
+  margin-top: 16px;
+  height: auto;
+  border-top: 1px solid #f0f2f5;
+}
+
+.ps {
+  color: #7f8c8d;
+  font-size: 13px;
+  margin-left: 0;
+}
+
+/* 确定按钮样式 */
+.el-button {
+  background: #667eea;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-weight: 500;
+  font-size: 14px;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.el-button:hover {
+  background: #5a67d8;
+  transform: translateY(-1px);
+}
+
+.el-button:active {
+  transform: translateY(0);
+}
+
+/* 响应式设计 */
+@media screen and (max-width: 768px) {
+  .body {
+    padding: 16px;
+  }
+
+  .leftPage {
+    width: 100%;
+    max-width: none;
+  }
+
+  .leftPage h1 {
+    font-size: 20px;
+  }
+
+  .tx {
+    padding: 24px;
+  }
+
+  .item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 0;
+  }
+
+  .item span {
+    min-width: auto;
+    margin-bottom: 8px;
+  }
+
+  .info {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .el-select,
+  .el-input-number {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .body {
+    padding: 12px;
+  }
+
+  .leftPage h1 {
+    font-size: 18px;
+  }
+
+  .tx {
+    padding: 20px;
+  }
+
+  .item span {
+    font-size: 14px;
+  }
+
+  .el-button {
+    width: 100%;
+    padding: 12px 20px;
+  }
+}
+
+/* 输入框内容样式 */
+.el-select .el-input__inner,
+.el-input-number .el-input__inner {
+  font-weight: 500;
+  color: #2c3e50;
+}

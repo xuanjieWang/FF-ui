@@ -72,12 +72,12 @@
       <div>
         <h1 style="margin-left: 45%">提现/扣款记录</h1>
         <el-table v-loading="txLoading" :data="txList">
-          <el-table-column label="序号" prop="title" width="60px">
+          <el-table-column label="序号" prop="title" width="50px">
             <template #default="scope">
               {{ scope.$index + 1 + (queryParams.pageNum - 1) * queryParams.pageSize }}
             </template>
           </el-table-column>
-          <el-table-column label="姓名" align="center" prop="sjsName" width="100px" />
+          <el-table-column label="姓名" align="center" prop="sjsName" width="80px" />
           <el-table-column label="账户" align="center" prop="sjsPhone" width="120" />
           <el-table-column label="支付宝号" align="center" prop="zfb" width="140px" />
           <el-table-column label="类型" align="center" width="80px">
