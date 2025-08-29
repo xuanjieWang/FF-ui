@@ -3,17 +3,13 @@
     <div class="search">
       <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="70px">
         <el-form-item label="链接类型" prop="type">
-          <el-select placeholder="" v-model="queryParams.type" clearable :value-key="'id'" style="width: 120px; margin-bottom: 0">
+          <el-select placeholder="" v-model="queryParams.type" clearable :value-key="'id'" style="width: 200px; margin-bottom: 0">
             <el-option v-for="item in pptTypeList" :label="item" :value="item"> </el-option>
           </el-select>
         </el-form-item>
 
-        <!-- <el-form-item label="链接类型" prop="type">
-          <el-input v-model="queryParams.type" :disabled="updateLoading" placeholder="链接类型" style="width: 120px; margin-bottom: 0" />
-        </el-form-item> -->
-
         <el-form-item>
-          <el-button type="primary" @click="getList()">搜索</el-button>
+          <el-button type="primary" @click="ListPPTImg()">搜索</el-button>
         </el-form-item>
 
         <el-form-item>
@@ -48,7 +44,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
+      <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="ListPPTImg" />
     </el-card>
 
     <!---添加或者修改文件-->
@@ -89,17 +85,11 @@
               <div v-if="dialogTitle == '添加文件'">
                 <el-radio-group v-model="addData.fileType">
                   <el-radio-button label="img" value="img" />
-                  <!-- <el-radio-button label="mp4" value="mp4" /> -->
                 </el-radio-group>
               </div>
               <div v-else>{{ addData.fileType }}</div>
             </el-form-item>
           </el-row>
-
-          <!---修改文件展示文件的内容-->
-          <!-- <el-row :gutter="20" v-if="dialogTitle === '修改文件'">
-            <el-form-item label="排序:"> <el-input v-model="addData.sort" /> </el-form-item>
-          </el-row> -->
 
           <!---获取到图片对应的地址-->
           <el-row :gutter="20" v-if="dialogTitle === '修改文件'">
@@ -108,16 +98,10 @@
                 <img :src="item" class="w-[150px] h-[150px] cursor-pointer" />
               </div>
             </el-form-item>
-
-            <el-form-item label="视频:" v-if="addData.fileType === 'mp4' && dialogTitle == '修改文件'">
-              <video ref="videoPlayer" width="300" height="260" controls autoplay>
-                <source :src="videoUrl" type="video/mp4" />
-              </video>
-            </el-form-item>
           </el-row>
 
           <el-row :gutter="20">
-            <el-form-item label="图片:" v-if="addData.fileType === 'img' && dialogTitle == '添加文件'">
+            <el-form-item label="图片:" v-if="dialogTitle == '添加文件'">
               <div style="min-height: 150px">
                 <el-upload
                   :limit="20"
@@ -134,32 +118,6 @@
                   <img w-full :src="dialogImageUrl" alt="Preview Image" />
                 </el-dialog>
               </div>
-
-              <div v-if="addData.fileType === 'mp4' && dialogTitle == '添加文件'" style="min-height: 180px">
-                <el-dialog>
-                  <img w-full :src="dialogImageUrl" alt="Preview Image" />
-                </el-dialog>
-              </div>
-            </el-form-item>
-
-            <el-form-item label="文件:" v-if="addData.fileType === 'mp4' && dialogTitle == '添加文件'">
-              <div style="min-height: 150px">
-                <el-upload
-                  ref="upload"
-                  class="upload-demo"
-                  :action="url"
-                  :headers="uploadHeader"
-                  :limit="1"
-                  :auto-upload="false"
-                  :show-file-list="false"
-                  :on-change="handleChange"
-                  :on-success="handleExceed"
-                  :on-exceed="handleExceed">
-                  <el-button type="primary" :disabled="updateLoading">选择附件</el-button>
-                  (不超过50MB)
-                </el-upload>
-                <p class="ml-1">附件： {{ addData.fileName }}</p>
-              </div>
             </el-form-item>
           </el-row>
         </el-form>
@@ -173,8 +131,6 @@
 <script setup>
 import { ref, reactive, getCurrentInstance, toRefs, onMounted, watchEffect } from 'vue'
 import { listData, deleteById, addPPTFile, update, getFileById, listFileType } from '@/api/wx/ppt'
-import SparkMD5 from 'spark-md5'
-import { globalHeaders } from '@/utils/request'
 
 const { proxy } = getCurrentInstance()
 
@@ -186,8 +142,6 @@ const dialogButton = ref(false)
 const dialogTitle = ref('')
 const addData = ref({})
 const fileSize = ref(0)
-const url = import.meta.env.VITE_APP_BASE_API + '/wx/upload/upload'
-const uploadHeader = globalHeaders()
 
 const pptTypeList = ref([])
 
@@ -210,25 +164,18 @@ const data = reactive({
 const { queryParams } = toRefs(data)
 
 //获取数据
-onMounted(() => {
-  getFileTypeList()
-  getList()
+onMounted(async () => {
+  const res = await listFileType()
+  pptTypeList.value = res.data
+  ListPPTImg()
 })
 
-const getList = async () => {
+const ListPPTImg = async () => {
   loading.value = true
   const res = await listData(queryParams.value)
   list.value = res.rows
   total.value = res.total
   loading.value = false
-}
-
-// 获取到链接跳转类型
-const getFileTypeList = async () => {
-  const res = await listFileType()
-  console.log(res)
-
-  pptTypeList.value = res.data
 }
 
 // 修改文件 查询出图片列表
@@ -259,20 +206,12 @@ const openAdd = () => {
 }
 // 上传文件
 async function addFile() {
-  // if (!fileIsUpload.value && addData.value.fileType === 'mp4') {
-  //   return proxy?.$modal.msgError('请先上传视频文件')
-  // }
-
   // 文件设置为上传中
   updateLoading.value = true
-  if (addData.value.fileType === 'mp4') {
-    proxy?.$modal.msgSuccess('请等待文件上传')
-  }
-
   setTimeout(async () => {
     const res = await addPPTFile(addData.value)
     res.code == 200 ? proxy?.$modal.msgSuccess('添加成功！') : proxy?.$modal.msgError('添加失败！')
-    getList()
+    ListPPTImg()
     addData.value = {}
     updateLoading.value = false
     dialogButton.value = false
@@ -288,14 +227,13 @@ const updateFile = async () => {
   setTimeout(() => {
     dialogButton.value = false
     addData.value = {}
-    getList()
+    ListPPTImg()
   }, 500)
 }
 
 // 添加或者修改文件
 const uploadFile = async () => {
   if (updateLoading.value) return proxy?.$modal.msgSuccess('请等待文件上传完成')
-
   // 修改文件
   if (dialogTitle.value == '修改文件') {
     updateFile()
@@ -315,7 +253,7 @@ const delFile = async (row) => {
   const res = await deleteById(row.id)
   if (res.code == 200) {
     proxy?.$modal.msgSuccess('删除成功')
-    getList()
+    ListPPTImg()
   }
 }
 
@@ -350,44 +288,5 @@ const handleImgChange = () => {
 }
 
 const handleImgRemove = () => {}
-
-const saveFile = ref(null)
-const upload = ref()
-const fileIsUpload = ref(false)
-// 生成文件名称，文件类型，文件大小，文件md5信息，文件发生变化直接清除掉数据
-const handleChange = async (file) => {
-  fileIsUpload.value = false // 文件是否上传标志
-  const list = file.name.split('.')
-  const suffix = list[list.length - 1]
-
-  if (suffix != 'mp4') {
-    proxy?.$modal.msgError('请上传视频文件!')
-    proxy.$refs.upload.clearFiles()
-    return
-  }
-  fileIsUpload.value = true
-  addData.value.fileName = file.name // 文件名称
-  addData.value.fileType = suffix // 文件类型
-  addData.value.size = file.size // 文件大小
-  fileSize.value = file.size / 1024 / 1024
-  saveFile.value = file
-
-  const fileReader = new FileReader()
-  fileReader.readAsDataURL(file.raw)
-  fileReader.onload = () => {
-    let hexHash = SparkMD5.hash(fileReader.result)
-    addData.value.md5 = hexHash
-    proxy.$refs.upload.submit()
-  }
-}
-
-const handleExceed = async (file) => {
-  setTimeout(() => {
-    upload.value.clearFiles() // 清除文件列表
-    proxy.$nextTick(() => {
-      upload.value.handleStart(file[0])
-    })
-  }, 500)
-}
 </script>
 <style scoped></style>

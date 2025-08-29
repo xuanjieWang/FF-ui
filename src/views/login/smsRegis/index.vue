@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, reactive, ref, toRefs, onMounted, onUnmounted } from 'vue'
+import { getCurrentInstance, reactive, ref, onMounted, onUnmounted } from 'vue'
 import { regisRules } from '../rules'
 import { useUserStore } from '@/store/modules/user'
 import api from '@/api/system/user'
@@ -56,9 +56,6 @@ import { getInviteCode, getSmsCode } from '@/api/login'
 import { getResult } from '@/api/sms'
 import { the_dept } from '../rules'
 const { proxy } = getCurrentInstance()
-
-// const { the_dept } = toRefs(proxy?.useDict('the_dept'))
-
 const userStore = useUserStore()
 const router = useRouter()
 const loading = ref(false)

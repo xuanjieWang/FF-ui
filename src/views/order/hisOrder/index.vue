@@ -194,10 +194,21 @@ const getList = async () => {
   loading.value = true
 
   // 设计师查询自己的历史订单，需要查询自己的部门
-  if (userStore.deptName == ('设计师部门' || '客服部门')) {
+  console.log(userStore.deptName)
+
+  if (userStore.deptName === '软件开发' || userStore.deptName === '设计师部门' || userStore.deptName === '客服部门') {
     queryParams.value.deptName = userStore.deptName
     queryParams.value.sjsPhone = userStore.name
   }
+
+  if (userStore.deptName === ('设计师部门' || '客服部门' || '软件开发')) {
+    console.log(111)
+
+    queryParams.value.deptName = userStore.deptName
+    queryParams.value.sjsPhone = userStore.name
+  }
+  console.log(queryParams.value)
+
   const res = await listHis(queryParams.value)
 
   orderList.value = res.rows
